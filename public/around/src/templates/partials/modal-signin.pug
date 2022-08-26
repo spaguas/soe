@@ -1,0 +1,71 @@
+// Sign In Modal
+#modal-signin.modal.fade(tabindex='-1')
+  .modal-dialog.modal-dialog-centered(role='document')
+    .modal-content.border-0
+      #modal-signin-view.cs-view.show
+        .modal-header.border-0.bg-dark.px-4
+          h4.modal-title.text-light Sign in
+          button(type='button' class='close text-light' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body.px-4
+          p.font-size-ms.text-muted Sign in to your account using email and password provided during registration.
+          form(novalidate).needs-validation
+            .input-group-overlay.form-group
+              .input-group-prepend-overlay
+                span.input-group-text
+                  i.fe-mail
+              input(type='email' placeholder='Email' required).form-control.prepended-form-control
+            .input-group-overlay.cs-password-toggle.form-group
+              .input-group-prepend-overlay
+                span.input-group-text
+                  i.fe-lock
+              input(type='password' placeholder='Password' required).form-control.prepended-form-control
+              label.cs-password-toggle-btn
+                input(type='checkbox').custom-control-input
+                i.fe-eye.cs-password-toggle-indicator
+                span.sr-only Show password
+            .d-flex.justify-content-between.align-items-center.form-group
+              .custom-control.custom-checkbox
+                input(type='checkbox' id='keep-signed').custom-control-input
+                label(for='keep-signed').custom-control-label Keep me signed in
+              a(href='password-recovery.html').nav-link-style.font-size-ms Forgot password?
+            button(type='submit').btn.btn-primary.btn-block Sign in
+            p.font-size-sm.pt-3.mb-0 Don't have an account? <a href='#' class='font-weight-medium' data-view='#modal-signup-view'>Sign up</a>
+      #modal-signup-view.cs-view
+        .modal-header.border-0.bg-dark.px-4
+          h4.modal-title.text-light Sign up
+          button(type='button' class='close text-light' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body.px-4
+          p.font-size-ms.text-muted Registration takes less than a minute but gives you full control over your orders.
+          form(novalidate).needs-validation
+            .form-group
+              input(type='text' placeholder='Full name' required).form-control
+            .form-group
+              input(type='text' placeholder='Email' required).form-control
+            .cs-password-toggle.form-group
+              input(type='password' placeholder='Password' required).form-control
+              label.cs-password-toggle-btn
+                input(type='checkbox').custom-control-input
+                i.fe-eye.cs-password-toggle-indicator
+                span.sr-only Show password
+            .cs-password-toggle.form-group
+              input(type='password' placeholder='Confirm password' required).form-control
+              label.cs-password-toggle-btn
+                input(type='checkbox').custom-control-input
+                i.fe-eye.cs-password-toggle-indicator
+                span.sr-only Show password
+            button(type='submit').btn.btn-primary.btn-block Sign up
+            p.font-size-sm.pt-3.mb-0 Already have an account? <a href='#' class='font-weight-medium' data-view='#modal-signin-view'>Sign in</a>
+      .modal-body.text-center.px-4.pt-2.pb-4
+        hr
+        p.font-size-sm.font-weight-medium.text-heading.pt-4 Or sign in with
+        a(href='#').social-btn.sb-facebook.sb-lg.mx-1.mb-2
+          i.fe-facebook
+        a(href='#').social-btn.sb-twitter.sb-lg.mx-1.mb-2
+          i.fe-twitter
+        a(href='#').social-btn.sb-instagram.sb-lg.mx-1.mb-2
+          i.fe-instagram
+        a(href='#').social-btn.sb-google.sb-lg.mx-1.mb-2
+          i.fe-google
+              

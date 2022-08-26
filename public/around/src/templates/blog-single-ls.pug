@@ -1,0 +1,303 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var vendorStyles = ['tiny-slider/dist/tiny-slider.css', 'lightgallery.js/dist/css/lightgallery.min.css']
+  - var vendorScripts = ['tiny-slider/dist/min/tiny-slider.js', 'lightgallery.js/dist/js/lightgallery.min.js', 'lg-fullscreen.js/dist/lg-fullscreen.min.js', 'lg-zoom.js/dist/lg-zoom.min.js', 'lg-video.js/dist/lg-video.min.js']
+  - var parentMenu = 'Templates'
+  - var pageTitle = 'Single Post Left Sidebar'
+  - var isSidebar = true
+
+//- Navbar
+block navbar
+  include partials/navbar-solid-shadow
+
+//- Page Content
+block content
+  .cs-sidebar-enabled
+    .container
+      .row
+
+        // Sidebar
+        .cs-sidebar.col-lg-3.pt-lg-5
+          #blog-sidebar.cs-offcanvas-collapse
+            .cs-offcanvas-cap.navbar-box-shadow.px-4.mb-3
+              h5.mt-1.mb-0 Sidebar
+              button(type='button' data-toggle='offcanvas' data-offcanvas-id='blog-sidebar').close.lead
+                span(aria-hidden='true') &times;
+            .cs-offcanvas-body.px-4.pt-3.pt-lg-0.pl-lg-0.pr-lg-2.pr-xl-4(data-simplebar)
+              //- partials/sidebar-blog.pug
+              include partials/sidebar-blog
+
+        // Content
+        .col-lg-9.cs-content.py-4.mb-2.mb-sm-0.pb-sm-5
+          .pb-4(style='max-width: 38rem;')
+            +breadcrumb([{'title': 'Blog', 'link': '#'}, {'title': 'Category', 'link': '#'}, {'title': 'Single post left sidebar'}]).py-1.my-2
+            h1 Designers should always keep their users in mind
+
+          // Post author + Sharing
+          .row.position-relative.no-gutters.align-items-center.border-top.border-bottom.mb-4
+            .col-md-6.py-3.pr-md-3
+              .d-flex.align-items-center.justify-content-center.justify-content-md-start
+                .media.media-ie-fix.align-items-center.mr-grid-gutter
+                  a(href='#').d-block
+                    +image('blog/single/author.jpg', 'Emma Brown')(width='64').rounded-circle.mr-1
+                  .media-body.pl-2
+                    h6.nav-heading.mb-1: a(href='#') Emma Brown
+                    .text-nowrap
+                      .meta-link.font-size-xs
+                        i.fe-calendar.mr-1.mt-n1
+                        | &nbsp;Feb 19
+                      span.meta-divider
+                      a(href='#comments' data-scroll).meta-link.font-size-xs
+                        i.fe-message-square.mr-1
+                        | &nbsp;3
+                a(href='#').btn.btn-translucent-primary.btn-sm Follow
+            .d-none.d-md-block.position-absolute.border-left.h-100(style='top: 0; left: 50%; width: 1px;')
+            .col-md-6.pl-md-3.py-3
+              .d-flex.align-items-center.justify-content-center.justify-content-md-end
+                h6.text-nowrap.my-2.mr-3 Share post:
+                a(href='#').social-btn.sb-outline.sb-facebook.ml-2.my-2
+                  i.fe-facebook
+                a(href='#').social-btn.sb-outline.sb-twitter.ml-2.my-2
+                  i.fe-twitter
+                a(href='#').social-btn.sb-outline.sb-google.ml-2.my-2
+                  i.fe-google
+                a(href='#').social-btn.sb-outline.sb-email.ml-2.my-2
+                  i.fe-mail
+
+          // Post content
+          p.py-3 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum.
+          h2.h3.pt-2.pb-4 Some real life examples
+          .cs-carousel.cs-gallery
+            .cs-carousel-inner(data-carousel-options = '{"items": 2, "controls": false, "responsive": {"0":{"items":1, "gutter": 20},"500":{"items":2, "gutter": 20}, "700":{"items":2, "gutter": 30}}}')
+              div
+                a(href='img/blog/single/01.jpg' data-sub-html='<h6 class="font-size-sm text-light">Gallery image caption #1</h6>').cs-gallery-item.rounded-lg
+                  +image('blog/single/th01.jpg', 'Gallery thumbnail')
+                  span.cs-gallery-caption Gallery image caption #1
+              div
+                a(href='img/blog/single/02.jpg' data-sub-html='<h6 class="font-size-sm text-light">Gallery image caption #2</h6>').cs-gallery-item.rounded-lg
+                  +image('blog/single/th02.jpg', 'Gallery thumbnail')
+                  span.cs-gallery-caption Gallery image caption #2
+              div
+                a(href='img/blog/single/03.jpg' data-sub-html='<h6 class="font-size-sm text-light">Gallery image caption #3</h6>').cs-gallery-item.rounded-lg
+                  +image('blog/single/th03.jpg', 'Gallery thumbnail')
+                  span.cs-gallery-caption Gallery image caption #3
+          .py-4
+            p.pt-3 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+            p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          h2.h3.pt-1.pb-4 Expert opinion
+          .bg-faded-primary.rounded-lg.p-4.mb-4
+            .p-md-3
+              blockquote.blockquote.mb-0
+                p.text-nav Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida dignissimos ducimus qui blanditiis praesentium voluptatum.
+                p.text-nav Mattis enim ut tellus elementum sagittis vitae et leo duis.
+                footer.blockquote-footer Miguel Sánchez
+          p.py-3 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum.
+          
+          // Tags + Sharing
+          .row.no-gutters.position-relative.align-items-center.border-top.border-bottom.my-5
+            .col-md-6.py-2.py-dm-3.pr-md-3.text-center.text-md-left
+              a(href='#').cs-tag.mr-2.my-2 #ui design
+              a(href='#').cs-tag.mr-2.my-2 #workshop
+              a(href='#').cs-tag.mr-2.my-2 #business
+            .d-none.d-md-block.position-absolute.border-left.h-100(style='top: 0; left: 50%; width: 1px;')
+            .col-md-6.pl-md-3.py-2.py-md-3
+              .d-flex.align-items-center.justify-content-center.justify-content-md-end
+                h6.text-nowrap.my-2.mr-3 Share post:
+                a(href='#').social-btn.sb-outline.sb-facebook.ml-2.my-2
+                  i.fe-facebook
+                a(href='#').social-btn.sb-outline.sb-twitter.ml-2.my-2
+                  i.fe-twitter
+                a(href='#').social-btn.sb-outline.sb-google.ml-2.my-2
+                  i.fe-google
+                a(href='#').social-btn.sb-outline.sb-email.ml-2.my-2
+                  i.fe-mail
+          
+          // Prev / Next post navigation
+          nav(aria-label='Entry navigation').d-flex.justify-content-between.pb-4.mb-5
+            a(href='#').cs-entry-nav.mr-3
+              h3.h5.pb-sm-2 Prev post
+              .media
+                .cs-entry-nav-thumb.d-none.d-sm-block
+                  +image('blog/th04.jpg', 'Post thumbnail')
+                .media-body.pl-sm-3
+                  h4.nav-heading.font-size-md.font-weight-medium.mb-0 How technology affect our decisions
+                  span.font-size-xs.text-muted by Jessica Miller
+            a(href='#').cs-entry-nav.ml-3
+              h3.h5.pb-sm-2.text-right Next post
+              .media
+                .media-body.text-right.pr-sm-3
+                  h4.nav-heading.font-size-md.font-weight-medium.mb-0 Open space - new trend in office design
+                  span.font-size-xs.text-muted by Daniel Adams
+                .cs-entry-nav-thumb.d-none.d-sm-block
+                  +image('blog/th05.jpg', 'Post thumbnail')
+          
+          // Comments
+          #comments.pb-4.mb-5
+            h2.h3.pb-4 3 Comments
+            .cs-comment
+              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat cumque nihil impedit quo minus. Duis aute irure dolor in reprehenderit in voluptate.
+              .d-flex.justify-content-between.align-items-center
+                .media.media-ie-fix.align-items-center
+                  +image('blog/comments/01.jpg', 'Barbara Palson')(width='42').rounded-circle
+                  .media-body.pl-2.ml-1
+                    h4.font-size-sm.mb-0 Barbara Palson
+                    span.font-size-xs.text-muted 3 days ago
+                a(href='#').btn.btn-outline-primary.btn-sm
+                  i.fe-corner-up-left.font-size-base.mr-2.ml-n1
+                  | Reply
+              .cs-comment
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat cumque nihil impedit quo minus. Duis aute irure dolor in reprehenderit in voluptate.
+                .media.align-items-center
+                  +image('blog/comments/02.jpg', 'Daniel Adams')(width='42').rounded-circle
+                  .media-body.pl-2.ml-1
+                    h4.font-size-sm.mb-0 Daniel Adams
+                    span.font-size-xs.text-muted 2 days ago
+            .cs-comment
+              p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+              .d-flex.justify-content-between.align-items-center
+                .media.media-ie-fix.align-items-center
+                  +image('blog/comments/03.jpg', 'Tim Brooks')(width='42').rounded-circle
+                  .media-body.pl-2.ml-1
+                    h4.font-size-sm.mb-0 Tim Brooks
+                    span.font-size-xs.text-muted 1 week ago
+                a(href='#').btn.btn-outline-primary.btn-sm
+                  i.fe-corner-up-left.font-size-base.mr-2.ml-n1
+                  | Reply
+            a(href='#comment-form' data-toggle='collapse').btn.btn-translucent-primary.btn-block Join the conversation
+
+            // Comment form
+            #comment-form.collapse
+              form(novalidate).needs-validation.bg-light.rounded-lg.box-shadow.p-4.p-lg-5.mt-4
+                .row
+                  .col-sm-6.form-group
+                    label(for='com-name').form-label
+                      | Your name
+                      sup.text-danger.ml-1 *
+                    input(type='text' id='com-name' placeholder='Enter your name' required).form-control
+                    .invalid-feedback Please enter your name.
+                    .valid-feedback Looks good!
+                  .col-sm-6.form-group
+                    label(for='com-email').form-label
+                      | Email address
+                      sup.text-danger.ml-1 *
+                    input(type='email' id='com-email' placeholder='Enter your email' required).form-control
+                    .invalid-feedback Please provide a vild email address.
+                    .valid-feedback Looks good!
+                .form-group
+                  label(for='com-text').form-label
+                    | Comment
+                    sup.text-danger.ml-1 *
+                  textarea(id='com-text' rows='6' placeholder='Write your comment here' required).form-control
+                  .invalid-feedback Please write your comment.
+                  .valid-feedback Looks good!
+                button(type='submit').btn.btn-primary Post comment
+
+
+          // Related posts (carousel)
+          .pb-4.pb-md-5
+            h2.h3.pb-4 Related posts
+            .cs-carousel
+              .cs-carousel-inner(data-carousel-options='{"items": 2, "controls": false, "autoHeight": true, "responsive": {"0":{"items":1, "gutter": 16},"500":{"items":2, "gutter": 16},"850":{"items":3, "gutter": 16}, "1100":{"items":3, "gutter": 23}}}')
+              
+                // Article
+                .pb-2
+                  article.card.card-hover.mx-1
+                    a(href='#').card-img-top
+                      +image('blog/02.jpg', 'Post thumbnail')
+                    .card-body
+                      a(href='#').meta-link.font-size-sm.mb-2 Technology
+                      h2.h5.nav-heading.mb-4
+                        a(href='#') How technology affect our decisions
+                      a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                        +image('blog/avatar/03.jpg', 'Jessica Miller')(width='36').rounded-circle
+                        .media-body.pl-2.ml-1.mt-n1
+                          | by
+                          span.font-weight-semibold.ml-1 Jessica Miller
+                      .mt-3.text-right.text-nowrap
+                        a(href='#').meta-link.font-size-xs
+                          i.fe-message-square.mr-1
+                          | &nbsp;3
+                        span.meta-divider
+                        a(href='#').meta-link.font-size-xs
+                          i.fe-calendar.mr-1.mt-n1
+                          | &nbsp;Feb 4
+              
+                // Article
+                .pb-2
+                  article.card.card-hover.mx-1
+                    a(href='#').card-img-top
+                      +image('blog/03.jpg', 'Post thumbnail')
+                    .card-body
+                      a(href='#').meta-link.font-size-sm.mb-2 Business
+                      h2.h5.nav-heading.mb-4
+                        a(href='#') Open space - new trend in office design
+                      a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                        +image('blog/avatar/05.jpg', 'Daniel Adams')(width='36').rounded-circle
+                        .media-body.pl-2.ml-1.mt-n1
+                          | by
+                          span.font-weight-semibold.ml-1 Daniel Adams
+                      .mt-3.text-right.text-nowrap
+                        a(href='#').meta-link.font-size-xs
+                          i.fe-message-square.mr-1
+                          | &nbsp;12
+                        span.meta-divider
+                        a(href='#').meta-link.font-size-xs
+                          i.fe-calendar.mr-1.mt-n1
+                          | &nbsp;Jan 10
+              
+                // Article
+                .pb-2
+                  article.card.card-hover.mx-1
+                    a(href='#').card-img-top
+                      +image('blog/06.jpg', 'Post thumbnail')
+                    .card-body
+                      a(href='#').meta-link.font-size-sm.mb-2 Business
+                      h2.h5.nav-heading.mb-4
+                        a(href='#') Business offices of Fortune 500 companies
+                      a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                        +image('blog/avatar/06.jpg', 'Barbara Palson')(width='36').rounded-circle
+                        .media-body.pl-2.ml-1.mt-n1
+                          | by
+                          span.font-weight-semibold.ml-1 Barbara Palson
+                      .mt-3.text-right.text-nowrap
+                        a(href='#').meta-link.font-size-xs
+                          i.fe-message-square.mr-1
+                          | &nbsp;5
+                        span.meta-divider
+                        a(href='#').meta-link.font-size-xs
+                          i.fe-calendar.mr-1.mt-n1
+                          | &nbsp;Nov 20
+              
+                // Article
+                .pb-2
+                  article.card.card-hover.mx-1
+                    a(href='#').card-img-top
+                      +image('blog/05.jpg', 'Post thumbnail')
+                    .card-body
+                      a(href='#').meta-link.font-size-sm.mb-2 Technology
+                      h2.h5.nav-heading.mb-4
+                        a(href='#') Payments made easy. New tech in E-commerce
+                      a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                        +image('blog/avatar/02.jpg', 'Charlie Welch')(width='36').rounded-circle
+                        .media-body.pl-2.ml-1.mt-n1
+                          | by
+                          span.font-weight-semibold.ml-1 Charlie Welch
+                      .mt-3.text-right.text-nowrap
+                        a(href='#').meta-link.font-size-xs
+                          i.fe-message-square.mr-1
+                          | &nbsp;17
+                        span.meta-divider
+                        a(href='#').meta-link.font-size-xs
+                          i.fe-calendar.mr-1.mt-n1
+                          | &nbsp;Nov 08
+
+//- Footer
+block footer
+  include partials/footer-blog
+
+  // Sidebar toggle button
+  button(type='button' data-toggle='offcanvas' data-offcanvas-id='blog-sidebar').btn.btn-primary.btn-sm.cs-sidebar-toggle
+    i.fe-sidebar.font-size-base.mr-2
+    | Sidebar

@@ -1,0 +1,508 @@
+extends ../partials/layout-components
+
+//- Override default config variables
+append config
+  - var vendorStyles = ['prismjs/themes/prism.css', 'prismjs/plugins/toolbar/prism-toolbar.css', 'prismjs/plugins/line-numbers/prism-line-numbers.css', 'tiny-slider/dist/tiny-slider.css']
+  - var vendorScripts = ['prismjs/components/prism-core.min.js', 'prismjs/components/prism-markup.min.js', 'prismjs/components/prism-clike.min.js', 'prismjs/components/prism-javascript.min.js', 'prismjs/components/prism-pug.min.js', 'prismjs/plugins/toolbar/prism-toolbar.min.js', 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js', 'prismjs/plugins/line-numbers/prism-line-numbers.min.js', 'tiny-slider/dist/min/tiny-slider.js']
+  - var pageTitle = 'Carousel'
+  - var pageSubtitle = 'A slideshow component for cycling through elements (images or slides of text) like a carousel.'
+  - var isPageTitleBadge = true
+  - var anchorNav = [{'title': 'All controls: Dots + Arrows + Progress', 'link': '#carousel-all-controls'}, {'title': 'Controls position: Dots outside + Arrows inside', 'link': '#carousel-controls-position'}, {'title': 'Fade transition + Layer animations', 'link': '#carousel-fade-animations'}, {'title': 'Vertical carousel + Arrows visible on hover', 'link': '#carousel-vertical'}, {'title': 'Responsive carousel with multiple items', 'link': '#carousel-multiple'}, {'title': 'Default Bootstrap carousel', 'link': '#carousel-default-bs'}]
+  
+//- Page Content
+block content
+
+  .alert.alert-info.mb-4(role='alert')
+    .d-flex.py-2
+      i.fe-alert-circle.font-size-xl.mr-3.d-none.d-sm-block
+      p.font-size-md.mb-0 Make sure to link to <strong>Tiny Slider css and js</strong> files in your document: <strong>vendor/tiny-slider/dist/tiny-slider.css</strong> and <strong>vendor/tiny-slider/dist/min/tiny-slider.js</strong>. Use this page as a reference.
+
+  //-- Styles For Demo purpose only
+  style.
+    .example-code {
+      padding-top: 0 !important;
+    }
+    div.code-toolbar > .toolbar {
+      display: none;
+    }
+  //-- End of styles
+  .bg-secondary.rounded-lg.p-4.mb-5
+    p.font-size-sm You can alter carousel look and behaviour via modifier CSS classes and flexible data API.
+    h6.font-size-sm Basic HTML structure:
+    pre.example-code
+      code(class='lang-html').
+        &lt;div class=&quot;cs-carousel&quot;&gt;
+          &lt;div class=&quot;cs-carousel-inner&quot; data-carousel-options='{}'&gt;
+            &lt;!-- Carousel slides here --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+    h6.font-size-sm Modifier classes:
+    ul.list-unstyled.font-size-sm
+      li
+        code cs-controls-center
+        span &nbsp;- Center align controls (prev/next buttons).
+      li
+        code cs-controls-left
+        span &nbsp;- Left align controls (prev/next buttons).
+      li
+        code cs-controls-inside
+        span &nbsp;- Position controls (prev/next buttons) absolutely on top of the carousel content (on sides). Will not work with the above positioning classes.
+      li
+        code cs-controls-onhover
+        span &nbsp;- Show controls (prev/next buttons) only when user hovers over the carousel. Works only with <code>cs-controls-inside</code>
+
+      li
+        code cs-dots-inside
+        span &nbsp;- Position dots absolutely on top of the carousel content.
+      li
+        code cs-dots-light
+        span &nbsp;- Switch dots skin to light version.
+    h6.font-size-sm Data API:
+    code.font-size-sm data-carousel-options = '{}'
+    | :
+    ul.list-unstyled.font-size-sm
+      li
+        code "mode": "carousel" | "gallery"
+        span &nbsp;- With carousel everything slides to the side, while gallery uses fade animations and changes all slides at once.
+      li
+        code "axis": "horizontal" | "vertical"
+        span &nbsp;- The axis of the slider.
+      li
+        code "items": 1
+        span &nbsp;- How many items to display
+      li
+        code "nav": true/false
+        span &nbsp;- Enable/disable dots control
+      li
+        code "controls": true/false
+        span &nbsp;- Enable/disable prev / next arrow buttons
+      li
+        code "loop": true/false
+        span &nbsp;- Enable/disable infinite loop
+      li
+        code "speed": 300
+        span &nbsp;- Speed of the slide animation (in "ms")
+      li
+        code "autoplay": true/false
+        span &nbsp;- Toggles the automatic change of slides
+      li
+        code "autoplayTimeout": 5000
+        span &nbsp;- Timeou between transition. Value in ms | 1000ms = 1s
+      li
+        code "gutter": 0
+        span &nbsp;- Space between carousel items (in px)
+      li
+        code "autoHeight": true/false
+        span &nbsp;- Height of slider container changes according to each slide's height.
+      li
+        code "responsive": {"0": {"items": 1}, "768": {"items": 2}, ...}
+        span &nbsp;- How many items to display on each screen size. Options are not limited to number of items. You can change any option based on screen size.
+      li.font-weight-medium.pt-3
+        | For more options please visit
+        a(href='https://github.com/ganlanyuan/tiny-slider#options' target='_blank' rel='noopener').ml-2
+          | https://github.com/ganlanyuan/tiny-slider#options
+    h6.font-size-sm Layer animation classes:
+    ul.list-unstyled.font-size-sm.mb-0
+      li: code cs-from-top
+      li: code cs-from-bottom
+      li: code cs-from-left
+      li: code cs-from-right
+      li: code cs-scale-up
+      li: code cs-scale-down
+      li: code cs-fade-in
+      li: code cs-delay-1
+      li: code cs-delay-2
+      li: code cs-delay-3
+      li: code cs-delay-4
+  
+  // All controls: Dots + Arrows + Progress
+  section#carousel-all-controls.pb-5.mb-md-2
+    h2.h4.mb-3 All controls: Dots + Arrows + Progress
+    .card.border-0.box-shadow-lg
+      .card-header
+        ul(role='tablist').nav.nav-tabs.card-header-tabs
+          li.nav-item
+            a(href='#result1' data-toggle='tab' role='tab' aria-controls='result1' aria-selected='true').nav-link.active Result
+          li.nav-item
+            a(href='#html1' data-toggle='tab' role='tab' aria-controls='html1' aria-selected='false').nav-link HTML
+          li.nav-item
+            a(href='#pug1' data-toggle='tab' role='tab' aria-controls='pug1' aria-selected='false').nav-link Pug
+      .card-body
+        .tab-content
+          #result1.tab-pane.fade.show.active(role='tabpanel')
+            .cs-carousel.cs-dots-inside.cs-dots-light(style='max-width: 50rem;')
+              .cs-carousel-progress.ml-auto.mb-3
+                .text-sm.text-muted.text-center.mb-2
+                  span.cs-current-slide.mr-1
+                  | of
+                  span.cs-total-slides.ml-1
+                .progress
+                  .progress-bar(role='progressbar')
+              .cs-carousel-inner(data-carousel-options = '{"loop": false, "gutter": 15}')
+                div
+                  +image('components/carousel/01.jpg', 'Image').rounded-lg
+                div
+                  +image('components/carousel/02.jpg', 'Image').rounded-lg
+                div
+                  +image('components/carousel/03.jpg', 'Image').rounded-lg
+          #html1.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-html').
+                &lt;!-- All controls: Dots + Arrows + Progress --&gt;
+                &lt;div class=&quot;cs-carousel cs-dots-inside cs-dots-light&quot;&gt;
+                  &lt;div class=&quot;cs-carousel-progress ml-auto mb-3&quot;&gt;
+                    &lt;div class=&quot;text-sm text-muted text-center mb-2&quot;&gt;
+                      &lt;span class=&quot;cs-current-slide mr-1&quot;&gt;&lt;/span&gt;
+                      of
+                      &lt;span class=&quot;cs-total-slides ml-1&quot;&gt;&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;progress&quot;&gt;
+                      &lt;div class=&quot;progress-bar&quot; role=&quot;progressbar&quot;&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;div class=&quot;cs-carousel-inner&quot; data-carousel-options='{&quot;loop&quot;: false, &quot;gutter&quot;: 15}'&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+          #pug1.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-pug').
+                // All controls: Dots + Arrows + Progress
+                .cs-carousel.cs-dots-inside.cs-dots-light
+                  .cs-carousel-progress.ml-auto.mb-3
+                    .text-sm.text-muted.text-center.mb-2
+                      span.cs-current-slide.mr-1
+                      | of
+                      span.cs-total-slides.ml-1
+                    .progress
+                      .progress-bar(role=&quot;progressbar&quot;)
+                  .cs-carousel-inner(data-carousel-options = '{&quot;loop&quot;: false, &quot;gutter&quot;: 15}')
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+  
+  // Controls position: Dots outside + Arrows inside
+  section#carousel-controls-position.pb-5.mb-md-2
+    h2.h4.mb-3 Controls position: Dots outside + Arrows inside
+    .card.border-0.box-shadow-lg
+      .card-header
+        ul(role='tablist').nav.nav-tabs.card-header-tabs
+          li.nav-item
+            a(href='#result2' data-toggle='tab' role='tab' aria-controls='result2' aria-selected='true').nav-link.active Result
+          li.nav-item
+            a(href='#html2' data-toggle='tab' role='tab' aria-controls='html2' aria-selected='false').nav-link HTML
+          li.nav-item
+            a(href='#pug2' data-toggle='tab' role='tab' aria-controls='pug2' aria-selected='false').nav-link Pug
+      .card-body
+        .tab-content
+          #result2.tab-pane.fade.show.active(role='tabpanel')
+            .cs-carousel.cs-controls-inside(style='max-width: 50rem;')
+              .cs-carousel-inner(data-carousel-options = '{"gutter": 15}')
+                div
+                  +image('components/carousel/04.jpg', 'Image').rounded-lg
+                div
+                  +image('components/carousel/01.jpg', 'Image').rounded-lg
+                div
+                  +image('components/carousel/03.jpg', 'Image').rounded-lg
+          #html2.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-html').
+                &lt;!-- Controls position: Dots outside + Arrows inside --&gt;
+                &lt;div class=&quot;cs-carousel cs-controls-inside&quot;&gt;
+                  &lt;div class=&quot;cs-carousel-inner&quot; data-carousel-options='{&quot;gutter&quot;: 15}'&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+          #pug2.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-pug').
+                // Controls position: Dots outside + Arrows inside
+                .cs-carousel.cs-controls-inside
+                  .cs-carousel-inner(data-carousel-options = '{&quot;gutter&quot;: 15}')
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+  
+  // Fade transition + Layer animations
+  section#carousel-fade-animations.pb-5.mb-md-2
+    h2.h4.mb-3 Fade transition + Layer animations
+    .card.border-0.box-shadow-lg
+      .card-header
+        ul(role='tablist').nav.nav-tabs.card-header-tabs
+          li.nav-item
+            a(href='#result3' data-toggle='tab' role='tab' aria-controls='result3' aria-selected='true').nav-link.active Result
+          li.nav-item
+            a(href='#html3' data-toggle='tab' role='tab' aria-controls='html3' aria-selected='false').nav-link HTML
+          li.nav-item
+            a(href='#pug3' data-toggle='tab' role='tab' aria-controls='pug3' aria-selected='false').nav-link Pug
+      .card-body
+        .tab-content
+          #result3.docs-tab-pane.tab-pane.fade.show.active(role='tabpanel')
+            .cs-carousel.cs-controls-center(style='max-width: 50rem;')
+              .cs-carousel-inner(data-carousel-options = '{"mode": "gallery", "nav": false}')
+                div
+                  .rounded-lg.bg-faded-primary.text-center.py-6.px-3
+                    h3.cs-from-top From top to bottom
+                    p.font-size-lg.mb-4.pb-3.cs-from-bottom.cs-delay-1 From bottom to top
+                    button(type='button').btn.btn-primary.cs-scale-down.cs-delay-2 Scale down
+                div
+                  .rounded-lg.bg-faded-success.text-center.py-6.px-3
+                    h3.cs-from-left From left to right
+                    p.font-size-lg.mb-4.pb-3.cs-from-right From right to left
+                    button(type='button').btn.btn-success.cs-scale-up.cs-delay-2 Scale up
+          #html3.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-html').
+                &lt;!-- Fade transition + Layer animations --&gt;
+                &lt;div class=&quot;cs-carousel cs-controls-center&quot;&gt;
+                  &lt;div class=&quot;cs-carousel-inner&quot; data-carousel-options='{&quot;mode&quot;: &quot;gallery&quot;, &quot;nav&quot;: false}'&gt;
+                    &lt;div&gt;
+                      &lt;div class=&quot;rounded-lg bg-faded-primary text-center py-6 px-3&quot;&gt;
+                        &lt;h3 class=&quot;cs-from-top&quot;&gt;From top to bottom&lt;/h3&gt;
+                        &lt;p class=&quot;font-size-lg mb-4 pb-3 cs-from-bottom cs-delay-1&quot;&gt;From bottom to top&lt;/p&gt;
+                        &lt;button class=&quot;btn btn-primary cs-scale-down cs-delay-2&quot; type=&quot;button&quot;&gt;Scale down&lt;/button&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;div class=&quot;rounded-lg bg-faded-success text-center py-6 px-3&quot;&gt;
+                        &lt;h3 class=&quot;cs-from-left&quot;&gt;From left to right&lt;/h3&gt;
+                        &lt;p class=&quot;font-size-lg mb-4 pb-3 cs-from-right&quot;&gt;From right to left&lt;/p&gt;
+                        &lt;button class=&quot;btn btn-success cs-scale-up cs-delay-2&quot; type=&quot;button&quot;&gt;Scale up&lt;/button&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+          #pug3.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-pug').
+                // Fade transition + Layer animations
+                .cs-carousel.cs-controls-center
+                  .cs-carousel-inner(data-carousel-options = '{&quot;mode&quot;: &quot;gallery&quot;, &quot;nav&quot;: false}')
+                    div
+                      .rounded-lg.bg-faded-primary.text-center.py-6.px-3
+                        h3.cs-from-top From top to bottom
+                        p.font-size-lg.mb-4.pb-3.cs-from-bottom.cs-delay-1 From bottom to top
+                        button(type=&quot;button&quot;).btn.btn-primary.cs-scale-down.cs-delay-2
+                          | Scale down
+                    div
+                      .rounded-lg.bg-faded-success.text-center.py-6.px-3
+                        h3.cs-from-left From left to right
+                        p.font-size-lg.mb-4.pb-3.cs-from-right From right to left
+                        button(type=&quot;button&quot;).btn.btn-success.cs-scale-up.cs-delay-2
+                          | Scale up
+  
+  // Vertical carousel + Arrows visible on hover
+  section#carousel-vertical.pb-5.mb-md-2
+    h2.h4.mb-3 Vertical carousel + Arrows visible on hover
+    .card.border-0.box-shadow-lg
+      .card-header
+        ul(role='tablist').nav.nav-tabs.card-header-tabs
+          li.nav-item
+            a(href='#result4' data-toggle='tab' role='tab' aria-controls='result4' aria-selected='true').nav-link.active Result
+          li.nav-item
+            a(href='#html4' data-toggle='tab' role='tab' aria-controls='html4' aria-selected='false').nav-link HTML
+          li.nav-item
+            a(href='#pug4' data-toggle='tab' role='tab' aria-controls='pug4' aria-selected='false').nav-link Pug
+      .card-body
+        .tab-content
+          #result4.tab-pane.fade.show.active(role='tabpanel')
+            .cs-carousel.cs-dots-inside.cs-dots-light.cs-controls-inside.cs-controls-onhover(style='max-width: 50rem;')
+              .cs-carousel-inner(data-carousel-options = '{"axis": "vertical", "gutter": 15}')
+                div
+                  +image('components/carousel/03.jpg', 'Image').rounded-lg
+                div
+                  +image('components/carousel/02.jpg', 'Image').rounded-lg
+                div
+                  +image('components/carousel/01.jpg', 'Image').rounded-lg
+          #html4.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-html').
+                &lt;!-- Vertical carousel + Arrows visible on hover --&gt;
+                &lt;div class=&quot;cs-carousel cs-dots-inside cs-dots-light cs-controls-inside cs-controls-onhover&quot;&gt;
+                  &lt;div class=&quot;cs-carousel-inner&quot; data-carousel-options='{&quot;axis&quot;: &quot;vertical&quot;, &quot;gutter&quot;: 15}'&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded-lg&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+          #pug4.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-pug').
+                // Vertical carousel + Arrows visible on hover
+                .cs-carousel.cs-dots-inside.cs-dots-light.cs-controls-inside.cs-controls-onhover
+                  .cs-carousel-inner(data-carousel-options = '{&quot;axis&quot;: &quot;vertical&quot;, &quot;gutter&quot;: 15}')
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded-lg
+  
+  // Responsive carousel with multiple items
+  section#carousel-multiple.pb-5.mb-md-2
+    h2.h4.mb-3 Responsive carousel with multiple items
+    .card.border-0.box-shadow-lg
+      .card-header
+        ul(role='tablist').nav.nav-tabs.card-header-tabs
+          li.nav-item
+            a(href='#result5' data-toggle='tab' role='tab' aria-controls='result5' aria-selected='true').nav-link.active Result
+          li.nav-item
+            a(href='#html5' data-toggle='tab' role='tab' aria-controls='html5' aria-selected='false').nav-link HTML
+          li.nav-item
+            a(href='#pug5' data-toggle='tab' role='tab' aria-controls='pug5' aria-selected='false').nav-link Pug
+      .card-body
+        .tab-content
+          #result5.tab-pane.fade.show.active(role='tabpanel')
+            .cs-carousel
+              .cs-carousel-inner(data-carousel-options = '{"items": 3, "controls": false, "responsive": {"0":{"items":1, "gutter": 16},"500":{"items":2, "gutter": 18},"768":{"items":3, "gutter": 18}, "1100":{"gutter": 24}}}')
+                div
+                  +image('components/carousel/01.jpg', 'Image').rounded
+                div
+                  +image('components/carousel/02.jpg', 'Image').rounded
+                div
+                  +image('components/carousel/03.jpg', 'Image').rounded
+                div
+                  +image('components/carousel/04.jpg', 'Image').rounded
+          #html5.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-html').
+                &lt;!-- Responsive carousel with multiple items --&gt;
+                &lt;div class=&quot;cs-carousel&quot;&gt;
+                  &lt;div class=&quot;cs-carousel-inner&quot; data-carousel-options='{&quot;items&quot;: 3, &quot;controls&quot;: false, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1, &quot;gutter&quot;: 16},&quot;500&quot;:{&quot;items&quot;:2, &quot;gutter&quot;: 16},"768":{&quot;items&quot;:3, &quot;gutter&quot;: 16}, &quot;1100&quot;:{&quot;gutter&quot;: 24}}}'&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;img class=&quot;rounded&quot; src=&quot;path-to-image&quot; alt=&quot;Image&quot;/&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+          #pug5.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-pug').
+                // Responsive carousel with multiple items
+                .cs-carousel
+                  .cs-carousel-inner(data-carousel-options = '{&quot;items&quot;: 3, &quot;controls&quot;: false, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1, &quot;gutter&quot;: 16},&quot;500&quot;:{&quot;items&quot;:2, &quot;gutter&quot;: 16},"768":{&quot;items&quot;:3, &quot;gutter&quot;: 16}, &quot;1100&quot;:{&quot;gutter&quot;: 24}}}')
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded
+                    div
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;).rounded
+  
+  // Default Bootstrap carousel
+  section#carousel-default-bs.pb-5.mb-md-2
+    h2.h4.mb-3 Default Bootstrap carousel
+    .card.border-0.box-shadow-lg
+      .card-header
+        ul(role='tablist').nav.nav-tabs.card-header-tabs
+          li.nav-item
+            a(href='#result6' data-toggle='tab' role='tab' aria-controls='result6' aria-selected='true').nav-link.active Result
+          li.nav-item
+            a(href='#html6' data-toggle='tab' role='tab' aria-controls='html6' aria-selected='false').nav-link HTML
+          li.nav-item
+            a(href='#pug6' data-toggle='tab' role='tab' aria-controls='pug6' aria-selected='false').nav-link Pug
+      .card-body
+        .tab-content
+          #result6.tab-pane.fade.show.active(role='tabpanel')
+            #carouselExample.carousel.slide(data-ride='carousel' style='max-width: 50rem;')
+              ol.carousel-indicators
+                li(data-target='#carouselExample' data-slide-to='0').active
+                li(data-target='#carouselExample' data-slide-to='1')
+                li(data-target='#carouselExample' data-slide-to='2')
+              .carousel-inner
+                .carousel-item.active
+                  +image('components/carousel/04.jpg', 'Image')
+                .carousel-item
+                  +image('components/carousel/01.jpg', 'Image')
+                .carousel-item
+                  +image('components/carousel/03.jpg', 'Image')
+              a(href='#carouselExample' role='button' data-slide='prev').carousel-control-prev
+                span(aria-hidden='true').carousel-control-prev-icon
+                span.sr-only Previous
+              a(href='#carouselExample' role='button' data-slide='next').carousel-control-next
+                span(aria-hidden='true').carousel-control-next-icon
+                span.sr-only Next
+          #html6.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-html').
+                &lt;!-- Default Bootstrap carousel --&gt;
+                &lt;div id=&quot;carouselExample&quot; class=&quot;carousel slide&quot; data-ride=&quot;carousel&quot;&gt;
+                  &lt;ol class=&quot;carousel-indicators&quot;&gt;
+                    &lt;li data-target=&quot;#carouselExample&quot; data-slide-to=&quot;0&quot; class=&quot;active&quot;&gt;&lt;/li&gt;
+                    &lt;li data-target=&quot;#carouselExample&quot; data-slide-to=&quot;1&quot;&gt;&lt;/li&gt;
+                    &lt;li data-target=&quot;#carouselExample&quot; data-slide-to=&quot;2&quot;&gt;&lt;/li&gt;
+                  &lt;/ol&gt;
+                  &lt;div class=&quot;carousel-inner&quot;&gt;
+                    &lt;div class=&quot;carousel-item active&quot;&gt;
+                      &lt;img src=&quot;path-to-image&quot; alt=&quot;Image&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;carousel-item&quot;&gt;
+                      &lt;img src=&quot;path-to-image&quot; alt=&quot;Image&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;carousel-item&quot;&gt;
+                      &lt;img src=&quot;path-to-image&quot; alt=&quot;Image&quot;&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  &lt;a class=&quot;carousel-control-prev&quot; href=&quot;#carouselExample&quot; role=&quot;button&quot; data-slide=&quot;prev&quot;&gt;
+                    &lt;span class=&quot;carousel-control-prev-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+                    &lt;span class=&quot;sr-only&quot;&gt;Previous&lt;/span&gt;
+                  &lt;/a&gt;
+                  &lt;a class=&quot;carousel-control-next&quot; href=&quot;#carouselExample&quot; role=&quot;button&quot; data-slide=&quot;next&quot;&gt;
+                    &lt;span class=&quot;carousel-control-next-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+                    &lt;span class=&quot;sr-only&quot;&gt;Next&lt;/span&gt;
+                  &lt;/a&gt;
+                &lt;/div&gt;
+          #pug6.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-pug').
+                // Default Bootstrap carousel
+                #carouselExample.carousel.slide(data-ride=&quot;carousel&quot;)
+                  ol.carousel-indicators
+                    li(data-target=&quot;#carouselExample&quot;, data-slide-to=&quot;0&quot;).active
+                    li(data-target=&quot;#carouselExample&quot;, data-slide-to=&quot;1&quot;)
+                    li(data-target=&quot;#carouselExample&quot;, data-slide-to=&quot;2&quot;)
+                  .carousel-inner
+                    .carousel-item.active
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;)
+                    .carousel-item
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;)
+                    .carousel-item
+                      +image(&quot;path-to-image&quot;, &quot;Image&quot;)
+                  a(href=&quot;#carouselExample&quot;, role=&quot;button&quot;, data-slide=&quot;prev&quot;).carousel-control-prev
+                    span(aria-hidden=&quot;true&quot;).carousel-control-prev-icon
+                    span.sr-only Previous
+                  a(href=&quot;#carouselExample&quot;, role=&quot;button&quot;, data-slide=&quot;next&quot;).carousel-control-next
+                    span(aria-hidden=&quot;true&quot;).carousel-control-next-icon
+                    span.sr-only Next

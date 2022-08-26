@@ -1,0 +1,218 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var vendorScripts = ['cleave.js/dist/cleave.min.js']
+  - var parentMenu = 'Templates'
+  - var pageTitle = 'Checkout'
+
+//- Navbar
+block navbar
+
+  // Coupon code modal
+  #modal-coupon.modal.fade(tabindex='-1')
+    .modal-dialog.modal-dialog-centered(role='document')
+      .modal-content
+        .modal-header
+          h4.modal-title Coupon code
+          button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') &times;
+        form(novalidate).modal-body.needs-validation
+          .input-group
+            input(type='text' placeholder='Your coupon code' required).form-control
+            .input-group-append
+              button(type='submit').btn.btn-primary Apply code
+
+  //- navbar-shop.pug template
+  include partials/navbar-shop
+
+//- Page Content
+block content
+  form(novalidate).cs-sidebar-enabled.cs-sidebar-right.needs-validation
+    .container
+      .row
+
+        // Content
+        .col-lg-8.cs-content.py-4
+          +breadcrumb([{'title': 'Shop', 'link': 'shop-ls.html'}, {'title': 'Checkout'}]).py-1.my-2
+          h1.mb-3.pb-4 Checkout
+          .alert.alert-info.font-size-md.mb-5(role='alert')
+            i.fe-alert-circle.font-size-xl.mt-n1.mr-3
+            | Have a coupon code? <a href='#modal-coupon' data-toggle='modal' class='alert-link'>Click here to enter your code</a>
+          h2.h3.pb-3 Billing details
+          .row.mb-4
+            .col-sm-6.form-group
+              label(for='ch-fn').form-label
+                | First name
+                sup.text-danger.ml-1 *
+              input(type='text' id='ch-fn' required).form-control
+            .col-sm-6.form-group
+              label(for='ch-ln').form-label
+                | Last names
+                sup.text-danger.ml-1 *
+              input(type='text' id='ch-ln' required).form-control
+            .col-12.form-group
+              label(for='ch-company').form-label Company name
+              input(type='text' id='ch-company').form-control
+            .col-12.form-group
+              label(for='ch-country').form-label
+                | Country
+                sup.text-danger.ml-1 *
+              select(id='ch-country' required).form-control.custom-select
+                option(value='' selected disabled hidden) Choose country
+                option(value='Australia') Australia
+                option(value='Canada') Canada
+                option(value='Francee') France
+                option(value='Germany') Germany
+                option(value='Switzerland') Switzerland
+                option(value='USA') USA
+            .col-12.form-group
+              label(for='ch-address').form-label
+                | Street address
+                sup.text-danger.ml-1 *
+              input(type='text' id='ch-address' placeholder='House number and street name' required).form-control
+            .col-12.form-group
+              input(type='text' placeholder='Apartment, suite, unit, etc. (optional)').form-control
+            .col-12.form-group
+              label(for='ch-city').form-label
+                | Town / City
+                sup.text-danger.ml-1 *
+              input(type='text' id='ch-city' required).form-control
+            .col-12.form-group
+              label(for='ch-county').form-label County
+              input(type='text' id='ch-county').form-control
+            .col-12.form-group
+              label(for='ch-postcode').form-label
+                | Postcode
+                sup.text-danger.ml-1 *
+              input(type='text' id='ch-postcode' required).form-control
+            .col-sm-6.form-group
+              label(for='ch-phone').form-label
+                | Phone
+                sup.text-danger.ml-1 *
+              input(type='text' id='ch-phone' required).form-control
+            .col-sm-6.form-group
+              label(for='ch-email').form-label
+                | Email address
+                sup.text-danger.ml-1 *
+              input(type='email' id='ch-email' required).form-control
+          h2.h3.pb-3 Additional information
+          .form-group.pb-3.pb-lg-5
+            label(for='ch-order-notes').form-label Order notes
+            textarea(id='ch-order-notes' rows='5' placeholder='Notes about your order, e.g. special notes for delivery.').form-control
+              
+
+        // Sidebar
+        .col-lg-4.cs-sidebar.bg-secondary.pt-5.pl-lg-4.pb-md-2
+          .pl-lg-4.mb-3.pb-5
+            h2.h4.pb-3 Your cart
+            .media.align-items-center.mb-4
+              a(href='shop-single.html').d-block
+                +image('demo/shop-homepage/thumbnails/05.jpg', 'Product')(width='60').rounded
+              .media-body.pl-2.ml-1
+                .d-flex.align-items-center.justify-content-between
+                  .mr-3
+                    h4.nav-heading.font-size-md.mb-1
+                      a(href='shop-single.html').font-weight-medium
+                        | Smart Watch Series 5
+                    .d-flex.align-items-center.font-size-sm
+                      span.mr-2 $364.99
+                      span.mr-2 x
+                      input(type='number' style='max-width: 3.5rem;' value='1').form-control.form-control-sm.bg-image-0.px-2
+                  .pl-3.border-left
+                    a(href='#' data-toggle='tooltip' title='Remove').d-block.text-danger.text-decoration-none.font-size-xl
+                      i.fe-x-circle
+            .media.align-items-center.mb-4
+              a(href='shop-single.html').d-block
+                +image('demo/shop-homepage/thumbnails/02.jpg', 'Product')(width='60').rounded
+              .media-body.pl-2.ml-1
+                .d-flex.align-items-center.justify-content-between
+                  .mr-3
+                    h4.nav-heading.font-size-md.mb-1
+                      a(href='shop-single.html').font-weight-medium
+                        | Running Sneakers, Collection
+                    .d-flex.align-items-center.font-size-sm
+                      span.mr-2 $145.00
+                      span.mr-2 x
+                      input(type='number' style='max-width: 3.5rem;' value='1').form-control.form-control-sm.bg-image-0.px-2
+                  .pl-3.border-left
+                    a(href='#' data-toggle='tooltip' title='Remove').d-block.text-danger.text-decoration-none.font-size-xl
+                      i.fe-x-circle
+            .media.align-items-center.mb-4
+              a(href='shop-single.html').d-block
+                +image('demo/shop-homepage/thumbnails/06.jpg', 'Product')(width='60').rounded
+              .media-body.pl-2.ml-1
+                .d-flex.align-items-center.justify-content-between
+                  .mr-3
+                    h4.nav-heading.font-size-md.mb-1
+                      a(href='shop-single.html').font-weight-medium
+                        | Wireless Bluethoothe Headset
+                    .d-flex.align-items-center.font-size-sm
+                      span.mr-2 $258.00
+                      span.mr-2 x
+                      input(type='number' style='max-width: 3.5rem;' value='1').form-control.form-control-sm.bg-image-0.px-2
+                  .pl-3.border-left
+                    a(href='#' data-toggle='tooltip' title='Remove').d-block.text-danger.text-decoration-none.font-size-xl
+                      i.fe-x-circle
+            hr.mb-4
+            .d-flex.justify-content-between.mb-3
+              span.h6.mb-0 Subtotal:
+              span.text-nav $776.99
+            .d-flex.justify-content-between.mb-3
+              span.h6.mb-0 Tax:
+              span.text-nav &mdash;
+            .d-flex.justify-content-between.mb-3
+              span.h6.mb-0 Shipping:
+              span.text-nav $12.35
+            .d-flex.justify-content-between.mb-3
+              span.h6.mb-0 Total:
+              span.h6.mb-0 $789.34
+            #payment-methods.accordion.accordion-alt.pt-4.mb-grid-gutter
+              .card.border-0.box-shadow.card-active
+                .card-header.p-3
+                  .p-1
+                    .custom-control.custom-radio(data-toggle='collapse' data-target='#credit-card')
+                      input(type='radio' id='credit-card-radio' name='payment_method' checked).custom-control-input
+                      label(for='credit-card-radio').custom-control-label.d-flex.align-items-center.h6.mb-0
+                        span Credit Card
+                        +image('shop/cards.png', 'Accepted cards')(width='130').ml-3
+                #credit-card.collapse.show(data-parent='#payment-methods')
+                  .card-body
+                    .form-group
+                      label(for='cc-number').form-label Card number
+                      input(type='text' id='cc-number' data-format='card' placeholder='0000 0000 0000 0000').form-control.bg-image-0
+                    .row.no-gutters
+                      .col-7.px-2.form-group.mb-1
+                        label(for='cc-expiry').form-label Expiry date
+                        input(type='text' id='cc-expiry' data-format='date' placeholder='mm/yy').form-control.bg-image-0
+                      .col-5.px-2.form-group.mb-1
+                        label(for='cc-cvc').form-label CVC
+                        input(type='text' id='cc-cvc' data-format='cvc' placeholder='000').form-control.bg-image-0
+              .card.border-0.box-shadow
+                .card-header.p-3
+                  .p-1
+                    .custom-control.custom-radio.collapsed(data-toggle='collapse' data-target='#paypal')
+                      input(type='radio' id='paypal-radio' name='payment_method').custom-control-input
+                      label(for='paypal-radio').custom-control-label.d-flex.align-items-center.h6.mb-0
+                        span PayPal
+                        +image('shop/paypal.png', 'PayPal')(width='20').ml-3
+                #paypal.collapse(data-parent='#payment-methods')
+                  .card-body
+                    p.font-size-ms By clicking on the button below you will be redirected to your PayPal account to complete the payment.
+                    a(href='#').d-inline-block
+                      +image('shop/paypal-button.png', 'PayPal')(width='200').d-block
+              .card.border-0.box-shadow
+                .card-header.p-3
+                  .p-1
+                    .custom-control.custom-radio.collapsed(data-toggle='collapse' data-target='#cash')
+                      input(type='radio' id='cash-radio' name='payment_method').custom-control-input
+                      label(for='cash-radio').custom-control-label.d-flex.h6.mb-0
+                        | Cash on delivery
+                #cash.collapse(data-parent='#payment-methods')
+                  .card-body
+                    p.font-size-ms.mb-0 You have selected to pay with cash upon delivery.
+            button(type='submit').btn.btn-primary.btn-block Place order
+
+//- Footer
+block footer
+  include partials/footer-shop

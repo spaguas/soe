@@ -1,0 +1,904 @@
+extends ../partials/layout-components
+
+//- Override default config variables
+append config
+  - var vendorStyles = ['prismjs/themes/prism.css', 'prismjs/plugins/toolbar/prism-toolbar.css', 'prismjs/plugins/line-numbers/prism-line-numbers.css']
+  - var vendorScripts = ['prismjs/components/prism-core.min.js', 'prismjs/components/prism-markup.min.js', 'prismjs/components/prism-clike.min.js', 'prismjs/components/prism-javascript.min.js', 'prismjs/components/prism-pug.min.js', 'prismjs/plugins/toolbar/prism-toolbar.min.js', 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js', 'prismjs/plugins/line-numbers/prism-line-numbers.min.js']
+  - var pageTitle = 'Icon font'
+  - var pageSubtitle = 'Collection of vector icons in the format of font. To add icon simply apply css class listed under each icon to <code>&lt;i&gt;</code> or <code>&lt;span&gt;</code> tag.'
+  - var isPageTitleBadge = true
+  
+//- Page Content
+block content
+  section.pb-5.mb-md-2
+    .card.border-0.box-shadow
+      .card-body.text-center
+        .row
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-activity
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-activity
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-airplay
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-airplay
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-alert-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-alert-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-alert-octagon
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-alert-octagon
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-alert-triangle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-alert-triangle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-align-center
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-align-center
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-align-justify
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-align-justify
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-align-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-align-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-align-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-align-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-anchor
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-anchor
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-aperture
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-aperture
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-archive
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-archive
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-down-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-down-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-down-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-down-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-down-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-down-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-down
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-down
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-left-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-left-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-right-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-right-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-up-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-up-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-up-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-up-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-up-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-up-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-arrow-up
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-arrow-up
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-at-sign
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-at-sign
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-award
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-award
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-bar-chart-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-bar-chart-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-bar-chart
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-bar-chart
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-battery-charging
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-battery-charging
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-battery
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-battery
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-behance
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-behance
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-bell-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-bell-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-bell
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-bell
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-bluetooth
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-bluetooth
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-bold
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-bold
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-book-open
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-book-open
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-book
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-book
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-bookmark
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-bookmark
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-box
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-box
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-briefcase
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-briefcase
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-calendar
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-calendar
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-camera-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-camera-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-camera
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-camera
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-cast
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-cast
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-check-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-check-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-check-square
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-check-square
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-check
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-check
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chevron-down
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chevron-down
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chevron-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chevron-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chevron-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chevron-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chevron-up
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chevron-up
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chevron-down
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chevron-down
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chevrons-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chevrons-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chevrons-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chevrons-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chevrons-up
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chevrons-up
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-chrome
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-chrome
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-clipboard
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-clipboard
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-clock
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-clock
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-cloud-drizzle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-cloud-drizzle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-cloud-lightning
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-cloud-lightning
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-cloud-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-cloud-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-cloud-rain
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-cloud-rain
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-cloud-snow
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-cloud-snow
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-cloud
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-cloud
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-code
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-code
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-codepen
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-codepen
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-codesandbox
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-codesandbox
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-coffee
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-coffee
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-columns
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-columns
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-command
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-command
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-compass
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-compass
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-copy
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-copy
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-corner-down-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-corner-down-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-corner-down-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-corner-down-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-corner-left-down
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-corner-left-down
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-corner-left-up
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-corner-left-up
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-corner-right-down
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-corner-right-down
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-corner-right-up
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-corner-right-up
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-corner-up-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-corner-up-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-corner-up-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-corner-up-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-cpu
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-cpu
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-credit-card
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-credit-card
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-crop
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-crop
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-crosshair
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-crosshair
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-database
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-database
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-delete
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-delete
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-disc
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-disc
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-dollar-sign
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-dollar-sign
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-download-cloud
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-download-cloud
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-download
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-download
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-dribbble
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-dribbble
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-droplet
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-droplet
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-edit-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-edit-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-edit-3
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-edit-3
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-edit
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-edit
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-external-link
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-external-link
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-eye-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-eye-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-eye
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-eye
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-facebook
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-facebook
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-fast-forward
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-fast-forward
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-feather
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-feather
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-figma
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-figma
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-file-minus
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-file-minus
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-file-plus
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-file-plus
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-file-text
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-file-text
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-file
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-file
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-film
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-film
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-filter-alt
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-filter-alt
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-filter
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-filter
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-flag
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-flag
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-folder-minus
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-folder-minus
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-folder-plus
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-folder-plus
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-folder
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-folder
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-framer
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-framer
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-frown
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-frown
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-gift
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-gift
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-git-branch
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-git-branch
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-git-commit
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-git-commit
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-git-merge
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-git-merge
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-git-pull-request
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-git-pull-request
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-github
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-github
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-gitlab
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-gitlab
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-globe
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-globe
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-google
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-google
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-grid
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-grid
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-hangouts
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-hangouts
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-hard-drive
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-hard-drive
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-hash
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-hash
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-headphones
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-headphones
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-heart
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-heart
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-help-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-help-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-hexagon
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-hexagon
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-home
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-home
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-image
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-image
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-inbox
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-inbox
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-info
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-info
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-instagram
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-instagram
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-italic
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-italic
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-key
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-key
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-layers
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-layers
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-layout
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-layout
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-life-buoy
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-life-buoy
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-link-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-link-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-link
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-link
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-linkedin
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-linkedin
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-list
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-list
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-loader
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-loader
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-lock
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-lock
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-log-in
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-log-in
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-log-out
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-log-out
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-mail
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-mail
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-map-pin
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-map-pin
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-map
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-map
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-maximize-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-maximize-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-maximize
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-maximize
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-meh
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-meh
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-menu
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-menu
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-message-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-message-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-message-square
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-message-square
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-messenger
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-messenger
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-mic-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-mic-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-mic
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-mic
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-minimize-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-minimize-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-minimize
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-minimize
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-minus-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-minus-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-minus-square
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-minus-square
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-minus
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-minus
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-monitor
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-monitor
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-moon
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-moon
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-more-horizontal
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-more-horizontal
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-more-vertical
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-more-vertical
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-mouse-pointer
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-mouse-pointer
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-move
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-move
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-music
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-music
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-navigation-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-navigation-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-navigation
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-navigation
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-octagon
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-octagon
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-odnoklassniki
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-odnoklassniki
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-package
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-package
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-paperclip
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-paperclip
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-pause-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-pause-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-pause
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-pause
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-paypal
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-paypal
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-pen-tool
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-pen-tool
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-percent
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-percent
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-phone-call
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-phone-call
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-phone-forwarded
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-phone-forwarded
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-phone-incoming
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-phone-incoming
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-phone-missed
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-phone-missed
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-phone-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-phone-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-phone-outgoing
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-phone-outgoing
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-phone
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-phone
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-pie-chart
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-pie-chart
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-pinterest
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-pinterest
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-play-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-play-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-play
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-play
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-plus-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-plus-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-plus-square
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-plus-square
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-plus
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-plus
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-pocket
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-pocket
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-power
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-power
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-printer
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-printer
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-quotes
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-quotes
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-radio
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-radio
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-refresh-ccw
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-refresh-ccw
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-refresh-cw
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-refresh-cw
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-repeat
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-repeat
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-rewind
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-rewind
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-rotate-ccw
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-rotate-ccw
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-rotate-cw
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-rotate-cw
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-rss
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-rss
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-save
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-save
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-scissors
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-scissors
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-search
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-search
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-send
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-send
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-server
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-server
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-settings
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-settings
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-share-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-share-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-share
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-share
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-shield-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-shield-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-shield
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-shield
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-shopping-bag
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-shopping-bag
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-shopping-cart
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-shopping-cart
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-shuffle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-shuffle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-sidebar
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-sidebar
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-skip-back
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-skip-back
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-skip-forward
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-skip-forward
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-skype
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-skype
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-slack
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-slack
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-slash
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-slash
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-sliders
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-sliders
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-smartphone
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-smartphone
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-smile
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-smile
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-speaker
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-speaker
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-star
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-star
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-stop-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-stop-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-sun
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-sun
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-sunrise
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-sunrise
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-sunset
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-sunset
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-tablet
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-tablet
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-tag
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-tag
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-target
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-target
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-telegram
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-telegram
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-terminal
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-terminal
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-thermometer
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-thermometer
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-thumbs-down
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-thumbs-down
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-thumbs-up
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-thumbs-up
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-toggle-left
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-toggle-left
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-toggle-right
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-toggle-right
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-tool
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-tool
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-trash-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-trash-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-trash
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-trash
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-trello
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-trello
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-trending-down
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-trending-down
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-trending-up
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-trending-up
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-truck
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-truck
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-tumblr
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-tumblr
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-tv
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-tv
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-twitch
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-twitch
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-twitter
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-twitter
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-type
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-type
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-umbrella
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-umbrella
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-underline
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-underline
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-unlock
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-unlock
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-upload-cloud
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-upload-cloud
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-upload
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-upload
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-user-check
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-user-check
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-user-minus
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-user-minus
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-user-plus
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-user-plus
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-user-x
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-user-x
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-user
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-user
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-users
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-users
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-viber
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-viber
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-video-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-video-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-video
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-video
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-vimeo
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-vimeo
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-vk
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-vk
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-voicemail
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-voicemail
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-volume-1
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-volume-1
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-volume-2
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-volume-2
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-volume-x
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-volume-x
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-volume
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-volume
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-watch
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-watch
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-wechat
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-wechat
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-wifi-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-wifi-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-wifi
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-wifi
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-wind
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-wind
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-x-circle
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-x-circle
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-x-octagon
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-x-octagon
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-x-square
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-x-square
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-x
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-x
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-youtube
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-youtube
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-zap-off
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-zap-off
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-zap
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-zap
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-zoom-in
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-zoom-in
+          .col-md-3.col-sm-4.col-6.mb-4
+            i.h2.text-nav.fe-zoom-out
+            .border-top.border-bottom.mt-1.py-1.font-size-sm fe-zoom-out

@@ -1,0 +1,242 @@
+extends ../partials/layout-components
+
+//- Override default config variables
+append config
+  - var vendorStyles = ['prismjs/themes/prism.css', 'prismjs/plugins/toolbar/prism-toolbar.css', 'prismjs/plugins/line-numbers/prism-line-numbers.css']
+  - var vendorScripts = ['prismjs/components/prism-core.min.js', 'prismjs/components/prism-markup.min.js', 'prismjs/components/prism-clike.min.js', 'prismjs/components/prism-javascript.min.js', 'prismjs/components/prism-pug.min.js', 'prismjs/plugins/toolbar/prism-toolbar.min.js', 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js', 'prismjs/plugins/line-numbers/prism-line-numbers.min.js']
+  - var pageTitle = 'Hotspots'
+  - var pageSubtitle = 'Create an image with interactive hotspots that show hidden description on hover.'
+  - var isPageTitleBadge = true
+  - var anchorNav = [{'title': 'Basic example', 'link': '#hotspots-basic'}, {'title': 'Combine with color switcher', 'link': '#hotspots-color-switcher'}]
+  
+//- Page Content
+block content
+
+  // Basic example
+  section#hotspots-basic.pb-5.mb-md-2
+    h2.h4.mb-3 Basic example
+    .card.border-0.box-shadow-lg
+      .card-header
+        ul(role='tablist').nav.nav-tabs.card-header-tabs
+          li.nav-item
+            a(href='#result1' data-toggle='tab' role='tab' aria-controls='result1' aria-selected='true').nav-link.active Result
+          li.nav-item
+            a(href='#html1' data-toggle='tab' role='tab' aria-controls='html1' aria-selected='false').nav-link HTML
+          li.nav-item
+            a(href='#pug1' data-toggle='tab' role='tab' aria-controls='pug1' aria-selected='false').nav-link Pug
+      .card-body
+        .tab-content
+          #result1.tab-pane.fade.show.active(role='tabpanel')
+            #hotspots-container-1.cs-hotspots(style='max-width: 45rem;')
+              +image('components/hotspots/image.jpg', 'Image with hotspots').rounded-lg
+              span(style='top: 56%; right: 34%;' data-container='#hotspots-container-1' data-toggle='popover' data-placement='top' data-trigger='hover' title='Soft foam base' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+              span(style='top: 15%; left: 40%;' data-container='#hotspots-container-1' data-toggle='popover' data-placement='bottom' data-trigger='hover' title='Durable materials' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+              span(style='top: 56%; left: 21%;' data-container='#hotspots-container-1' data-toggle='popover' data-placement='top' data-trigger='hover' title='Top-notch ergonomics' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+          #html1.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-html').
+                &lt;!-- Hotspots --&gt;
+                &lt;div id=&quot;hotspots-container-1&quot; class=&quot;cs-hotspots&quot;&gt;
+
+                  &lt;!-- Image --&gt;
+                  &lt;img src=&quot;path-to-image&quot; alt=&quot;Image with hotspots&quot;/&gt;
+
+                  &lt;!-- Hotspot --&gt;
+                  &lt;span class=&quot;cs-hotspot&quot; style=&quot;top: 56%; right: 34%;&quot; data-container=&quot;#hotspots-container-1&quot; data-toggle=&quot;popover&quot; data-placement=&quot;top&quot; data-trigger=&quot;hover&quot; title=&quot;Soft foam base&quot; data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;&gt;&lt;/span&gt;
+
+                  &lt;!-- Hotspot --&gt;
+                  &lt;span class=&quot;cs-hotspot&quot; style=&quot;top: 15%; left: 40%;&quot; data-container=&quot;#hotspots-container-1&quot; data-toggle=&quot;popover&quot; data-placement=&quot;bottom&quot; data-trigger=&quot;hover&quot; title=&quot;Durable materials&quot; data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;&gt;&lt;/span&gt;
+
+                  &lt;!-- Hotspot --&gt;
+                  &lt;span class=&quot;cs-hotspot&quot; style=&quot;top: 56%; left: 21%;&quot; data-container=&quot;#hotspots-container-1&quot; data-toggle=&quot;popover&quot; data-placement=&quot;top&quot; data-trigger=&quot;hover&quot; title=&quot;Top-notch ergonomics&quot; data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;&gt;&lt;/span&gt;
+                &lt;/div&gt;
+          #pug1.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-pug').
+                // Hotspots
+                #hotspots-container-1.cs-hotspots
+
+                  // Image
+                  +image(&quot;path-to-image&quot;, &quot;Image with hotspots&quot;).rounded-lg
+
+                  // Hotspot
+                  span(style=&quot;top: 56%; right: 34%;&quot;, data-container=&quot;#hotspots-container-1&quot;, data-toggle=&quot;popover&quot;, data-placement=&quot;top&quot;, data-trigger=&quot;hover&quot;, title=&quot;Soft foam base&quot;, data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;).cs-hotspot
+
+                  // Hotspot
+                  span(style=&quot;top: 15%; left: 40%;&quot;, data-container=&quot;#hotspots-container-1&quot;, data-toggle=&quot;popover&quot;, data-placement=&quot;bottom&quot;, data-trigger=&quot;hover&quot;, title=&quot;Durable materials&quot;, data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;).cs-hotspot
+
+                  // Hotspot
+                  span(style=&quot;top: 56%; left: 21%;&quot;, data-container=&quot;#hotspots-container-1&quot;, data-toggle=&quot;popover&quot;, data-placement=&quot;top&quot;, data-trigger=&quot;hover&quot;, title=&quot;Top-notch ergonomics&quot;, data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;).cs-hotspot
+
+  // Combine with color switcher
+  section#hotspots-color-switcher.pb-5.mb-md-2
+    h2.h4.mb-3 Combine with color switcher
+    .card.border-0.box-shadow-lg
+      .card-header
+        ul(role='tablist').nav.nav-tabs.card-header-tabs
+          li.nav-item
+            a(href='#result2' data-toggle='tab' role='tab' aria-controls='result2' aria-selected='true').nav-link.active Result
+          li.nav-item
+            a(href='#html2' data-toggle='tab' role='tab' aria-controls='html2' aria-selected='false').nav-link HTML
+          li.nav-item
+            a(href='#pug2' data-toggle='tab' role='tab' aria-controls='pug2' aria-selected='false').nav-link Pug
+      .card-body
+        .tab-content
+          #result2.tab-pane.fade.show.active(role='tabpanel')
+            .bg-secondary.px-4.py-6.m-n4
+              #hotspots-container-2.cs-hotspots.mx-auto(style='max-width: 45rem;')
+                #pink.radio-tab-pane.active(role='tabpanel')
+                  +image('demo/gadget-landing/hotspots/01_pink.png', 'Image')
+                #blue.radio-tab-pane(role='tabpanel')
+                  +image('demo/gadget-landing/hotspots/02_blue.png', 'Image')
+                #orange.radio-tab-pane(role='tabpanel')
+                  +image('demo/gadget-landing/hotspots/03_orange.png', 'Image')
+                #green.radio-tab-pane(role='tabpanel')
+                  +image('demo/gadget-landing/hotspots/04_green.png', 'Image')
+                span(style='top: 58%; right: 50%;' data-container='#hotspots-container-2' data-toggle='popover' data-placement='top' data-trigger='hover' title='Soft anti-slip grip' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+                span(style='top: 22%; right: 38%;' data-container='#hotspots-container-2' data-toggle='popover' data-placement='top' data-trigger='hover' title='Power button with 3 modes' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+                span(style='top: 17%; right: 17%;' data-container='#hotspots-container-2' data-toggle='popover' data-placement='bottom' data-trigger='hover' title='Interchangeable head' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+                span(style='top: 77%; left: 8%;' data-container='#hotspots-container-2' data-toggle='popover' data-placement='top' data-trigger='hover' title='Powerful Li-ion battery' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+              .text-center.pt-grid-gutter
+                .d-inline-flex.bg-light.rounded.py-2.px-3
+                  .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+                    input(type='radio' name='color' id='c-pink' value='Pink' checked).custom-control-input
+                    label(for='c-pink' data-toggle='radioTab' data-target='#pink' data-parent='#hotspots-container-2').cs-custom-option-label
+                      span(style='background-color: #ff3dbe;').cs-color-swatch
+                  .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+                    input(type='radio' name='color' id='c-blue' value='Blue').custom-control-input
+                    label(for='c-blue' data-toggle='radioTab' data-target='#blue' data-parent='#hotspots-container-2').cs-custom-option-label
+                      span(style='background-color: #00a1f0;').cs-color-swatch
+                  .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+                    input(type='radio' name='color' id='c-orange' value='Orange').custom-control-input
+                    label(for='c-orange' data-toggle='radioTab' data-target='#orange' data-parent='#hotspots-container-2').cs-custom-option-label
+                      span(style='background-color: #fa6000;').cs-color-swatch
+                  .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+                    input(type='radio' name='color' id='c-green' value='Green').custom-control-input
+                    label(for='c-green' data-toggle='radioTab' data-target='#green' data-parent='#hotspots-container-2').cs-custom-option-label
+                      span(style='background-color: #00b22c;').cs-color-swatch
+          #html2.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-html').
+                &lt;!-- Combine hotspots with color switcher --&gt;
+                &lt;div class=&quot;cs-hotspots&quot; id=&quot;hotspots-container-2&quot;&gt;
+
+                  &lt;!-- Image (radio) tabs --&gt;
+                  &lt;div class=&quot;radio-tab-pane active&quot; id=&quot;pink&quot; role=&quot;tabpanel&quot;&gt;
+                    &lt;img src=&quot;path-to-first-image&quot; alt=&quot;Image&quot;/&gt;
+                  &lt;/div&gt;
+                  &lt;div class=&quot;radio-tab-pane&quot; id=&quot;blue&quot; role=&quot;tabpanel&quot;&gt;
+                    &lt;img src=&quot;.path-to-second-image&quot; alt=&quot;Image&quot;/&gt;
+                  &lt;/div&gt;
+                  &lt;div class=&quot;radio-tab-pane&quot; id=&quot;orange&quot; role=&quot;tabpanel&quot;&gt;
+                    &lt;img src=&quot;path-to-third-image&quot; alt=&quot;Image&quot;/&gt;
+                  &lt;/div&gt;
+                  &lt;div class=&quot;radio-tab-pane&quot; id=&quot;green&quot; role=&quot;tabpanel&quot;&gt;
+                    &lt;img src=&quot;path-to-fourth-image&quot; alt=&quot;Image&quot;/&gt;
+                  &lt;/div&gt;
+                  
+                  &lt;!-- Hotspot --&gt;
+                  &lt;span class=&quot;cs-hotspot&quot; style=&quot;top: 58%; right: 50%;&quot; data-container=&quot;#hotspots-container-2&quot; data-toggle=&quot;popover&quot; data-placement=&quot;top&quot; data-trigger=&quot;hover&quot; title=&quot;Soft anti-slip grip&quot; data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;&gt;&lt;/span&gt;
+                  
+                  &lt;!-- Hotspot --&gt;
+                  &lt;span class=&quot;cs-hotspot&quot; style=&quot;top: 22%; right: 38%;&quot; data-container=&quot;#hotspots-container-2&quot; data-toggle=&quot;popover&quot; data-placement=&quot;top&quot; data-trigger=&quot;hover&quot; title=&quot;Power button with 3 modes&quot; data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;&gt;&lt;/span&gt;
+                  
+                  &lt;!-- Hotspot --&gt;
+                  &lt;span class=&quot;cs-hotspot&quot; style=&quot;top: 17%; right: 17%;&quot; data-container=&quot;#hotspots-container-2&quot; data-toggle=&quot;popover&quot; data-placement=&quot;bottom&quot; data-trigger=&quot;hover&quot; title=&quot;Interchangeable head&quot; data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;&gt;&lt;/span&gt;
+                  
+                  &lt;!-- Hotspot --&gt;
+                  &lt;span class=&quot;cs-hotspot&quot; style=&quot;top: 77%; left: 8%;&quot; data-container=&quot;#hotspots-container-2&quot; data-toggle=&quot;popover&quot; data-placement=&quot;top&quot; data-trigger=&quot;hover&quot; title=&quot;Powerful Li-ion battery&quot; data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;&gt;&lt;/span&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Color radio buttons --&gt;
+                &lt;div class=&quot;text-center pt-grid-gutter&quot;&gt;
+                  &lt;div class=&quot;d-inline-flex bg-light rounded py-2 px-3&quot;&gt;
+
+                    &lt;!-- Radio --&gt;
+                    &lt;div class=&quot;custom-control cs-custom-color-option custom-control-inline mx-1 my-1&quot;&gt;
+                      &lt;input class=&quot;custom-control-input&quot; type=&quot;radio&quot; name=&quot;color&quot; id=&quot;c-pink&quot; value=&quot;Pink&quot; checked&gt;
+                      &lt;label class=&quot;cs-custom-option-label&quot; for=&quot;c-pink&quot; data-toggle=&quot;radioTab&quot; data-target=&quot;#pink&quot; data-parent=&quot;#hotspots-container-2&quot;&gt;
+                        &lt;span class=&quot;cs-color-swatch&quot; style=&quot;background-color: #ff3dbe;&quot;&gt;&lt;/span&gt;
+                      &lt;/label&gt;
+                    &lt;/div&gt;
+
+                    &lt;!-- Radio --&gt;
+                    &lt;div class=&quot;custom-control cs-custom-color-option custom-control-inline mx-1 my-1&quot;&gt;
+                      &lt;input class=&quot;custom-control-input&quot; type=&quot;radio&quot; name=&quot;color&quot; id=&quot;c-blue&quot; value=&quot;Blue&quot;&gt;
+                      &lt;label class=&quot;cs-custom-option-label&quot; for=&quot;c-blue&quot; data-toggle=&quot;radioTab&quot; data-target=&quot;#blue&quot; data-parent=&quot;#hotspots-container-2&quot;&gt;
+                        &lt;span class=&quot;cs-color-swatch&quot; style=&quot;background-color: #00a1f0;&quot;&gt;&lt;/span&gt;
+                      &lt;/label&gt;
+                    &lt;/div&gt;
+
+                    &lt;!-- Radio --&gt;
+                    &lt;div class=&quot;custom-control cs-custom-color-option custom-control-inline mx-1 my-1&quot;&gt;
+                      &lt;input class=&quot;custom-control-input&quot; type=&quot;radio&quot; name=&quot;color&quot; id=&quot;c-orange&quot; value=&quot;Orange&quot;&gt;
+                      &lt;label class=&quot;cs-custom-option-label&quot; for=&quot;c-orange&quot; data-toggle=&quot;radioTab&quot; data-target=&quot;#orange&quot; data-parent=&quot;#hotspots-container-2&quot;&gt;
+                        &lt;span class=&quot;cs-color-swatch&quot; style=&quot;background-color: #fa6000;&quot;&gt;&lt;/span&gt;
+                      &lt;/label&gt;
+                    &lt;/div&gt;
+
+                    &lt;!-- Radio --&gt;
+                    &lt;div class=&quot;custom-control cs-custom-color-option custom-control-inline mx-1 my-1&quot;&gt;
+                      &lt;input class=&quot;custom-control-input&quot; type=&quot;radio&quot; name=&quot;color&quot; id=&quot;c-green&quot; value=&quot;Green&quot;&gt;
+                      &lt;label class=&quot;cs-custom-option-label&quot; for=&quot;c-green&quot; data-toggle=&quot;radioTab&quot; data-target=&quot;#green&quot; data-parent=&quot;#hotspots-container-2&quot;&gt;
+                        &lt;span class=&quot;cs-color-swatch&quot; style=&quot;background-color: #00b22c;&quot;&gt;&lt;/span&gt;
+                      &lt;/label&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+          #pug2.tab-pane.fade(role='tabpanel')
+            pre.line-numbers
+              code(class='lang-pug').
+                // Combine hotspots with color switcher
+                #hotspots-container-2.cs-hotspots
+
+                  // Image (radio) tabs
+                  #pink.radio-tab-pane.active(role=&quot;tabpanel&quot;)
+                    +image(&quot;path-to-first-image&quot;, &quot;Image&quot;)
+                  #blue.radio-tab-pane(role=&quot;tabpanel&quot;)
+                    +image(&quot;path-to-second-image&quot;, &quot;Image&quot;)
+                  #orange.radio-tab-pane(role=&quot;tabpanel&quot;)
+                    +image(&quot;path-to-third-image&quot;, &quot;Image&quot;)
+                  #green.radio-tab-pane(role=&quot;tabpanel&quot;)
+                    +image(&quot;path-to-fourth-image&quot;, &quot;Image&quot;)
+                  
+                  // Hotspot
+                  span(style=&quot;top: 58%; right: 50%;&quot;, data-container=&quot;#hotspots-container-2&quot;, data-toggle=&quot;popover&quot;, data-placement=&quot;top&quot;, data-trigger=&quot;hover&quot;, title=&quot;Soft anti-slip grip&quot;, data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;).cs-hotspot
+
+                  // Hotspot
+                  span(style=&quot;top: 22%; right: 38%;&quot;, data-container=&quot;#hotspots-container-2&quot;, data-toggle=&quot;popover&quot;, data-placement=&quot;top&quot;, data-trigger=&quot;hover&quot;, title=&quot;Power button with 3 modes&quot;, data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;).cs-hotspot
+
+                  // Hotspot
+                  span(style=&quot;top: 17%; right: 17%;&quot;, data-container=&quot;#hotspots-container-2&quot;, data-toggle=&quot;popover&quot;, data-placement=&quot;bottom&quot;, data-trigger=&quot;hover&quot;, title=&quot;Interchangeable head&quot;, data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;).cs-hotspot
+
+                  // Hotspot
+                  span(style=&quot;top: 77%; left: 8%;&quot;, data-container=&quot;#hotspots-container-2&quot;, data-toggle=&quot;popover&quot;, data-placement=&quot;top&quot;, data-trigger=&quot;hover&quot;, title=&quot;Powerful Li-ion battery&quot;, data-content=&quot;Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.&quot;).cs-hotspot
+
+                // Color radio buttons
+                .text-center.pt-grid-gutter
+                  .d-inline-flex.bg-light.rounded.py-2.px-3
+
+                    // Radio
+                    .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+                      input(type=&quot;radio&quot;, name=&quot;color&quot;, id=&quot;c-pink&quot;, value=&quot;Pink&quot;, checked).custom-control-input
+                      label(for=&quot;c-pink&quot;, data-toggle=&quot;radioTab&quot;, data-target=&quot;#pink&quot;, data-parent=&quot;#hotspots-container-2&quot;).cs-custom-option-label
+                        span(style=&quot;background-color: #ff3dbe;&quot;).cs-color-swatch
+                    
+                    // Radio
+                    .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+                      input(type=&quot;radio&quot;, name=&quot;color&quot;, id=&quot;c-blue&quot;, value=&quot;Blue&quot;).custom-control-input
+                      label(for=&quot;c-blue&quot;, data-toggle=&quot;radioTab&quot;, data-target=&quot;#blue&quot;, data-parent=&quot;#hotspots-container-2&quot;).cs-custom-option-label
+                        span(style=&quot;background-color: #00a1f0;&quot;).cs-color-swatch
+                    
+                    // Radio
+                    .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+                      input(type=&quot;radio&quot;, name=&quot;color&quot;, id=&quot;c-orange&quot;, value=&quot;Orange&quot;).custom-control-input
+                      label(for=&quot;c-orange&quot;, data-toggle=&quot;radioTab&quot;, data-target=&quot;#orange&quot;, data-parent=&quot;#hotspots-container-2&quot;).cs-custom-option-label
+                        span(style=&quot;background-color: #fa6000;&quot;).cs-color-swatch
+
+                    // Radio
+                    .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+                      input(type=&quot;radio&quot;, name=&quot;color&quot;, id=&quot;c-green&quot;, value=&quot;Green&quot;).custom-control-input
+                      label(for=&quot;c-green&quot;, data-toggle=&quot;radioTab&quot;, data-target=&quot;#green&quot;, data-parent=&quot;#hotspots-container-2&quot;).cs-custom-option-label
+                        span(style=&quot;background-color: #00b22c;&quot;).cs-color-swatch

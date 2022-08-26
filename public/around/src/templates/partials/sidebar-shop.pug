@@ -1,0 +1,138 @@
+// Categories
+.cs-widget.cs-widget-categories.mb-5
+  h3.cs-widget-title Categories
+  ul#categories
+    li
+      a(href='#clothing' data-toggle='collapse').cs-widget-link
+        | Clothing
+        small.text-muted.pl-1.ml-2 235
+      ul#clothing.collapse.show(data-parent='#categories')
+        li: a(href='#').cs-widget-link View all
+        li: a(href='#').cs-widget-link Blazers &amp; Suits
+        li: a(href='#').cs-widget-link Cardigans
+        li: a(href='#').cs-widget-link Dresses
+        li: a(href='#').cs-widget-link Hoodie &amp; Sweatshirts
+        li: a(href='#').cs-widget-link Jackets &amp; Coats
+        li: a(href='#').cs-widget-link Jeans
+        li: a(href='#').cs-widget-link Lingerie
+        li: a(href='#').cs-widget-link Sportswear
+    li
+      a(href='#shoes' data-toggle='collapse').cs-widget-link.collapsed
+        | Shoes
+        small.text-muted.pl-1.ml-2 210
+      ul#shoes.collapse(data-parent='#categories')
+        li: a(href='#').cs-widget-link View all
+        li: a(href='#').cs-widget-link Athletic shoes
+        li: a(href='#').cs-widget-link Balerinas &amp; Flats
+        li: a(href='#').cs-widget-link Boots
+        li: a(href='#').cs-widget-link Clogs &amp; Mules
+        li: a(href='#').cs-widget-link Flip Flops
+        li: a(href='#').cs-widget-link Loafers
+        li: a(href='#').cs-widget-link Sandals
+        li: a(href='#').cs-widget-link Sneakers
+    li
+      a(href='#electronics' data-toggle='collapse').cs-widget-link.collapsed
+        | Electronics
+        small.text-muted.pl-1.ml-2 197
+      ul#electronics.collapse(data-parent='#categories')
+        li: a(href='#').cs-widget-link View all
+        li: a(href='#').cs-widget-link Computers &amp; Accessories
+        li: a(href='#').cs-widget-link TV, Video &amp; Audio
+        li: a(href='#').cs-widget-link Smartphones &amp; Tablets
+        li: a(href='#').cs-widget-link Cameras, Photo &amp; Video
+        li: a(href='#').cs-widget-link Headphones
+        li: a(href='#').cs-widget-link Wearable Electronics
+        li: a(href='#').cs-widget-link Printers &amp; Ink
+        li: a(href='#').cs-widget-link Video Games
+    li
+      a(href='#accessories' data-toggle='collapse').cs-widget-link.collapsed
+        | Accessories
+        small.text-muted.pl-1.ml-2 124
+      ul#accessories.collapse(data-parent='#categories')
+        li: a(href='#').cs-widget-link View all
+        li: a(href='#').cs-widget-link Bags
+        li: a(href='#').cs-widget-link Belts
+        li: a(href='#').cs-widget-link Hats
+        li: a(href='#').cs-widget-link Jewelry
+        li: a(href='#').cs-widget-link Cosmetics
+
+// Price range
+.cs-widget.mt-n1.mb-5
+  h3.cs-widget-title Price
+  .px-2
+    .cs-range-slider(data-start-min='250' data-start-max='680' data-min='0' data-max='1000' data-step='1')
+      .cs-range-slider-ui
+      .d-flex
+        .w-50.pr-2.mr-2
+          .input-group.input-group-sm
+            .input-group-prepend
+              span.input-group-text $
+            input(type='text').form-control.cs-range-slider-value-min
+        .w-50.pl-2
+          .input-group.input-group-sm
+            .input-group-prepend
+              span.input-group-text $
+            input(type='text').form-control.cs-range-slider-value-max
+
+// Brand (checkboxes)
+.cs-widget.mb-5
+  h3.cs-widget-title Brand
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='adidas' checked).custom-control-input
+    label(for='adidas').custom-control-label.text-nav
+      | Adidas
+      span.font-size-xs.text-muted.ml-2 425
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='bilabong').custom-control-input
+    label(for='bilabong').custom-control-label.text-nav
+      | Bilabong
+      span.font-size-xs.text-muted.ml-2 27
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='klein').custom-control-input
+    label(for='klein').custom-control-label.text-nav
+      | Calvin Klein
+      span.font-size-xs.text-muted.ml-2 365
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='electrolux').custom-control-input
+    label(for='electrolux').custom-control-label.text-nav
+      | Electrolux
+      span.font-size-xs.text-muted.ml-2 56
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='motorolla').custom-control-input
+    label(for='motorolla').custom-control-label.text-nav
+      | Motorolla
+      span.font-size-xs.text-muted.ml-2 104
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='nb').custom-control-input
+    label(for='nb').custom-control-label.text-nav
+      | New Balance
+      span.font-size-xs.text-muted.ml-2 197
+
+// Size (checkboxes)
+.cs-widget.mb-5
+  h3.cs-widget-title Size
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='xs').custom-control-input
+    label(for='xs').custom-control-label.text-nav
+      | XS
+      span.font-size-xs.text-muted.ml-2 38
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='s' checked).custom-control-input
+    label(for='s').custom-control-label.text-nav
+      | S
+      span.font-size-xs.text-muted.ml-2 173
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='m').custom-control-input
+    label(for='m').custom-control-label.text-nav
+      | M
+      span.font-size-xs.text-muted.ml-2 226
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='l').custom-control-input
+    label(for='l').custom-control-label.text-nav
+      | L
+      span.font-size-xs.text-muted.ml-2 345
+  .custom-control.custom-checkbox.mb-2
+    input(type='checkbox' id='xl').custom-control-input
+    label(for='xl').custom-control-label.text-nav
+      | XL
+      span.font-size-xs.text-muted.ml-2 104

@@ -1,0 +1,62 @@
+extends ../partials/layout
+
+//- Override default config variables
+append config
+  - var isNestedFile = true
+
+//- Navbar
+block navbar
+  header.navbar.navbar-expand-lg.navbar-light.bg-light.navbar-box-shadow.fixed-top
+    .container.px-0.px-xl-3
+      a(href='#').navbar-brand.order-lg-1.mr-0.pr-lg-2.mr-lg-4
+        +image('logo/logo-dark.png', 'Around')(width='153').d-none.d-lg-block
+        +image('logo/logo-icon.png', 'Around')(width='58').d-lg-none
+      .d-flex.align-items-center.order-lg-3.ml-auto
+        button(type='button' data-toggle='offcanvas' data-offcanvas-id='offcanvasMenu').navbar-toggler
+          span.navbar-toggler-icon
+        .navbar-tool.mr-2
+          a(href='#').navbar-tool-icon-box
+            i.fe-search
+        .navbar-tool.d-none.d-sm-flex.mr-2
+          a(href='#').navbar-tool-icon-box
+            i.fe-user
+        div(style='height: 30px;').border-left.mr-2
+        .navbar-tool.mr-2
+          a(href='#').navbar-tool-icon-box
+            i.fe-shopping-cart
+            span.navbar-tool-badge 3
+      #offcanvasMenu.cs-offcanvas-collapse.order-lg-2
+        .cs-offcanvas-cap.navbar-box-shadow
+          h5.mt-1.mb-0 Menu
+          button(type='button' data-toggle='offcanvas' data-offcanvas-id='offcanvasMenu').close.lead
+            span(aria-hidden='true') &times;
+        .cs-offcanvas-body(data-simplebar)
+          ul.navbar-nav
+            li.nav-item.active
+              a(href='#').nav-link Home
+            li.nav-item
+              a(href='#').nav-link Link
+            li.nav-item.dropdown
+              a(href='#' data-toggle='dropdown').nav-link.dropdown-toggle Dropdown
+              ul.dropdown-menu
+                li: a(href='#').dropdown-item Action link
+                li.dropdown
+                  a(href='#' data-toggle='dropdown').dropdown-item.dropdown-toggle Dropdown
+                  ul.dropdown-menu
+                    li: a(href='#').dropdown-item Action link
+                    li: a(href='#').dropdown-item Another action
+                    li: a(href='#').dropdown-item Something else here
+                    li: a(href='#').dropdown-item Yet another link
+                li: a(href='#').dropdown-item Another action
+                li.dropdown-divider 
+                li: a(href='#').dropdown-item Something else here
+            li.nav-item
+              a(href='#' tabindex='-1' aria-disabled='true').nav-link.disabled Disabled
+  
+//- Page Content
+block content
+  .container.pt-5.pb-4
+    h1.h3.pt-5.mt-2 Off-canvas menu example
+    p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    p Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+    p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.

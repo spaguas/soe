@@ -1,0 +1,208 @@
+//- Include config.pug file that holds all variables
+block config
+  include ../helpers/config
+
+//- Mixins - reusable code snippets
+include ../helpers/mixins
+
+//- Override default config variables
+append config
+  - var isPageLoading = false
+  - var isNestedFile = true
+
+doctype html
+html(lang="en")
+
+  //- head.pug template
+  include head 
+  
+  // Body
+  body
+    
+    main.container-fluid
+
+      // Main content
+      section.cs-offcanvas-enabled.row.pb-3.pb-md-4
+        .col-xl-9
+
+          // Navbar
+          header(data-scroll-header).navbar.navbar-expand.navbar-light.fixed-top.navbar-box-shadow.bg-light.px-3.px-lg-4
+            a(href='typography.html').navbar-brand.d-lg-none
+              +image('logo/logo-icon.png', 'Around')(width='58')
+            button(type='button' data-toggle='offcanvas' data-offcanvas-id='componentsNav').navbar-toggler.d-block.d-lg-none.mr-3.ml-auto
+              span.navbar-toggler-icon
+            ul.navbar-nav.ml-auto.d-none.d-lg-flex
+              li.nav-item
+                a(href='../index.html').nav-link
+                  i.fe-eye.align-middle.mt-n1.mr-2
+                  | Live preview
+              li.nav-item: .nav-link.disabled.text-border.px-1 |
+              li.nav-item
+                a(href='../docs/dev-setup.html').nav-link
+                  i.fe-file-text.align-middle.mt-n1.mr-2
+                  | Documentation
+              li.nav-item: .nav-link.disabled.text-border.px-1 |
+            a(href='https://themes.getbootstrap.com/product/around-multipurpose-template-ui-kit/' target='_blank' rel='noopener').btn.btn-primary.btn-shadow.ml-lg-4
+              i.fe-shopping-cart.mr-2.d-none.d-sm-inline-block
+              | Buy now
+          
+          // Side navigation (Off-canvas)
+          aside#componentsNav.cs-offcanvas.cs-offcanvas-collapse.bg-dark
+            .cs-offcanvas-cap.bg-darker.d-none.d-lg-block.py-2
+              a(href='typography.html').navbar-brand.py-1
+                +image('logo/logo-light.png', 'Around')(width='153')
+              span.badge.badge-danger UI Kit
+            .cs-offcanvas-cap.bg-darker.d-flex.d-lg-none
+              .d-flex.align-items-center.mt-1
+                h5.text-light.mb-0.mr-3 Menu
+                span.badge.badge-danger UI Kit
+              button(type='button' data-toggle='offcanvas' data-offcanvas-id='componentsNav').close.text-light.lead
+                span(aria-hidden='true') &times;
+            .d-flex.d-lg-none.align-items-center.py-4.px-3.border-bottom.border-light
+              a(href='../index.html').btn.btn-outline-light.btn-block.btn-sm.mr-2
+                i.fe-eye.mr-2
+                | Preview
+              a(href='../docs/dev-setup.html').btn.btn-outline-light.btn-block.btn-sm.mt-0
+                i.fe-file-text.mr-2
+                | Docs
+            .cs-offcanvas-body.pt-4.pb-grid-gutter(data-simplebar data-simplebar-inverse)
+              h6.text-light.pt-2.pb-2.border-bottom.border-light Content
+              a(href='typography.html')&attributes(pageTitle === 'Typography' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Typography
+              a(href='icon-font.html')&attributes(pageTitle === 'Icon font' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Icon font
+              a(href='code.html')&attributes(pageTitle === 'Code' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Code
+              a(href='images.html')&attributes(pageTitle === 'Images & figures' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Images &amp; figures
+              a(href='tables.html')&attributes(pageTitle === 'Tables' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Tables
+              h6.text-light.pt-3.pb-2.border-bottom.border-light Components
+              a(href='alerts.html')&attributes(pageTitle === 'Alerts' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Alerts
+              a(href='badge.html')&attributes(pageTitle === 'Badges' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Badges
+              a(href='blog-components.html')&attributes(pageTitle === 'Blog components' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Blog components
+              a(href='breadcrumb.html')&attributes(pageTitle === 'Breadcrumb' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Breadcrumb
+              a(href='buttons.html')&attributes(pageTitle === 'Buttons' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Buttons
+              a(href='button-group.html')&attributes(pageTitle === 'Button group' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Button group
+              a(href='cards.html')&attributes(pageTitle === 'Cards' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Cards
+              a(href='carousel.html')&attributes(pageTitle === 'Carousel' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Carousel
+              a(href='charts.html')&attributes(pageTitle === 'Charts' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Charts
+              a(href='collapse.html')&attributes(pageTitle === 'Collapse' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Collapse
+              a(href='countdown.html')&attributes(pageTitle === 'Countdown' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Countdown
+              a(href='contacts-card.html')&attributes(pageTitle === 'Contacts card' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Contacts card
+              a(href='date-picker.html')&attributes(pageTitle === 'Date / time picker' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Date / time picker
+              a(href='dropdowns.html')&attributes(pageTitle === 'Dropdowns' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Dropdowns
+              a(href='forms.html')&attributes(pageTitle === 'Forms' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Forms
+              a(href='frames.html')&attributes(pageTitle === 'Frames' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Frames
+              a(href='gallery.html')&attributes(pageTitle === 'Gallery' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Gallery
+              a(href='hotspots.html')&attributes(pageTitle === 'Hotspots' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Hotspots
+              a(href='input-group.html')&attributes(pageTitle === 'Input group' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Input group
+              a(href='jumbotron.html')&attributes(pageTitle === 'Jumbotron' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Jumbotron
+              a(href='list-group.html')&attributes(pageTitle === 'List group' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | List group
+              a(href='media-object.html')&attributes(pageTitle === 'Media object' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Media object
+              a(href='modal.html')&attributes(pageTitle === 'Modal' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Modal
+              a(href='navbar.html')&attributes(pageTitle === 'Navbar' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Navbar
+              a(href='pagination.html')&attributes(pageTitle === 'Pagination' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Pagination
+              a(href='parallax.html')&attributes(pageTitle === 'Parallax' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Parallax
+              a(href='pills.html')&attributes(pageTitle === 'Pills' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Pills
+              a(href='popovers.html')&attributes(pageTitle === 'Popovers' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Popovers
+              a(href='portfolio-components.html')&attributes(pageTitle === 'Portfolio components' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Portfolio components
+              a(href='pricing.html')&attributes(pageTitle === 'Pricing' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Pricing
+              a(href='progress.html')&attributes(pageTitle === 'Progress' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Progress
+              a(href='shop-components.html')&attributes(pageTitle === 'Shop components' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Shop components
+              a(href='social-buttons.html')&attributes(pageTitle === 'Social buttons' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Social buttons
+              a(href='spinners.html')&attributes(pageTitle === 'Spinners' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Spinners
+              a(href='tabs.html')&attributes(pageTitle === 'Tabs' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Tabs
+              a(href='team.html')&attributes(pageTitle === 'Team' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Team
+              a(href='testimonials.html')&attributes(pageTitle === 'Testimonials / reviews' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Testimonials / reviews
+              a(href='toasts.html')&attributes(pageTitle === 'Toasts' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Toasts
+              a(href='tooltips.html')&attributes(pageTitle === 'Tooltips' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Tooltips
+              a(href='video-popup.html')&attributes(pageTitle === 'Video popup' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Video popup
+              a(href='widgets.html')&attributes(pageTitle === 'Widgets' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Widgets
+              h6.text-light.pt-3.pb-2.border-bottom.border-light Utilities
+              a(href='https://getbootstrap.com/docs/4.5/utilities/borders/' target='_blank' rel='noopener')&attributes(pageTitle === 'Alerts' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Bootstrap
+              a(href='utilities.html')&attributes(pageTitle === 'Around utilities' ? {'class': 'nav-link-style nav-link-light font-size-sm active'} : {'class': 'nav-link-style nav-link-light font-size-sm'})
+                | Around
+
+
+          // Page title
+          .border-bottom.pt-5.pb-2.mt-2.mb-5
+            h1.mt-4.pt-5 !{pageTitle}
+            .d-flex.flex-wrap.flex-md-nowrap.justify-content-between
+              p.text-muted !{pageSubtitle}
+              if Object.keys(pageTitleLink).length
+                p.font-size-sm.font-weight-medium.pl-md-4
+                  a()&attributes({'href': pageTitleLink.link, 'class': 'text-nowrap', 'target': '_blank', 'rel': 'noopener'})= pageTitleLink.title
+                    i.fe-chevron-right.font-size-base.align-middle.ml-1
+              if isPageTitleBadge
+                .pl-md-4.mb-3
+                  span.badge.badge-danger Around component
+
+          
+          block content
+
+        
+        if anchorNav.length
+          // Quick (anchor) navigation
+          .col-xl-3.d-none.d-xl-block.pl-5
+            aside.sticky-top.pt-5
+              .pt-5.mt-5
+                .pl-4.border-left
+                  h3.h5 Jump to
+                  each item in anchorNav
+                    - var linkatts = {'href': item.link}
+                    a(class='d-block nav-link-style font-size-sm mb-2', 'data-scroll')&attributes(linkatts)= item.title
+
+
+    // Back to top button
+    a(href='#top' data-scroll).btn-scroll-top
+      span.btn-scroll-top-tooltip.text-muted.font-size-sm.mr-2 Top
+      i.btn-scroll-top-icon.fe-arrow-up    
+    
+    // Vendor scrits: js libraries and plugins
+    +vendor-scripts
+
+    // Main theme script
+    script()&attributes(isNestedFile ? {'src': '../js/theme.min.js'} : {'src': 'js/theme.min.js'})

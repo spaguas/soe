@@ -1,0 +1,85 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var parentMenu = 'Templates'
+  - var pageTitle = 'Order Tracking'
+
+//- Navbar
+block navbar
+
+  //- navbar-shop.pug template
+  include partials/navbar-shop
+
+//- Page Content
+block content
+  .container.pt-4.mb-2.pb-6
+    +breadcrumb([{'title': 'Shop', 'link': 'shop-ls.html'}, {'title': 'Order tracking'}]).py-1.my-2
+    h1.mb-3.pb-4 Tracking order: <span class='font-weight-normal'>34VB5540K83</span>
+
+    // Details
+    .row.mb-4
+      .col-sm-4.mb-2
+        .bg-secondary.h-100.p-4.text-center.rounded
+          span.font-weight-medium.text-heading.mr-2 Shipped via:
+          | UPS Ground
+      .col-sm-4.mb-2
+        .bg-secondary.h-100.p-4.text-center.rounded
+          span.font-weight-medium.text-heading.mr-2 Status:
+          | Processing order
+      .col-sm-4.mb-2
+        .bg-secondary.h-100.p-4.text-center.rounded
+          span.font-weight-medium.text-heading.mr-2 Expected date:
+          | May 15, 2020
+    
+    // Progress
+    .card.border-0.box-shadow
+      .card-body
+        .progress.mb-3(style='height: 4px;')
+          .progress-bar(role='progressbar' style='width: 36%' aria-valuenow='34' aria-valuemin='0' aria-valuemax='100')
+        .row.pt-4
+          .col-lg-3.col-sm-6
+            .media.align-items-center.mb-4
+              .bg-secondary.rounded-circle.border.text-center(style='width: 60px; height: 60px; line-height: 54px;')
+                i.fe-shopping-bag.font-size-xl.text-muted
+              .media-body.pl-3
+                span.badge.badge-success.badge-pill.mb-1
+                  i.fe-check.mr-1
+                  | Completed
+                h6.text-muted.mb-0 Order placed
+          .col-lg-3.col-sm-6
+            .media.align-items-center.mb-4
+              .rounded-circle.border.border-primary.text-center(style='width: 60px; height: 60px; line-height: 54px;')
+                i.fe-settings.font-size-xl.text-primary
+              .media-body.pl-3
+                span.badge.badge-primary.badge-pill.mb-1
+                  | In progress
+                h6.text-primary.mb-0 Processing order
+          .col-lg-3.col-sm-6
+            .media.align-items-center.mb-4
+              .rounded-circle.border.text-center(style='width: 60px; height: 60px; line-height: 54px;')
+                i.fe-star.font-size-xl
+              .media-body.pl-3
+                span.d-block.text-muted.font-size-ms.mb-1
+                  | Third step
+                h6.mb-0 Quality check
+          .col-lg-3.col-sm-6
+            .media.align-items-center.mb-4
+              .rounded-circle.border.text-center(style='width: 60px; height: 60px; line-height: 54px;')
+                i.fe-package.font-size-xl
+              .media-body.pl-3
+                span.d-block.text-muted.font-size-ms.mb-1
+                  | Fourth step
+                h6.mb-0 Product dispatched
+    
+    // Footer
+    .d-sm-flex.flex-wrap.justify-content-between.align-items-center.text-center.pt-4
+      .custom-control.custom-checkbox.mt-2.mr-3
+        input(type='checkbox' id='notify-me' checked).custom-control-input
+        label(for='notify-me').custom-control-label Notify me when order is delivered
+      a(href='dashboard-orders.html').btn.btn-primary.btn-sm.mt-2 View order details
+
+
+//- Footer
+block footer
+  include partials/footer-shop

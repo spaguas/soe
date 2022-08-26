@@ -1,0 +1,42 @@
+// Add Payment Method
+#add-payment.modal.fade
+  .modal-dialog.modal-lg.modal-dialog-centered
+    .modal-content
+      .modal-header
+        h4.modal-title Add a payment method
+        button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+          span(aria-hidden='true') &times;
+      .modal-body
+        .custom-control.custom-radio.mb-4
+          input(type='radio' id='card' name='payment-method' checked).custom-control-input
+          label(for='card' data-toggle='radioTab' data-target='#card-payment' data-parent='#payment-methods').custom-control-label
+            | Credit / Debit card
+            +image('account/cards/cards.png', 'Cards accepted')(width='187').d-inline-block.align-middle.ml-2
+        .custom-control.custom-radio.mb-4
+          input(type='radio' id='paypal' name='payment-method').custom-control-input
+          label(for='paypal' data-toggle='radioTab' data-target='#paypal-payment' data-parent='#payment-methods').custom-control-label
+            | PayPal
+            +image('account/cards/card-paypal.png', 'PayPal')(width='39').d-inline-block.align-middle.ml-2
+
+        #payment-methods.pt-3
+          #card-payment.radio-tab-pane.active
+            form.row.no-gutters.mx-n2
+              .form-group.col-sm-6.px-2
+                label(for='cc-number').form-label Card number
+                input(type='text' id='cc-number' data-format='card' placeholder='0000 0000 0000 0000').form-control
+              .form-group.col-sm-6.px-2
+                label(for='cc-holder-name').form-label Name on card
+                input(type='text' id='cc-holder-name' placeholder="Card holder's name").form-control
+              .form-group.col-sm-3.px-2
+                label(for='cc-expiry').form-label Expiry
+                input(type='text' id='cc-expiry' data-format='date' placeholder='mm/yy').form-control
+              .form-group.col-sm-3.px-2
+                label(for='cc-cvc').form-label CVC
+                input(type='text' id='cc-cvc' data-format='cvc' placeholder='000').form-control
+              .col-sm-6.pt-4.px-2
+                button(type='submit').btn.btn-primary.btn-block.mt-1 Register this card
+
+          #paypal-payment.radio-tab-pane
+            p.font-size-ms By clicking on the button below you will be redirected to your PayPal account to complete the payment.
+            a(href='#').d-inline-block
+              +image('shop/paypal-button.png', 'PayPal')(width='200').d-block

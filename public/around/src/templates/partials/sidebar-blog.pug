@@ -1,0 +1,76 @@
+// Search
+.cs-widget.mb-5
+  h3.cs-widget-title Search blog
+  .input-group-overlay
+    .input-group-prepend-overlay
+      span.input-group-text
+        i.fe-search
+    input(type='text' placeholder='Search').form-control.prepended-form-control
+
+// Categories
+.cs-widget.cs-widget-categories.mb-5
+  h3.cs-widget-title Categories
+  ul
+    li
+      a(href='#').cs-widget-link
+        | Digital design
+        small.text-muted.pl-1.ml-2 23
+    li
+      a(href='#').cs-widget-link
+        | Brand strategy
+        small.text-muted.pl-1.ml-2 14
+    li
+      a(href='#').cs-widget-link
+        | Project management
+        small.text-muted.pl-1.ml-2 7
+    li
+      a(href='#').cs-widget-link
+        | Business
+        small.text-muted.pl-1.ml-2 19
+    li
+      a(href='#').cs-widget-link
+        | Technology
+        small.text-muted.pl-1.ml-2 35
+    li
+      a(href='#').cs-widget-link
+        | Travel &amp; Vacation
+        small.text-muted.pl-1.ml-2 28
+
+// Featured posts
+.cs-widget.mt-n1.mb-5
+  h3.cs-widget-title.pb-1 Trending posts
+  .media.align-items-center.pb-1.mb-3
+    a(href='#').d-block
+      +image('blog/th01.jpg', 'Post')(width='64').rounded
+    .media-body.pl-2.ml-1
+      h4.font-size-md.nav-heading.mb-1
+        a(href='#').font-weight-medium
+          | Virtual Reality - game changing technology
+      p.font-size-xs.text-muted.mb-0 by John Doe
+  .media.align-items-center.pb-1.mb-3
+    a(href='#').d-block
+      +image('blog/th02.jpg', 'Post')(width='64').rounded
+    .media-body.pl-2.ml-1
+      h4.font-size-md.nav-heading.mb-1
+        a(href='#').font-weight-medium
+          | New trends in suburban fashion
+      p.font-size-xs.text-muted.mb-0 by Susan Mayer
+  .media.align-items-center
+    a(href='#').d-block
+      +image('blog/th03.jpg', 'Post')(width='64').rounded
+    .media-body.pl-2.ml-1
+      h4.font-size-md.nav-heading.mb-1
+        a(href='#').font-weight-medium
+          | Millenials is the top market for companies
+      p.font-size-xs.text-muted.mb-0 by Daniel Adams
+
+// Tag cloud
+.cs-widget.mb-5
+  h3.cs-widget-title.pb-1 Popular tags
+  a(href='#').cs-tag.mr-2.mb-2 #business
+  a(href='#').cs-tag.mr-2.mb-2 #online shopping
+  a(href='#').cs-tag.mr-2.mb-2 #gadgets
+  a(href='#').cs-tag.mr-2.mb-2 #travel
+  a(href='#').cs-tag.mr-2.mb-2 #brands
+  a(href='#').cs-tag.mr-2.mb-2 #personal finance
+  a(href='#').cs-tag.mb-2 #around news

@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  web:
+    build:
+      context: ./
+    command: node .
+    restart: always
+    ports:
+      - "20000:3000"
+    environment:
+      NODE_ENV: production
+      DEBUG: nodejs-docker-express:*

@@ -1,0 +1,66 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var parentMenu = 'Pages'
+  - var pageTitle = 'Coming Soon - Illustration'
+  - var isPageFullHeight = true
+
+
+//- Navbar
+block navbar
+
+  // Navbar
+  header.cs-header.navbar
+    .container.pt-2.px-0.px-xl-3
+      a(href='index.html').navbar-brand.mx-auto.ml-md-0
+        +image('logo/logo-dark.png', 'Around')(width='153')
+        
+
+//- Page Content
+block content
+  .container.d-flex.flex-column.justify-content-center.py-5(style='flex: 1 0 auto;')
+    .row.align-items-center.pb-2
+      .col-xl-5.col-md-6.text-center.text-md-left.mb-5.mb-md-0
+        h1.mb-3 Coming soon...
+        p.mb-grid-gutter We are working hard to deliver best possible experience. The website is currently under construction. <u>It goes live in:</u>
+        .cs-countdown.h2.justify-content-center.justify-content-md-start(data-countdown='10/01/2021 07:00:00 PM')
+          .cs-countdown-days.mr-grid-gutter
+            span.cs-countdown-value 0
+            span.cs-countdown-label.text-body.font-size-sm Days
+          .cs-countdown-hours.mr-grid-gutter
+            span.cs-countdown-value 0
+            span.cs-countdown-label.text-body.font-size-sm Hours
+          .cs-countdown-minutes.mr-grid-gutter
+            span.cs-countdown-value 0
+            span.cs-countdown-label.text-body.font-size-sm Mins
+          .cs-countdown-seconds
+            span.cs-countdown-value 0
+            span.cs-countdown-label.text-body.font-size-sm Secs
+        p.pt-4 Let me know when your website is live.
+        form(novalidate).d-flex.align-items-start.needs-validation
+          .mr-2.mr-sm-3.w-100
+            input(type='email' placeholder='Email address' required).form-control
+            .invalid-tooltip Please provide a valid email address!
+          button(type='submit').btn.btn-primary Notify Me
+      .col-md-6.offset-xl-1
+        +image('pages/coming-soon/illustration.svg', 'Illustration').d-block.mx-auto
+
+
+//- Footer
+block footer
+
+  // Footer
+  footer.cs-footer.container.text-center.pb-4
+    a(href='tel:+15262200459').nav-link-style.mb-2 + 1 526 220 0459
+    br
+    a(href='mailto:contact@example.com').nav-link-style.mb-2 contact@example.com
+    .pt-4.pb-3
+      a(href='#').social-btn.sb-outline.sb-facebook.mx-2.mb-2
+        i.fe-facebook
+      a(href='#').social-btn.sb-outline.sb-twitter.mx-2.mb-2
+        i.fe-twitter
+      a(href='#').social-btn.sb-outline.sb-instagram.mx-2.mb-2
+        i.fe-instagram
+      a(href='#').social-btn.sb-outline.sb-google.mx-2.mb-2
+        i.fe-google

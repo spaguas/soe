@@ -1,0 +1,406 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var vendorStyles = ['tiny-slider/dist/tiny-slider.css', 'lightgallery.js/dist/css/lightgallery.min.css', 'flatpickr/dist/flatpickr.min.css']
+  - var vendorScripts = ['jarallax/dist/jarallax.min.js', 'tiny-slider/dist/min/tiny-slider.js','lightgallery.js/dist/js/lightgallery.min.js', 'lg-fullscreen.js/dist/lg-fullscreen.min.js', 'lg-zoom.js/dist/lg-zoom.min.js', 'imagesloaded/imagesloaded.pkgd.min.js', 'shufflejs/dist/shuffle.min.js', 'flatpickr/dist/flatpickr.min.js']
+  - var parentMenu = 'Demos'
+  - var pageTitle = 'Coworking Space'
+
+//- Navbar
+block navbar
+  include partials/navbar-solid
+
+//- Page Content
+block content
+
+  // Hero
+  section.jarallax.bg-dark.py-6.py-md-7(data-jarallax data-type='scale-opacity' data-speed='0.09')
+    .jarallax-img(style='background-image: url(img/demo/coworking/hero-bg.jpg);')
+    .container.py-md-3
+      .row
+        .col-xl-7.col-lg-8.col-md-10
+          .bg-light.rounded-lg.box-shadow-lg.py-5.px-4
+            form.py-sm-2.px-sm-3
+              h1.text-center.mb-4 Reserve your spot
+              .row
+                .col-sm-6.form-group
+                  label(for='rf-space').form-label Space
+                  select#rf-space.fotm-control.custom-select
+                    option(value='Coworking main room') Coworking main room
+                    option(value='Coworking terrace') Coworking terrace
+                    option(value='Skype room 1' selected) Skype room 1
+                    option(value='Skype room 2') Skype room 2
+                    option(value='Meeting room 1') Meeting room 1
+                    option(value='Meeting room 2') Meeting room 2
+                    option(value='Gaming room') Gaming room
+                .col-sm-6.form-group
+                  label(for='rf-date').form-label Date and time
+                  .input-group-overlay
+                    input(type='text' placeholder='Choose date / time' data-datepicker-options='{"enableTime": true, "altInput": true, "altFormat": "F j, Y H:i", "dateFormat": "Y-m-d H:i", "minDate": "today"}')#rf-date.form-control.appended-form-control.cs-date-picker
+                    .input-group-append-overlay
+                      span.input-group-text
+                        i.fe-calendar
+                .col-sm-6.form-group
+                  label(for='rf-company-size').form-label Company size
+                  input(type='number' value='1' placeholder='How many people')#rf-company-size.form-control
+                .col-sm-6.form-group
+                  label(for='rf-email').form-label Email address
+                  input(type='email' placeholder='Your email')#rf-email.form-control
+              .row.align-items-center.pt-2
+                .col-sm-6.mb-4.mb-sm-0
+                  a(href='tel:+15262200459')
+                    i.fe-phone.font-size-xl.mr-2
+                    | + 1 526 220 0459
+                .col-sm-6
+                  button(type='submit').btn.btn-primary.btn-block Reserve
+  
+
+  // About (Services)
+  section.container.mt-4.pt-5.mt-md-2.pt-md-7.pb-6
+    h2.text-center.mb-3 About Around
+    .row.justify-content-center.mb-5.pb-2
+      .col-xl-6.col-lg-7
+        p.text-center.mb-0 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    .cs-carousel
+      .cs-carousel-inner(data-carousel-options = '{"items": 5, "controls": false, "gutter": 15, "responsive": {"0":{"items":2}, "410":{"items":3}, "580":{"items":4}, "740":{"items":5}}}')
+        .text-center
+          +image('demo/coworking/icons/cube.svg', 'Total Area')(width='54').mb-3
+          .text-muted(style='font-size: 2.25rem;') 362
+          h3.h5 Total Area
+        .text-center
+          +image('demo/coworking/icons/shower.svg', 'Showers')(width='54').mb-3
+          .text-muted(style='font-size: 2.25rem;') 5
+          h3.h5 Showers
+        .text-center
+          +image('demo/coworking/icons/24-hours.svg', '24/7 Access')(width='54').mb-3
+          .text-muted(style='font-size: 2.25rem;') 24/7
+          h3.h5 Access
+        .text-center
+          +image('demo/coworking/icons/building.svg', '3 Full Floors')(width='54').mb-3
+          .text-muted(style='font-size: 2.25rem;') 3
+          h3.h5 Full Floors
+        .text-center
+          +image('demo/coworking/icons/parking.svg', 'Parking')(width='54').mb-3
+          .text-muted(style='font-size: 2.25rem;') 2
+          h3.h5 Car Parking
+
+  
+  // Virtual tour
+  section.jarallax.bg-dark.py-7(data-jarallax data-speed='0.25')
+    .jarallax-img(style='background-image: url(img/demo/coworking/virtual-tour-bg.jpg);')
+    .container.text-center.py-md-5
+      a(href='#').d-inline-block.bg-primary.rounded-circle
+        +image('demo/coworking/icons/360-tour.svg', '360 VR Tour')(width='195')
+  
+ 
+  // Pricing
+  section.container.mb-3.mt-4.py-5.my-md-0.pt-md-7.pb-md-6
+    h2.text-center.mb-5 Pricing
+    .d-flex.align-items-center.justify-content-between.border.rounded.mx-auto.mb-5.py-3.px-5(style='max-width: 730px;')
+      i.fe-clock.lead.text-primary.p-2
+      h5.p-2.mb-0 2 hours - $6
+      h5.p-2.mb-0 4 hours - $10
+      h5.p-2.mb-0 1 day - $18
+    .row
+      .col-lg-4.col-sm-6.mb-grid-gutter
+        .card.border-0.box-shadow.w-100
+          .card-img-top.bg-secondary.text-center.py-5.px-grid-gutter
+            h3.text-body.mb-0 Starter
+          .card-body.px-grid-gutter.py-grid-gutter
+            .d-flex.align-items-end.py-2.px-4.mb-4
+              span.h2.font-weight-normal.text-muted.mb-1.mr-2 $
+              span.cs-price.display-2.font-weight-normal.text-primary.px-1.mr-2 35
+              span.h3.font-size-lg.font-weight-medium.text-muted.mb-2 per<br>month
+            ul.list-unstyled.py-2.mb-4
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span 24/7 Premises access
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span High speeed WiFi
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span Car parking lot
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span Lounge room access
+              li.d-flex.align-items-center.mb-3
+                i.fe-x.font-size-xl.text-muted.mr-2
+                span.text-muted 3 events / workshops per month
+              li.d-flex.align-items-center.mb-3
+                i.fe-x.font-size-xl.text-muted.mr-2
+                span.text-muted Breakfasts
+            .text-center.mb-2
+              a(href='#').btn.btn-outline-primary Get started
+      .col-lg-4.col-sm-6.mb-grid-gutter
+        .card.card-active.w-100
+          .card-img-top.bg-gradient.text-center.py-5.px-grid-gutter
+            h3.text-light.mb-0 Freelancer
+          .card-body.px-grid-gutter.py-grid-gutter
+            .d-flex.align-items-end.py-2.px-4.mb-4
+              span.h2.font-weight-normal.text-muted.mb-1.mr-2 $
+              span.cs-price.display-2.font-weight-normal.text-primary.px-1.mr-2 99
+              span.h3.font-size-lg.font-weight-medium.text-muted.mb-2 per<br>month
+            ul.list-unstyled.py-2.mb-4
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span 24/7 Premises access
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span High speeed WiFi
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span Car parking lot
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span Lounge room access
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span 3 events / workshops per month
+              li.d-flex.align-items-center.mb-3
+                i.fe-x.font-size-xl.text-muted.mr-2
+                span.text-muted Breakfasts
+            .text-center.mb-2
+              a(href='#').btn.btn-primary Get started
+      .col-lg-4.col-sm-6.mb-grid-gutter
+        .card.border-0.box-shadow.w-100
+          .card-img-top.bg-secondary.text-center.py-5.px-grid-gutter
+            h3.text-body.mb-0 Resident Full
+          .card-body.px-grid-gutter.py-grid-gutter
+            .d-flex.align-items-end.py-2.px-4.mb-4
+              span.h2.font-weight-normal.text-muted.mb-1.mr-2 $
+              span.cs-price.display-2.font-weight-normal.text-primary.px-1.mr-2 124
+              span.h3.font-size-lg.font-weight-medium.text-muted.mb-2 per<br>month
+            ul.list-unstyled.py-2.mb-4
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span 24/7 Premises access
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span High speeed WiFi
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span Car parking lot
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span Lounge room access
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span 3 events / workshops per month
+              li.d-flex.align-items-center.mb-3
+                i.fe-check.font-size-xl.text-primary.mr-2
+                span Breakfasts
+            .text-center.mb-2
+              a(href='#').btn.btn-outline-primary Get started
+  
+ 
+  // Gallery
+  section.bg-secondary.py-5.py-md-6
+    .container.mt-4.mb-2.mt-md-2.mb-md-0
+      h2.text-center.mb-4.pb-2 Our space
+      .cs-masonry-filterable
+        ul.cs-masonry-filters.nav.nav-tabs.justify-content-center.pb-4
+          li.nav-item
+            a(href='#' data-group='all').nav-link.active All
+          li.nav-item
+            a(href='#' data-group='open-space').nav-link Open space
+          li.nav-item
+            a(href='#' data-group='lounge').nav-link Lounge zone
+          li.nav-item
+            a(href='#' data-group='kitchen').nav-link Kitchen
+        .cs-masonry-grid.cs-gallery.overflow-hidden(data-columns='3')
+          .cs-grid-item(data-groups='["lounge"]')
+            a(href='img/demo/coworking/gallery/01.jpg' data-sub-html='<h6 class="font-size-sm text-light">Lounge room</h6>').cs-gallery-item.rounded-lg
+              +image('demo/coworking/gallery/th01.jpg', 'Lounge room')
+              span.cs-gallery-caption Lounge room
+          .cs-grid-item(data-groups='["open-space"]')
+            a(href='img/demo/coworking/gallery/02.jpg' data-sub-html='<h6 class="font-size-sm text-light">Open space</h6>').cs-gallery-item.rounded-lg
+              +image('demo/coworking/gallery/th02.jpg', 'Open space')
+              span.cs-gallery-caption Open space
+          .cs-grid-item(data-groups='["open-space"]')
+            a(href='img/demo/coworking/gallery/03.jpg' data-sub-html='<h6 class="font-size-sm text-light">Open space</h6>').cs-gallery-item.rounded-lg
+              +image('demo/coworking/gallery/th03.jpg', 'Open space')
+              span.cs-gallery-caption Open space
+          .cs-grid-item(data-groups='["kitchen"]')
+            a(href='img/demo/coworking/gallery/04.jpg' data-sub-html='<h6 class="font-size-sm text-light">Kitchen</h6>').cs-gallery-item.rounded-lg
+              +image('demo/coworking/gallery/th04.jpg', 'Kitchen')
+              span.cs-gallery-caption Kitchen
+          .cs-grid-item(data-groups='["kitchen"]')
+            a(href='img/demo/coworking/gallery/05.jpg' data-sub-html='<h6 class="font-size-sm text-light">Kitchen</h6>').cs-gallery-item.rounded-lg
+              +image('demo/coworking/gallery/th05.jpg', 'Kitchen')
+              span.cs-gallery-caption Kitchen
+          .cs-grid-item(data-groups='["open-space"]')
+            a(href='img/demo/coworking/gallery/06.jpg' data-sub-html='<h6 class="font-size-sm text-light">Open space</h6>').cs-gallery-item.rounded-lg
+              +image('demo/coworking/gallery/th06.jpg', 'Open space')
+              span.cs-gallery-caption Open space
+
+  
+  // Benefits
+  section.container.pb-5.pt-6.mb-md-2.py-md-7
+    .row.align-items-center
+      .col-md-6
+        +image('demo/coworking/illustration01.svg', 'Illustration').d-block.mx-auto
+      .col-md-6.col-lg-5.offset-lg-1.pt-4.pt-md-0
+        h2.mt-4.mb-5.text-center.text-md-left Our benefits
+        .row
+          .col-6.col-sm-4.text-center.mb-grid-gutter
+            +image('demo/coworking/icons/tv.svg', 'Free computer')(width='46').mb-2
+            h5.h6 Free computer
+          .col-6.col-sm-4.text-center.mb-grid-gutter
+            +image('demo/coworking/icons/sandwich.svg', 'Coffee and snacks')(width='46').mb-2
+            h5.h6 Coffee and snacks
+          .col-6.col-sm-4.text-center.mb-grid-gutter
+            +image('demo/coworking/icons/table-tennis.svg', 'Relax zone')(width='46').mb-2
+            h5.h6 Relax zone
+          .col-6.col-sm-4.text-center.mb-grid-gutter
+            +image('demo/coworking/icons/living-room.svg', 'Private meeting room')(width='46').mb-2
+            h5.h6 Private meeting room
+          .col-6.col-sm-4.text-center.mb-grid-gutter
+            +image('demo/coworking/icons/router.svg', 'High-speed internet')(width='46').mb-2
+            h5.h6 High-speed internet
+          .col-6.col-sm-4.text-center.mb-grid-gutter
+            +image('demo/coworking/icons/open-book.svg', 'Educational programs')(width='46').mb-2
+            h5.h6 Educational programs
+
+  
+  // Testimonials
+  section.container.pb-5.mb-md-4.pb-md-7
+    .row.align-items-center
+      .col-md-6.offset-lg-1.order-md-2
+        +image('demo/coworking/illustration02.svg', 'Illustration').d-block.mx-auto
+      .col-md-6.col-lg-5.order-md-1.pt-4.pt-md-0
+        h2.mt-4.mb-5.text-center.text-md-left What people say about us
+        .cs-carousel
+          .cs-carousel-inner(data-carousel-options = '{"nav": false, "gutter": 20}')
+            .pt-3
+              blockquote.blockquote.mx-1
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida commodo consequat.
+                footer.blockquote-footer Miguel Sánchez
+            .pt-3
+              blockquote.blockquote.mx-1
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida commodo consequat.
+                footer.blockquote-footer Sarah Paulson
+            .pt-3
+              blockquote.blockquote.mx-1
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida commodo consequat.
+                footer.blockquote-footer Tim Brooks
+  
+
+  // Events
+  section.position-relative.bg-gradient.pt-6.pb-7(style='z-index: 2;')
+    .container.pb-5
+      h2.text-light.text-center.pb-1.mb-5 Upcoming events
+  .bg-overlay-content.container(style='margin-top: -150px;')
+    .cs-carousel
+      .cs-carousel-inner(data-carousel-options = '{"items": 2, "nav": false, "gutter": 23, "responsive": {"0":{"items":1},"800":{"items":2}}}')
+        .pb-2
+          .card.h-100.border-0.box-shadow.mx-1
+            span.badge.badge-lg.badge-floating.badge-floating-right.badge-success New
+            .card-body.py-5.px-4
+              .d-sm-flex.py-sm-4.px-lg-3
+                .text-sm-center.mt-0.mt-sm-n3
+                  span.d-sm-block.text-primary.mr-2.mr-sm-0.mb-n3(style='font-size: 3.75rem;') 06
+                  span.font-size-xl.text-muted.text-uppercase Aug
+                .pl-sm-4.pl-lg-5
+                  a(href='#').meta-link.font-size-sm.mb-2 Open lecture
+                  h3.h4.nav-heading.mb-4
+                    a(href='#') The Single Most Important Thing You Need to Know About
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-2
+                    +image('testimonials/02.jpg', 'Sanomi Smith')(width='42').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Sanomi Smith
+        .pb-2
+          .card.h-100.border-0.box-shadow.mx-1
+            .card-body.py-5.px-4
+              .d-sm-flex.py-sm-4.px-lg-3
+                .text-sm-center.mt-0.mt-sm-n3
+                  span.d-sm-block.text-primary.mr-2.mr-sm-0.mb-n3(style='font-size: 3.75rem;') 24
+                  span.font-size-xl.text-muted.text-uppercase Jul
+                .pl-sm-4.pl-lg-5
+                  a(href='#').meta-link.font-size-sm.mb-2 Worksop
+                  h3.h4.nav-heading.mb-4
+                    a(href='#') Learn Exactly How I Improved Personal Finance in 2 Days
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-2
+                    +image('testimonials/04.jpg', 'Charlie Welch')(width='42').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Charlie Welch
+        .pb-2
+          .card.h-100.border-0.box-shadow.mx-1
+            .card-body.py-5.px-4
+              .d-sm-flex.py-sm-4.px-lg-3
+                .text-sm-center.mt-0.mt-sm-n3
+                  span.d-sm-block.text-primary.mr-2.mr-sm-0.mb-n3(style='font-size: 3.75rem;') 15
+                  span.font-size-xl.text-muted.text-uppercase Jun
+                .pl-sm-4.pl-lg-5
+                  a(href='#').meta-link.font-size-sm.mb-2 Open discussion
+                  h3.h4.nav-heading.mb-4
+                    a(href='#') How technological advancements affect our decisions
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-2
+                    +image('testimonials/09.jpg', 'Jessica Miller')(width='42').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Jessica Miller
+  
+
+  // Contacts
+  section.bg-secondary(style='margin-top: -300px; padding-top: 300px;')
+    .container.pt-5.pb-6.py-md-7
+      h2.text-center.mb-5 Contacts
+      .row
+        .col-md-6.mb-5.mb-md-0
+          form(novalidate).needs-validation.mb-4.pb-2
+            .input-group-overlay.form-group
+              .input-group-prepend-overlay
+                span.input-group-text
+                  i.fe-user
+              input(type='text' placeholder='Name' required).form-control.prepended-form-control
+            .input-group-overlay.form-group
+              .input-group-prepend-overlay
+                span.input-group-text
+                  i.fe-mail
+              input(type='email' placeholder='Email' required).form-control.prepended-form-control
+            .form-group
+              textarea(rows='4' placeholder='Message' required).form-control
+            .row.pt-2
+              .col-sm-6
+                button(type='submit').btn.btn-primary.btn-block Send Request
+          .row
+            .col-sm-6
+              h5 Around office
+              ul.list-unstyled.mb-0
+                li.mb-0 396 Lillian Blvd, Holbrook
+                li.mb-0 New York, USA
+            .col-sm-6
+              h5 Collaboration
+              ul.list-unstyled.mb-0
+                li.mb-0 + 1 526 220 0459
+                li.mb-0 contact@example.com
+        .col-md-6.col-xl-5.offset-xl-1.cs-gallery
+          a(href='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.91476818218!2d-74.11976253858133!3d40.69740344296443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sua!4v1568574342685!5m2!1sen!2sua' data-iframe='true' data-sub-html='<h6 class="font-size-sm text-light">396 Lillian Blvd, Holbrook, NY 11741</h6>').cs-gallery-item.cs-map-popup.border.rounded-lg
+            +image('demo/coworking/map.jpg', 'Maps')
+            span.cs-gallery-caption
+              i.fe-maximize-2.font-size-xl.mt-n1.mr-2
+              | Expand the map
+            .position-absolute(style='width: 48px; top: 50%; left: 50%; margin-top: -24px; margin-left: -24px;')
+              +image('pages/contacts/marker.png', 'Map marker')
+
+
+//- Footer
+block footer
+  footer.site-footer.bg-dark.py-5
+    .container.d-sm-flex.justify-content-between.align-items-center.text-center
+      .mb-4.mb-sm-0.ml-sm-4.order-sm-2
+        a(href='#').social-btn.sb-outline.sb-light.sb-facebook
+          i.fe-facebook
+        a(href='#').social-btn.sb-outline.sb-light.sb-twitter.ml-2
+          i.fe-twitter
+        a(href='#').social-btn.sb-outline.sb-light.sb-instagram.ml-2
+          i.fe-instagram
+        a(href='#').social-btn.sb-outline.sb-light.sb-google.ml-2
+          i.fe-google
+      p.font-size-sm.mb-0.order-sm-1
+        span.text-light.opacity-50.mr-1 © All rights reserved. Made by
+        a(href='https://createx.studio/' target='_blank' rel='noopener').nav-link-style.nav-link-light Createx Studio

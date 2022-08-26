@@ -1,0 +1,315 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var vendorStyles = ['tiny-slider/dist/tiny-slider.css', 'lightgallery.js/dist/css/lightgallery.min.css']
+  - var vendorScripts = ['jarallax/dist/jarallax.min.js', 'jarallax/dist/jarallax-element.min.js', 'tiny-slider/dist/min/tiny-slider.js', 'lightgallery.js/dist/js/lightgallery.min.js', 'lg-video.js/dist/lg-video.min.js']
+  - var parentMenu = 'Demos'
+  - var pageTitle = 'Product Landing - Gadget'
+
+//- Navbar
+block navbar
+  include partials/navbar-solid
+
+//- Page Content
+block content
+
+  // Hero
+  section.bg-position-left-bottom.bg-no-repeat.py-6.py-sm-7(style='background-color: #ffc6ce; background-image: url(img/demo/gadget-landing/hero-bg.jpg);')
+    .container.py-lg-7
+      .row
+        .col-xl-4.col-lg-5.col-md-7.offset-md-1.offset-xl-0
+          h1.display-4.text-light.pb-4.text-center.text-md-left Modern. Simple. Innovative.
+          .d-flex.align-items-center.justify-content-center.justify-content-md-start
+            a(href='https://www.youtube.com/watch?v=SE3apoZy4qA' data-sub-html='<h6 class="font-size-sm text-light">Goby Electric Toothbrush Review</h6>').cs-video-btn.mr-3
+            span.text-light(style='max-width: 15rem;') All you need for a healthy habit. Doubt it? Watch why.
+
+
+  // Image + Text
+  section.container.pt-6.pt-md-7.mt-lg-3.mb-md-n4.mb-lg-n5
+    .row.align-items-center.pt-xl-3
+      .col-md-6.col-lg-5.offset-lg-1(data-jarallax-element='25' data-disable-parallax-down='md')
+        .mx-auto.mx-md-0(style='max-width: 495px;')
+          +image('demo/gadget-landing/image01.jpg', 'Image').rounded-lg
+      .col-md-6.col-lg-5.py-5(data-jarallax-element='-15' data-disable-parallax-down='md')
+        .mx-auto(style='max-width: 370px;')
+          h2.pb-2 Everywhere with you
+          p.pb-2 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint.
+          ul.list-unstyled.font-size-sm
+            li.d-flex.align-items-center
+              i.fe-check-circle.font-size-lg.text-primary.mr-2
+              span Excepteur sint
+            li.d-flex.align-items-center
+              i.fe-check-circle.font-size-lg.text-primary.mr-2
+              span Quam lacus suspendisse
+            li.d-flex.align-items-center
+              i.fe-check-circle.font-size-lg.text-primary.mr-2
+              span Id volutpat lacus
+            li.d-flex.align-items-center
+              i.fe-check-circle.font-size-lg.text-primary.mr-2
+              span Nulla pharetra diam
+
+
+  // Image + Text
+  section.container.pb-5.mb-3.mb-md-0.pb-md-7
+    .row.align-items-center
+      .col-md-6.col-lg-5.order-md-2(data-jarallax-element='-40' data-disable-parallax-down='md')
+        .mx-auto.mx-md-0(style='max-width: 495px;')
+          +image('demo/gadget-landing/image02.jpg', 'Image').rounded-lg
+      .col-md-6.col-lg-5.offset-lg-1.order-md-1.pt-5.pt-md-7.pb-md-5(data-jarallax-element='40' data-disable-parallax-down='md')
+        .mx-auto(style='max-width: 370px;')
+          h2.pb-2 Show your personality
+          p.pb-2 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint.
+          ul.list-unstyled.font-size-sm
+            li.d-flex.align-items-center
+              i.fe-check-circle.font-size-lg.text-primary.mr-2
+              span Excepteur sint
+            li.d-flex.align-items-center
+              i.fe-check-circle.font-size-lg.text-primary.mr-2
+              span Quam lacus suspendisse
+            li.d-flex.align-items-center
+              i.fe-check-circle.font-size-lg.text-primary.mr-2
+              span Elementum pulvinar etiam
+
+
+  // Hotspots
+  section.bg-secondary.px-3.py-6.py-md-7
+    #hotspots-container.cs-hotspots.mx-auto(style='max-width: 45rem;')
+      #pink.radio-tab-pane.active(role='tabpanel')
+        +image('demo/gadget-landing/hotspots/01_pink.png', 'Image')
+      #blue.radio-tab-pane(role='tabpanel')
+        +image('demo/gadget-landing/hotspots/02_blue.png', 'Image')
+      #orange.radio-tab-pane(role='tabpanel')
+        +image('demo/gadget-landing/hotspots/03_orange.png', 'Image')
+      #green.radio-tab-pane(role='tabpanel')
+        +image('demo/gadget-landing/hotspots/04_green.png', 'Image')
+      span(style='top: 58%; right: 50%;' data-container='#hotspots-container' data-toggle='popover' data-placement='top' data-trigger='hover' title='Soft anti-slip grip' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+      span(style='top: 22%; right: 38%;' data-container='#hotspots-container' data-toggle='popover' data-placement='top' data-trigger='hover' title='Power button with 3 modes' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+      span(style='top: 17%; right: 17%;' data-container='#hotspots-container' data-toggle='popover' data-placement='bottom' data-trigger='hover' title='Interchangeable head' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+      span(style='top: 77%; left: 8%;' data-container='#hotspots-container' data-toggle='popover' data-placement='top' data-trigger='hover' title='Powerful Li-ion battery' data-content='Vivamus sagittis lacus vel augue laoreet rutrum faucibus ornare sem.').cs-hotspot
+    .text-center.pt-grid-gutter
+      .d-inline-flex.bg-light.rounded.py-2.px-3
+        .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+          input(type='radio' name='color' id='c-pink' value='Pink' checked).custom-control-input
+          label(for='c-pink' data-toggle='radioTab' data-target='#pink' data-parent='#hotspots-container').cs-custom-option-label
+            span(style='background-color: #ff3dbe;').cs-color-swatch
+        .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+          input(type='radio' name='color' id='c-blue' value='Blue').custom-control-input
+          label(for='c-blue' data-toggle='radioTab' data-target='#blue' data-parent='#hotspots-container').cs-custom-option-label
+            span(style='background-color: #00a1f0;').cs-color-swatch
+        .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+          input(type='radio' name='color' id='c-orange' value='Orange').custom-control-input
+          label(for='c-orange' data-toggle='radioTab' data-target='#orange' data-parent='#hotspots-container').cs-custom-option-label
+            span(style='background-color: #fa6000;').cs-color-swatch
+        .custom-control.cs-custom-color-option.custom-control-inline.mx-1.my-1
+          input(type='radio' name='color' id='c-green' value='Green').custom-control-input
+          label(for='c-green' data-toggle='radioTab' data-target='#green' data-parent='#hotspots-container').cs-custom-option-label
+            span(style='background-color: #00b22c;').cs-color-swatch
+
+
+  // Icon + text
+  section.container.pt-5.pb-4.mt-3.mt-md-0.mb-md-3.pb-md-5.pt-md-7
+    h2.text-center.mb-5 Good habits for oral health
+    .row
+      .col-sm-6.col-md-4
+        .mx-auto.mb-5.text-center(style='max-width: 280px;')
+          +image('demo/gadget-landing/icons/toothpaste.svg', 'Icon')(width='112').mb-3
+          h3.h5 High-quality toothpaste
+          p.font-size-sm.mb-0 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur consequat.
+      .col-sm-6.col-md-4
+        .mx-auto.mb-5.text-center(style='max-width: 280px;')
+          +image('demo/gadget-landing/icons/dental-care.svg', 'Icon')(width='112').mb-3
+          h3.h5 Daily flossing
+          p.font-size-sm.mb-0 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur consequat.
+      .col-sm-6.col-md-4
+        .mx-auto.mb-5.text-center(style='max-width: 280px;')
+          +image('demo/gadget-landing/icons/appointment.svg', 'Icon')(width='112').mb-3
+          h3.h5 Yearly checkup
+          p.font-size-sm.mb-0 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur consequat.
+      .col-sm-6.col-md-4
+        .mx-auto.mb-5.text-center(style='max-width: 280px;')
+          +image('demo/gadget-landing/icons/tooth.svg', 'Icon')(width='112').mb-3
+          h3.h5  Twice a day for 2 minutes
+          p.font-size-sm.mb-0 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur consequat.
+      .col-sm-6.col-md-4
+        .mx-auto.mb-5.text-center(style='max-width: 280px;')
+          +image('demo/gadget-landing/icons/tooth-brush-2.svg', 'Icon')(width='112').mb-3
+          h3.h5 1 month refresh
+          p.font-size-sm.mb-0 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur consequat.
+      .col-sm-6.col-md-4
+        .mx-auto.mb-5.text-center(style='max-width: 280px;')
+          +image('demo/gadget-landing/icons/tooth-brush.svg', 'Icon')(width='112').mb-3
+          h3.h5  Clean carefully
+          p.font-size-sm.mb-0 Find aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur consequat.
+
+  // Buy on Amazon CTA
+  section.bg-secondary
+    .container.pb-5.pb-md-0
+      .row.align-items-center.pb-3.pb-md-0
+        .col-md-6.col-lg-7.pb-5.pb-md-0
+          .mx-auto.mx-md-0(style='max-width: 495px;')
+            +image('demo/gadget-landing/amazon-cta.jpg', 'Buy on Amazon')
+        .col-md-6.col-lg-4.text-center
+          h2 The easiest way to get it!
+          p.font-size-sm.text-muted.pb-2 Lorem ipsum dolor sit amet, consectetur adipis icing elit. Veritatis eum modi, adipisci facilis.
+          a(href='#').btn.btn-primary Buy Now | $49
+
+  // Press
+  section.container.my-3.py-5.my-md-0.py-md-7
+    .row.justify-content-center
+      .col-md-11.col-lg-9.col-xl-8
+        h2.text-center.mb-5 Press about us
+        .cs-carousel
+          .cs-carousel-inner(data-carousel-options = '{"nav": false, "controls": false, "gutter": 20}')
+            blockquote.blockquote.text-center
+              p.lead.text-heading.font-weight-medium Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida dignissimos ducimus.
+            blockquote.blockquote.text-center
+              p.lead.text-heading.font-weight-medium Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida dignissimos ducimus.
+            blockquote.blockquote.text-center
+              p.lead.text-heading.font-weight-medium Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida dignissimos ducimus.
+            blockquote.blockquote.text-center
+              p.lead.text-heading.font-weight-medium Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida dignissimos ducimus.
+          .cs-carousel-pager.d-flex.flex-wrap.justify-content-center.align-items-center.pb-md-2
+            a(href='#' data-goto='1').cs-swap-image.active.mx-4.my-3
+              +image('demo/gadget-landing/logos/01_color.png', 'Logo')(width='136').cs-swap-to
+              +image('demo/gadget-landing/logos/01_gray.png', 'Logo')(width='136').cs-swap-from
+            a(href='#' data-goto='2').cs-swap-image.mx-4.my-3
+              +image('demo/gadget-landing/logos/02_color.png', 'Logo')(width='130').cs-swap-to
+              +image('demo/gadget-landing/logos/02_gray.png', 'Logo')(width='130').cs-swap-from
+            a(href='#' data-goto='3').cs-swap-image.mx-4.my-3
+              +image('demo/gadget-landing/logos/03_color.png', 'Logo')(width='103').cs-swap-to
+              +image('demo/gadget-landing/logos/03_gray.png', 'Logo')(width='103').cs-swap-from
+            a(href='#' data-goto='4').cs-swap-image.mx-4.my-3
+              +image('demo/gadget-landing/logos/04_color.png', 'Logo')(width='143').cs-swap-to
+              +image('demo/gadget-landing/logos/04_gray.png', 'Logo')(width='143').cs-swap-from
+
+  
+  // Testimonials
+  section.bg-gradient.pt-6.pb-7
+    .container.text-center.pb-7
+      h2.text-light.mb-5 What people say about us
+  .container-fluid.bg-overlay-content.mb-3.pb-5.mb-sm-0.pb-sm-6.pb-md-7(style='margin-top: -198px;')
+    .cs-carousel
+      .cs-carousel-inner(data-carousel-options='{"items": 2, "controls": false, "responsive": {"0":{"items":1, "gutter": 16}, "520":{"items":2, "gutter": 12}, "860":{"items":3, "gutter": 23}, "1080":{"items":4, "gutter": 23}, "1380":{"items":5, "gutter": 23}, "1600":{"items":6, "gutter": 23}}}')
+
+        // Testimonial: Card
+        .py-2
+          .card.h-100.border-0.box-shadow.mx-1
+            .card-body
+              blockquote.blockquote.font-size-sm
+                p.mb-0 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida omnis voluptas...
+            footer.font-size-sm.px-4.pb-4
+              .media.align-items-center.border-top.mb-n2.pt-3
+                +image('testimonials/01.jpg', 'Emma Brown')(width='42').rounded-circle
+                .media-body.text-heading.font-weight-medium.pl-2.ml-1.mt-n1
+                  | Emma Brown
+
+        // From Instagram
+        .py-2
+          a(href='#').card.h-100.border-0.box-shadow.mx-1
+            span.card-floating-icon: i.fe-instagram
+            +image('demo/gadget-landing/instagram/01.jpg', 'Image').card-img-top
+            footer.font-size-sm.mt-auto.py-2.px-4
+              .media.align-items-center.py-2
+                +image('testimonials/02.jpg', '@morni.janeffel')(width='42').rounded-circle
+                .media-body.text-heading.font-weight-medium.pl-2.ml-1.mt-n1
+                  | @morni.janeffel
+
+        // Testimonial: Card
+        .py-2
+          .card.h-100.border-0.box-shadow.mx-1
+            .card-body
+              blockquote.blockquote.font-size-sm
+                p.mb-0 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida omnis voluptas...
+            footer.font-size-sm.px-4.pb-4
+              .media.align-items-center.border-top.mb-n2.pt-3
+                +image('testimonials/03.jpg', 'Tim Brooks')(width='42').rounded-circle
+                .media-body.text-heading.font-weight-medium.pl-2.ml-1.mt-n1
+                  | Tim Brooks
+
+        // From Instagram
+        .py-2
+          a(href='#').card.h-100.border-0.box-shadow.mx-1
+            span.card-floating-icon: i.fe-instagram
+            +image('demo/gadget-landing/instagram/02.jpg', 'Image').card-img-top
+            footer.font-size-sm.mt-auto.py-2.px-4
+              .media.align-items-center.py-2
+                +image('testimonials/02.jpg', '@morni.janeffel')(width='42').rounded-circle
+                .media-body.text-heading.font-weight-medium.pl-2.ml-1.mt-n1
+                  | @morni.janeffel
+
+        // Testimonial: Card
+        .py-2
+          .card.h-100.border-0.box-shadow.mx-1
+            .card-body
+              blockquote.blockquote.font-size-sm
+                p.mb-0 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida omnis voluptas...
+            footer.font-size-sm.px-4.pb-4
+              .media.align-items-center.border-top.mb-n2.pt-3
+                +image('testimonials/05.jpg', 'Sarah Cole')(width='42').rounded-circle
+                .media-body.text-heading.font-weight-medium.pl-2.ml-1.mt-n1
+                  | Sarah Cole
+
+        // From Instagram
+        .py-2
+          a(href='#').card.h-100.border-0.box-shadow.mx-1
+            span.card-floating-icon: i.fe-instagram
+            +image('demo/gadget-landing/instagram/03.jpg', 'Image').card-img-top
+            footer.font-size-sm.mt-auto.py-2.px-4
+              .media.align-items-center.py-2
+                +image('testimonials/04.jpg', '@richard.davis')(width='42').rounded-circle
+                .media-body.text-heading.font-weight-medium.pl-2.ml-1.mt-n1
+                  | @richard.davis
+
+        // Testimonial: Card
+        .py-2
+          .card.h-100.border-0.box-shadow.mx-1
+            .card-body
+              blockquote.blockquote.font-size-sm
+                p.mb-0 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida omnis voluptas...
+            footer.font-size-sm.px-4.pb-4
+              .media.align-items-center.border-top.mb-n2.pt-3
+                +image('testimonials/07.jpg', 'Barba Palson')(width='42').rounded-circle
+                .media-body.text-heading.font-weight-medium.pl-2.ml-1.mt-n1
+                  | Barba Palson
+
+        // From Instagram
+        .py-2
+          a(href='#').card.h-100.border-0.box-shadow.mx-1
+            span.card-floating-icon: i.fe-instagram
+            +image('demo/gadget-landing/instagram/04.jpg', 'Image').card-img-top
+            footer.font-size-sm.mt-auto.py-2.px-4
+              .media.align-items-center.py-2
+                +image('testimonials/06.jpg', '@edward.chew')(width='42').rounded-circle
+                .media-body.text-heading.font-weight-medium.pl-2.ml-1.mt-n1
+                  | @edward.chew
+  
+
+  // Subscription CTA
+  section.bg-position-center-bottom.bg-no-repeat(style='background-color: #fafafa; background-image: url(img/demo/gadget-landing/subscription-bg.jpg);')
+    .container.pt-5.pb-7
+      .row.justify-content-center.pt-4
+        .col-lg-5.col-md-7.col-sm-8
+          h2.text-center.pb-4 Subscribe and get your promo code for sale
+          form.input-group
+            input(type='email' placeholder='Enter your email' required).form-control
+            .input-group-append
+              button(type='submit').btn.btn-primary: i.fe-send.font-size-xl.mr-1
+
+
+//- Footer
+block footer
+  footer.site-footer.bg-dark.py-5
+    .container.d-sm-flex.justify-content-between.align-items-center.text-center
+      .mb-4.mb-sm-0.ml-sm-4.order-sm-2
+        a(href='#').social-btn.sb-outline.sb-light.sb-facebook
+          i.fe-facebook
+        a(href='#').social-btn.sb-outline.sb-light.sb-twitter.ml-2
+          i.fe-twitter
+        a(href='#').social-btn.sb-outline.sb-light.sb-instagram.ml-2
+          i.fe-instagram
+        a(href='#').social-btn.sb-outline.sb-light.sb-google.ml-2
+          i.fe-google
+      p.font-size-sm.mb-0.order-sm-1
+        span.text-light.opacity-50.mr-1 © All rights reserved. Made by
+        a(href='https://createx.studio/' target='_blank' rel='noopener').nav-link-style.nav-link-light Createx Studio

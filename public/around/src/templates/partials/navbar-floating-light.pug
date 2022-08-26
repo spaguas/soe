@@ -1,0 +1,27 @@
+//- partials/modal-signin.pug
+include modal-signin
+
+// Navbar (Floating light)
+// Remove "navbar-sticky" class to make navigation bar scrollable with the page.
+header.cs-header.navbar.navbar-expand-lg.navbar-dark.navbar-floating.navbar-sticky(data-scroll-header)
+  .container.px-0.px-xl-3
+    button(type='button' data-toggle='offcanvas' data-offcanvas-id='primaryMenu').navbar-toggler.ml-n2.mr-2
+      span.navbar-toggler-icon
+    a(href='index.html').navbar-brand.order-lg-1.mx-auto.ml-lg-0.pr-lg-2.mr-lg-4
+      +image('logo/logo-light.png', 'Around')(width='153').navbar-floating-logo.d-none.d-lg-block
+      +image('logo/logo-dark.png', 'Around')(width='153').navbar-stuck-logo
+      +image('logo/logo-icon.png', 'Around')(width='58').d-lg-none
+    .d-flex.align-items-center.order-lg-3.ml-lg-auto
+      a(href='#modal-signin' data-toggle='modal' data-view='#modal-signin-view').nav-link-style.font-size-sm.text-nowrap
+        i.fe-user.font-size-xl.mr-2
+        | Sign in
+      a(href='#modal-signin' data-toggle='modal' data-view='#modal-signup-view')&attributes(isNavbarButtonLight ? {'class': 'btn btn-translucent-light ml-grid-gutter d-none d-lg-inline-block navbar-btn'} : {'class': 'btn btn-primary ml-grid-gutter d-none d-lg-inline-block navbar-btn'}) Sign up
+      a(href='#modal-signin' data-toggle='modal' data-view='#modal-signup-view').btn.btn-primary.ml-grid-gutter.d-none.d-lg-inline-block.navbar-stuck-btn Sign up
+    #primaryMenu.cs-offcanvas-collapse.order-lg-2
+      .cs-offcanvas-cap.navbar-box-shadow
+        h5.mt-1.mb-0 Menu
+        button(type='button' data-toggle='offcanvas' data-offcanvas-id='primaryMenu').close.lead
+          span(aria-hidden='true') &times;
+      .cs-offcanvas-body
+        //- partial/menu-primary
+        include menu-primary

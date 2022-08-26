@@ -1,0 +1,294 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var vendorStyles = ['tiny-slider/dist/tiny-slider.css', 'flatpickr/dist/flatpickr.min.css']
+  - var vendorScripts = ['jarallax/dist/jarallax.min.js', 'tiny-slider/dist/min/tiny-slider.js', 'flatpickr/dist/flatpickr.min.js', 'flatpickr/dist/plugins/rangePlugin.js']
+  - var parentMenu = 'Demos'
+  - var pageTitle = 'Booking / Directory'
+
+//- Navbar
+block navbar
+  include partials/navbar-floating-light
+
+//- Page Content
+block content
+
+  // Hero
+  section.jarallax.bg-dark.py-7(data-jarallax data-speed='0.25')
+    .jarallax-img(style='background-image: url(img/demo/booking/hero-bg.jpg);')
+    .container.py-5.py-sm-7.text-center
+      .py-md-6
+        h1.text-light.pb-1 Search for cheap airline tickets
+        p.font-size-lg.text-light Makes it easier to experience the world.
+  
+
+  // Booking form
+  form.container.bg-overlay-content(style='margin-top: -68px;')
+    .d-lg-flex.align-items-center.bg-secondary.border.rounded-lg.px-4.pt-4.pb-3
+      .d-sm-flex.align-items-center
+        .form-group.w-100.mb-sm-4.mr-sm-3
+          label(for='from-destination').form-label From
+          select#from-destination.form-control.custom-select
+            option(value='' disabled hidden) From where?
+            option(value='Abu Dhabi, UAE') Abu Dhabi, UAE
+            option(value='Amsterdam, NL') Amsterdam, NL
+            option(value='Berlin, GER') 	Berlin, GER
+            option(value='Brussels, BE') 	Brussels, BE
+            option(value='Buenos Aires, ARG') Buenos Aires, ARG
+            option(value='Canberra, AU') Canberra, AU
+            option(value='London, UK' selected) London, UK
+            option(value='Madrid, SP') Madrid, SP
+            option(value='Monaco, MON') Monaco, MON
+            option(value='Moscow, RU') Moscow, RU
+            option(value='Stockholm, SW') Stockholm, SW
+        .form-group.w-100.mb-sm-4.mr-sm-3
+          label(for='to-destination').form-label To
+          select#to-destination.form-control.custom-select
+            option(value='' selected disabled hidden) To where?
+            option(value='Abu Dhabi, UAE') Abu Dhabi, UAE
+            option(value='Amsterdam, NL') Amsterdam, NL
+            option(value='Berlin, GER') 	Berlin, GER
+            option(value='Brussels, BE') 	Brussels, BE
+            option(value='Buenos Aires, ARG') Buenos Aires, ARG
+            option(value='Canberra, AU') Canberra, AU
+            option(value='London, UK') London, UK
+            option(value='Madrid, SP') Madrid, SP
+            option(value='Monaco, MON') Monaco, MON
+            option(value='Moscow, RU') Moscow, RU
+            option(value='Stockholm, SW') Stockholm, SW
+      .d-sm-flex.align-items-center
+        .form-group.w-100.mb-sm-4.mr-sm-3
+          label.form-label Depart
+          .input-group-overlay
+            input(type='text' placeholder='Choose date' data-datepicker-options='{"altInput": true, "altFormat": "F j, Y", "dateFormat": "Y-m-d", "defaultDate": "today", "minDate": "today"}' data-linked-input='#return-date').form-control.appended-form-control.cs-date-picker.cs-date-range
+            .input-group-append-overlay
+              span.input-group-text
+                i.fe-calendar
+        .form-group.w-100.mb-sm-4.mr-sm-3
+          label.form-label Return
+          .input-group-overlay
+            input(type='text' placeholder='Choose date' data-datepicker-options='{"altInput": true, "altFormat": "F j, Y", "dateFormat": "Y-m-d"}')#return-date.form-control.appended-form-control.cs-date-picker
+            .input-group-append-overlay
+              span.input-group-text
+                i.fe-calendar
+        .text-center.text-sm-left.mt-2.mt-sm-4.mb-4
+          button(type='submit').btn.btn-primary Search Flights
+  
+
+  // Offers carousel
+  section.container.py-5.my-4.my-sm-0.py-sm-6.py-md-7
+    h2.text-center.mb-4 Hot offers
+    .cs-carousel
+      .cs-carousel-progress.ml-auto.mb-3
+        .text-sm.text-muted.text-center.mb-2
+          span.cs-current-slide.mr-1
+          | of
+          span.cs-total-slides.ml-1
+        .progress
+          .progress-bar(role='progressbar')
+      .cs-carousel-inner(data-carousel-options = '{"items": 3, "nav": false, "gutter": 23, "responsive": {"0":{"items":1},"540":{"items":2},"900":{"items":3}}}')
+        .pb-2
+          a(href='#').card.border-0.box-shadow.card-hover.mx-1
+            span.badge.badge-lg.badge-floating.badge-floating-right.badge-danger(style='width: 5rem;') $25
+            .card-img-top.card-img-gradient
+              +image('demo/booking/offers/01.jpg', 'Burano')
+              span.card-floating-text.text-light.font-weight-medium
+                | Discover the trip
+                i.fe-chevron-right.font-size-lg.ml-1
+            .card-body.text-center
+              h3.h5.pt-1.mb-3 London to Burano
+              p.font-size-sm.text-muted.mb-2 Feb 04, 2020
+        .pb-2
+          a(href='#').card.border-0.box-shadow.card-hover.mx-1
+            span.badge.badge-lg.badge-floating.badge-floating-right.badge-danger(style='width: 5rem;') $40
+            .card-img-top.card-img-gradient
+              +image('demo/booking/offers/02.jpg', 'New York')
+              span.card-floating-text.text-light.font-weight-medium
+                | Discover the trip
+                i.fe-chevron-right.font-size-lg.ml-1
+            .card-body.text-center
+              h3.h5.pt-1.mb-3 London to New York
+              p.font-size-sm.text-muted.mb-2 Mar 15, 2020
+        .pb-2
+          a(href='#').card.border-0.box-shadow.card-hover.mx-1
+            span.badge.badge-lg.badge-floating.badge-floating-right.badge-danger(style='width: 5rem;') $100
+            .card-img-top.card-img-gradient
+              +image('demo/booking/offers/03.jpg', 'Maldives')
+              span.card-floating-text.text-light.font-weight-medium
+                | Discover the trip
+                i.fe-chevron-right.font-size-lg.ml-1
+            .card-body.text-center
+              h3.h5.pt-1.mb-3 London to Maldives
+              p.font-size-sm.text-muted.mb-2 Apr 19, 2020
+        .pb-2
+          a(href='#').card.border-0.box-shadow.card-hover.mx-1
+            span.badge.badge-lg.badge-floating.badge-floating-right.badge-danger(style='width: 5rem;') $116
+            .card-img-top.card-img-gradient
+              +image('demo/booking/offers/04.jpg', 'Buenos Aires')
+              span.card-floating-text.text-light.font-weight-medium
+                | Discover the trip
+                i.fe-chevron-right.font-size-lg.ml-1
+            .card-body.text-center
+              h3.h5.pt-1.mb-3 London to Buenos Aires
+              p.font-size-sm.text-muted.mb-2 Apr 23, 2020
+        .pb-2
+          a(href='#').card.border-0.box-shadow.card-hover.mx-1
+            span.badge.badge-lg.badge-floating.badge-floating-right.badge-danger(style='width: 5rem;') $38
+            .card-img-top.card-img-gradient
+              +image('demo/booking/offers/05.jpg', 'Rome')
+              span.card-floating-text.text-light.font-weight-medium
+                | Discover the trip
+                i.fe-chevron-right.font-size-lg.ml-1
+            .card-body.text-center
+              h3.h5.pt-1.mb-3 London to Rome
+              p.font-size-sm.text-muted.mb-2 May 17, 2020
+  
+
+  // Features CTA
+  section.bg-gradient.position-relative.pt-6.pb-5.py-sm-6
+    .bg-overlay.bg-size-cover.opacity-100(style='background-color: transparent; background-image: url(img/demo/booking/bg-pattern01.png);')
+    .bg-overlay-content.container.py-2
+      .row.align-items-center
+        .col-lg-5.offset-lg-1.order-lg-2.pb-5.pb-lg-0.text-center.text-lg-left
+          h2.text-light What is Around?
+          p.text-light.mb-0 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+        .col-lg-6.order-lg-1
+          .row
+            .col-sm-4.mb-2.pb-4.mb-sm-0.pb-sm-0
+              .px-2.text-center
+                +image('demo/booking/icons/01.svg', 'Tickets')(width='105').bg-light.rounded-circle.mb-2
+                p.font-size-sm.font-weight-medium.text-light.mb-0.pt-1 Make it easier to experience the world
+            .col-sm-4.mb-2.pb-4.mb-sm-0.pb-sm-0
+              .px-2.text-center
+                +image('demo/booking/icons/02.svg', 'Search')(width='105').bg-light.rounded-circle.mb-2
+                p.font-size-sm.font-weight-medium.text-light.mb-0.pt-1 Advanced searching with filters
+            .col-sm-4.mb-2.pb-4.mb-sm-0.pb-sm-0
+              .px-2.text-center
+                +image('demo/booking/icons/03.svg', 'Flight')(width='105').bg-light.rounded-circle.mb-2
+                p.font-size-sm.font-weight-medium.text-light.mb-0.pt-1 Find the cheapest regular flights
+  
+
+  // FAQ
+  section.container.py-5.my-4.my-sm-0.py-sm-6.py-md-7
+    h2.text-center.pb-2.mb-5 Popular questions
+    .row.pb-2
+      .col-lg-6
+        #faq-accordion.accordion.accordion-alt
+          .card.border-0.box-shadow
+            .card-header
+              h3.accordion-heading
+                a(href='#questionOne' role='button' data-toggle='collapse' aria-expanded='true' aria-controls='questionOne').collapsed
+                  | How can I create a list of frequent destinations?
+                  span.accordion-indicator
+            #questionOne.collapse(data-parent='#faq-accordion')
+              .card-body.font-size-md
+                | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          .card.border-0.box-shadow.card-active
+            .card-header
+              h3.accordion-heading
+                a(href='#questionTwo' role='button' data-toggle='collapse' aria-expanded='true' aria-controls='questionTwo')
+                  | What will happen after I sign up?
+                  span.accordion-indicator
+            #questionTwo.collapse.show(data-parent='#faq-accordion')
+              .card-body.font-size-md
+                | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          .card.border-0.box-shadow
+            .card-header
+              h3.accordion-heading
+                a(href='#questionThree' role='button' data-toggle='collapse' aria-expanded='true' aria-controls='questionThree').collapsed
+                  | Do I have to confirm all bookings?
+                  span.accordion-indicator
+            #questionThree.collapse(data-parent='#faq-accordion')
+              .card-body.font-size-md
+                | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          .card.border-0.box-shadow
+            .card-header
+              h3.accordion-heading
+                a(href='#questionFour' role='button' data-toggle='collapse' aria-expanded='true' aria-controls='questionFour').collapsed
+                  | What do I get for the commission I pay?
+                  span.accordion-indicator
+            #questionFour.collapse(data-parent='#faq-accordion')
+              .card-body.font-size-md
+                | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      .d-none.d-lg-block.col-lg-5.offset-lg-1
+        +image('demo/booking/illustration.svg', 'Illustration')
+  
+
+  // Services (Split section)
+  section.row.no-gutters.mt-3
+    .col-md-6.bg-size-cover.py-7(style='background-image: url(img/demo/booking/services-cover.jpg);')
+      .py-6
+    .col-md-6.border-top.border-bottom.px-3.pr-xl-0.pl-lg-5.pl-xl-7
+      .ml-sm-4.my-2.py-5.my-sm-0.py-sm-6.py-md-7(style='max-width: 495px;')
+        h2.mb-4 Make your trip more comfortable
+        p.mb-5 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis eum modi, adipisci facilis.
+        .media.mb-grid-gutter
+          +image('demo/booking/icons/04.svg', 'Hotel')(width='47')
+          .media-body.pl-4
+            h3.h6.mb-2 Book hotel
+            p.font-size-sm.mb-0 Save not only on airline tickets, but also on accommodation.
+        .media.mb-grid-gutter
+          +image('demo/booking/icons/05.svg', 'Car rental')(width='47')
+          .media-body.pl-4
+            h3.h6.mb-2 Rent a car
+            p.font-size-sm.mb-0 Booking a car rental with us is as simple as booking a flight.
+        .media.mb-grid-gutter
+          +image('demo/booking/icons/06.svg', 'Medical insurance')(width='47')
+          .media-body.pl-4
+            h3.h6.mb-2 Medical insurance
+            p.font-size-sm.mb-0 With every flight booking you can order a medical insurance. Insurance options include cover for medical expenses, personal accident expenses, baggage, and more.
+        .pl-5.mt-n1
+          a(href='#').cs-fancy-link.ml-4 Read more
+  
+
+  // Mobile app CTA
+  section.container.mt-3.pt-5.mt-md-0.pt-md-7
+    .row.align-items-end.align-items-lg-start
+      .col-md-6.pb-5.pb-md-6.pt-lg-6.text-center.text-md-left
+        h2.pb-1 Access the best deals anywhere
+        p.mx-auto.mb-5.mx-md-0(style='max-width: 496px;') Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est.
+        a(href='#' role='button').btn-market.btn-apple.mx-2.mr-md-3.mb-3
+          span.btn-market-subtitle Download on the
+          span.btn-market-title App Store
+        a(href='#' role='button').btn-market.btn-google.mx-2.mb-3
+          span.btn-market-subtitle Download on the
+          span.btn-market-title Google Play
+      .col-md-6.col-xl-5.offset-xl-1
+        +image('demo/booking/mobile.jpg', 'Mobile App').d-block.mx-auto
+  
+
+  // Subscribe CTA
+  section.bg-gradient.position-relative.pt-6.pb-5.py-sm-6
+    .bg-overlay.bg-size-cover.opacity-100(style='background-color: transparent; background-image: url(img/demo/booking/bg-pattern02.png);')
+    .bg-overlay-content.container.pb-3.pt-sm-2
+      .mx-auto(style='max-width: 460px;')
+        h2.text-light.text-center.pt-sm-2 Subscribe to our newsletter
+        p.text-light.text-center.mb-grid-gutter Find unique flight and hotel rates.
+        form.input-group.mb-4
+          input(type='email' placeholder='Your email' required).form-control
+          .input-group-append
+            button(type='submit').btn.btn-success: i.fe-send.font-size-xl.mr-1
+        .text-center.pt-3
+          .font-size-sm.font-weight-medium.text-light.pb-1.mb-2 We are social
+          a(href='#').social-btn.sb-outline.sb-facebook.sb-light.sb-lg.mr-2.mb-2
+            i.fe-facebook
+          a(href='#').social-btn.sb-outline.sb-twitter.sb-light.sb-lg.mr-2.mb-2
+            i.fe-twitter
+          a(href='#').social-btn.sb-outline.sb-instagram.sb-light.sb-lg.mr-2.mb-2
+            i.fe-instagram
+          a(href='#').social-btn.sb-outline.sb-google.sb-light.sb-lg.mr-2.mb-2
+            i.fe-google
+
+
+//- Footer
+block footer
+  footer.site-footer.bg-dark.pt-5.pb-4
+    .container.d-md-flex.justify-content-between.align-items-center.text-center
+      ul.list-inline.font-size-sm.mb-3.order-md-2
+        li.list-inline-item.my-1: a(href='#').nav-link-style.nav-link-light Support
+        li.list-inline-item.my-1: a(href='#').nav-link-style.nav-link-light Contacts
+        li.list-inline-item.my-1: a(href='#').nav-link-style.nav-link-light Terms &amp; Conditions
+      p.font-size-sm.mb-3.order-md-1
+        span.text-light.opacity-50.mr-1 © All rights reserved. Made by
+        a(href='https://createx.studio/' target='_blank' rel='noopener').nav-link-style.nav-link-light Createx Studio

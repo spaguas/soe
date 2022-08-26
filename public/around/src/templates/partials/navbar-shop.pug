@@ -1,0 +1,90 @@
+//- partials/modal-signin.pug
+include modal-signin
+
+//- partials/offcanvas-cart.pug
+include offcanvas-cart
+
+// Navbar (Solid background + shadow)
+// Remove "navbar-sticky" class to make navigation bar scrollable with the page.
+header.cs-header
+  .topbar.topbar-dark.bg-dark
+    .container.d-md-flex.align-items-center.px-0.px-xl-3
+      .d-none.d-md-block.text-nowrap.mr-3
+        i.fe-phone.font-size-base.text-muted.mr-1
+        span.text-muted.mr-2 Support
+        a(href='tel:9107848015').topbar-link.mr-1 910-784-8015
+      .d-flex.text-md-right.ml-md-auto
+        a(href='order-tracking.html').topbar-link.pr-2.mr-4
+          i.fe-map-pin.font-size-base.opacity-60.mr-1
+          | Track <span class='d-none d-sm-inline'>your order</span>
+        .dropdown.ml-auto.ml-md-0.mr-3
+          a(href='#' data-toggle='dropdown').topbar-link.dropdown-toggle
+            +image('flags/en.png', 'English')(width='20').mr-2
+            | Eng
+          .dropdown-menu.dropdown-menu-right
+            a(href='#').dropdown-item
+              +image('flags/fr.png', 'Français')(width='20').mr-2
+              | Français
+            a(href='#').dropdown-item
+              +image('flags/de.png', 'Deutsch')(width='20').mr-2
+              | Deutsch
+            a(href='#').dropdown-item
+              +image('flags/it.png', 'Italiano')(width='20').mt-n1.mr-2
+              | Italiano
+        .dropdown
+          a(href='#' data-toggle='dropdown').topbar-link.dropdown-toggle
+            | $ Dollar (US)
+          .dropdown-menu.dropdown-menu-right
+            a(href='#').dropdown-item
+              | € Euro (EU)
+            a(href='#').dropdown-item
+              | £ Pound (UK)
+            a(href='#').dropdown-item
+              | ¥ Yen (JP)
+  .navbar.navbar-expand-lg.navbar-light.bg-light.navbar-box-shadow.navbar-sticky(data-scroll-header)
+    .navbar-search.bg-light
+      .container.d-flex.flex-nowrap.align-items-center
+        i.fe-search.font-size-xl
+        input(type='text' placeholder='Search site').form-control.form-control-xl.navbar-search-field
+        .d-none.d-sm-block.flex-shrink-0.pl-2.mr-4.border-left.border-right(style='width: 10rem;')
+          select.form-control.custom-select.pl-2.pr-0
+            option(value='all') All categories
+            option(value='clothing') Clothing
+            option(value='shoes') Shoes
+            option(value='electronics') Electronics
+            option(value='accessoriies') Accessories
+            option(value='software') Software
+            option(value='automotive') Automotive
+        .d-flex.align-items-center
+          span.text-muted.font-size-xs.mt-1.d-none.d-sm-inline Close
+          button(type='button' data-toggle='search').close.p-2 &times;
+    .container.px-0.px-xl-3
+      button(type='button' data-toggle='offcanvas' data-offcanvas-id='primaryMenu').navbar-toggler.ml-n2.mr-4
+        span.navbar-toggler-icon
+      a(href='index.html').navbar-brand.order-lg-1.mx-auto.ml-lg-0.pr-lg-2.mr-lg-4
+        +image('logo/logo-dark.png', 'Around')(width='153').d-none.d-lg-block
+        +image('logo/logo-icon.png', 'Around')(width='58').d-lg-none
+      .d-flex.align-items-center.order-lg-3.ml-lg-auto
+        .navbar-tool
+          a(href='#' data-toggle='search').navbar-tool-icon-box.mr-2
+            i.fe-search
+        .navbar-tool.d-none.d-sm-flex
+          a(href='#modal-signin' data-toggle='modal' data-view='#modal-signin-view').navbar-tool-icon-box.mr-2
+            i.fe-user
+        div(style='height: 30px;').border-left.mr-2
+        .navbar-tool.mr-2
+          a(href='#' data-toggle='offcanvas' data-offcanvas-id='shoppingCart').navbar-tool-icon-box
+            i.fe-shopping-cart
+            span.navbar-tool-badge 3
+      #primaryMenu.cs-offcanvas-collapse.order-lg-2
+        .cs-offcanvas-cap.navbar-box-shadow
+          h5.mt-1.mb-0 Menu
+          button(type='button' data-toggle='offcanvas' data-offcanvas-id='primaryMenu').close.lead
+            span(aria-hidden='true') &times;
+        .cs-offcanvas-body
+          //- partial/menu-primary
+          include menu-primary
+        .cs-offcanvas-cap.border-top
+          a(href='#modal-signin' data-toggle='modal' data-view='#modal-signin-view').btn.btn-translucent-primary.btn-block
+            i.fe-user.font-size-lg.mr-2
+            | Sign in

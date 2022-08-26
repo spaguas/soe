@@ -1,0 +1,47 @@
+//- Include config.pug file that holds all variables
+block config
+  include ../helpers/config
+
+//- Mixins - reusable code snippets
+include ../helpers/mixins
+
+doctype html
+html(lang="en")
+
+  //- head.pug template
+  include head 
+  
+  // Body
+  - var bodyAttrs = {};
+  - bodyAttrs.class = isSidebar ? 'cs-is-sidebar' : ''
+  - bodyAttrs.style = bodyBgColor.length ? {'background-color': bodyBgColor} : ''
+  body()&attributes(bodyAttrs)
+
+    if isPageLoading
+      // Page loading spinner
+      .cs-page-loading.active
+        .cs-page-loading-inner
+          .cs-page-spinner
+          span Loading...
+      
+    main()&attributes(isPageFullHeight ? {'class': 'cs-page-wrapper d-flex flex-column'} : {'class': 'cs-page-wrapper'})
+
+      //- Navbar template
+      block navbar
+
+      // Page content
+      block content
+
+    //- Footer template
+    block footer
+
+    // Back to top button
+    a(href='#top' data-scroll).btn-scroll-top
+      span.btn-scroll-top-tooltip.text-muted.font-size-sm.mr-2 Top
+      i.btn-scroll-top-icon.fe-arrow-up    
+    
+    // Vendor scrits: js libraries and plugins
+    +vendor-scripts
+
+    // Main theme script
+    script()&attributes(isNestedFile ? {'src': '../js/theme.min.js'} : {'src': 'js/theme.min.js'})

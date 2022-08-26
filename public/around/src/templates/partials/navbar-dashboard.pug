@@ -1,0 +1,68 @@
+// Navbar (Floating light)
+// Remove "navbar-sticky" class to make navigation bar scrollable with the page.
+header.cs-header.navbar.navbar-expand-lg.navbar-dark.navbar-floating.navbar-sticky(data-scroll-header)
+  .container.px-0.px-xl-3
+    button(type='button' data-toggle='offcanvas' data-offcanvas-id='primaryMenu').navbar-toggler.ml-n2.mr-2
+      span.navbar-toggler-icon
+    a(href='index.html').navbar-brand.order-lg-1.mx-auto.ml-lg-0.pr-lg-2.mr-lg-4
+      +image('logo/logo-light.png', 'Around')(width='153').navbar-floating-logo.d-none.d-lg-block
+      +image('logo/logo-dark.png', 'Around')(width='153').navbar-stuck-logo
+      +image('logo/logo-icon.png', 'Around')(width='58').d-lg-none
+    .d-flex.align-items-center.order-lg-3.ml-lg-auto
+      .navbar-tool.dropdown
+        a(href='account-profile.html').navbar-tool-icon-box
+          +image('dashboard/avatar/main-sm.jpg', 'Avatar').navbar-tool-icon-box-img
+        a(href='account-profile.html').navbar-tool-label.dropdown-toggle
+          small Hello,
+          | Amanda
+        ul.dropdown-menu.dropdown-menu-right(style='width: 15rem;')
+          li
+            a(href='dashboard-orders.html').dropdown-item.d-flex.align-items-center
+              i.fe-shopping-bag.font-size-base.opacity-60.mr-2
+              | Orders
+              span.nav-indicator
+              span.ml-auto.font-size-xs.text-muted 2
+          li.dropdown-divider
+          li
+            a(href='dashboard-sales.html').dropdown-item.d-flex.align-items-center
+              i.fe-dollar-sign.font-size-base.opacity-60.mr-2
+              | Sales
+              span.ml-auto.font-size-xs.text-muted $735.00
+          li.dropdown-divider
+          li
+            a(href='dashboard-messages.html').dropdown-item.d-flex.align-items-center
+              i.fe-message-square.font-size-base.opacity-60.mr-2
+              | Messages
+              span.nav-indicator
+              span.ml-auto.font-size-xs.text-muted 1
+          li.dropdown-divider
+          li
+            a(href='dashboard-followers.html').dropdown-item.d-flex.align-items-center
+              i.fe-users.font-size-base.opacity-60.mr-2
+              | Followers
+              span.ml-auto.font-size-xs.text-muted 34
+          li.dropdown-divider
+          li
+            a(href='dashboard-reviews.html').dropdown-item.d-flex.align-items-center
+              i.fe-star.font-size-base.opacity-60.mr-2
+              | Reviews
+              span.ml-auto.font-size-xs.text-muted 15
+          li.dropdown-divider
+          li
+            a(href='dashboard-favorites.html').dropdown-item.d-flex.align-items-center
+              i.fe-heart.font-size-base.opacity-60.mr-2
+              | Favorites
+              span.ml-auto.font-size-xs.text-muted 6
+          li.dropdown-divider
+          li
+            a(href='signin-illustration.html').dropdown-item.d-flex.align-items-center
+              i.fe-log-out.font-size-base.opacity-60.mr-2
+              | Sign out
+    #primaryMenu.cs-offcanvas-collapse.order-lg-2
+      .cs-offcanvas-cap.navbar-box-shadow
+        h5.mt-1.mb-0 Menu
+        button(type='button' data-toggle='offcanvas' data-offcanvas-id='primaryMenu').close.lead
+          span(aria-hidden='true') &times;
+      .cs-offcanvas-body
+        //- partial/menu-primary
+        include menu-primary

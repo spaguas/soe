@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Around | Booking / Directory</title>
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="Around - Multipurpose Bootstrap Template">
+    <meta name="keywords" content="bootstrap, business, consulting, coworking space, services, creative agency, dashboard, e-commerce, mobile app showcase, multipurpose, product landing, shop, software, ui kit, web studio, landing, html5, css3, javascript, gallery, slider, touch, creative">
+    <meta name="author" content="Createx Studio">
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" color="#5bbad5" href="safari-pinned-tab.svg">
+    <meta name="msapplication-TileColor" content="#766df4">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Page loading styles-->
+    <style>
+      .cs-page-loading {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -webkit-transition: all .4s .2s ease-in-out;
+        transition: all .4s .2s ease-in-out;
+        background-color: #fff;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 9999;
+      }
+      .cs-page-loading.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .cs-page-loading-inner {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        -webkit-transition: opacity .2s ease-in-out;
+        transition: opacity .2s ease-in-out;
+        opacity: 0;
+      }
+      .cs-page-loading.active > .cs-page-loading-inner {
+        opacity: 1;
+      }
+      .cs-page-loading-inner > span {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        font-weight: normal;
+        color: #737491;
+      }
+      .cs-page-spinner {
+        display: inline-block;
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-bottom: .75rem;
+        vertical-align: text-bottom;
+        border: .15em solid #766df4;
+        border-right-color: transparent;
+        border-radius: 50%;
+        -webkit-animation: spinner .75s linear infinite;
+        animation: spinner .75s linear infinite;
+      }
+      @-webkit-keyframes spinner {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spinner {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+      
+    </style>
+    <!-- Page loading scripts-->
+    <script>
+      (function () {
+        window.onload = function () {
+          var preloader = document.querySelector('.cs-page-loading');
+          preloader.classList.remove('active');
+          setTimeout(function () {
+            preloader.remove();
+          }, 2000);
+        };
+      })();
+      
+    </script>
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="vendor/simplebar/dist/simplebar.min.css"/>
+    <link rel="stylesheet" media="screen" href="vendor/tiny-slider/dist/tiny-slider.css"/>
+    <link rel="stylesheet" media="screen" href="vendor/flatpickr/dist/flatpickr.min.css"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="css/theme.min.css">
+  </head>
+  <!-- Body-->
+  <body>
+    <!-- Page loading spinner-->
+    <div class="cs-page-loading active">
+      <div class="cs-page-loading-inner">
+        <div class="cs-page-spinner"></div><span>Loading...</span>
+      </div>
+    </div>
+    <main class="cs-page-wrapper">
+      <!-- Sign In Modal-->
+      <div class="modal fade" id="modal-signin" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content border-0">
+            <div class="cs-view show" id="modal-signin-view">
+              <div class="modal-header border-0 bg-dark px-4">
+                <h4 class="modal-title text-light">Sign in</h4>
+                <button class="close text-light" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body px-4">
+                <p class="font-size-ms text-muted">Sign in to your account using email and password provided during registration.</p>
+                <form class="needs-validation" novalidate>
+                  <div class="input-group-overlay form-group">
+                    <div class="input-group-prepend-overlay"><span class="input-group-text"><i class="fe-mail"></i></span></div>
+                    <input class="form-control prepended-form-control" type="email" placeholder="Email" required>
+                  </div>
+                  <div class="input-group-overlay cs-password-toggle form-group">
+                    <div class="input-group-prepend-overlay"><span class="input-group-text"><i class="fe-lock"></i></span></div>
+                    <input class="form-control prepended-form-control" type="password" placeholder="Password" required>
+                    <label class="cs-password-toggle-btn">
+                      <input class="custom-control-input" type="checkbox"><i class="fe-eye cs-password-toggle-indicator"></i><span class="sr-only">Show password</span>
+                    </label>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input class="custom-control-input" type="checkbox" id="keep-signed">
+                      <label class="custom-control-label" for="keep-signed">Keep me signed in</label>
+                    </div><a class="nav-link-style font-size-ms" href="password-recovery.html">Forgot password?</a>
+                  </div>
+                  <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+                  <p class="font-size-sm pt-3 mb-0">Don't have an account? <a href='#' class='font-weight-medium' data-view='#modal-signup-view'>Sign up</a></p>
+                </form>
+              </div>
+            </div>
+            <div class="cs-view" id="modal-signup-view">
+              <div class="modal-header border-0 bg-dark px-4">
+                <h4 class="modal-title text-light">Sign up</h4>
+                <button class="close text-light" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body px-4">
+                <p class="font-size-ms text-muted">Registration takes less than a minute but gives you full control over your orders.</p>
+                <form class="needs-validation" novalidate>
+                  <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Full name" required>
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Email" required>
+                  </div>
+                  <div class="cs-password-toggle form-group">
+                    <input class="form-control" type="password" placeholder="Password" required>
+                    <label class="cs-password-toggle-btn">
+                      <input class="custom-control-input" type="checkbox"><i class="fe-eye cs-password-toggle-indicator"></i><span class="sr-only">Show password</span>
+                    </label>
+                  </div>
+                  <div class="cs-password-toggle form-group">
+                    <input class="form-control" type="password" placeholder="Confirm password" required>
+                    <label class="cs-password-toggle-btn">
+                      <input class="custom-control-input" type="checkbox"><i class="fe-eye cs-password-toggle-indicator"></i><span class="sr-only">Show password</span>
+                    </label>
+                  </div>
+                  <button class="btn btn-primary btn-block" type="submit">Sign up</button>
+                  <p class="font-size-sm pt-3 mb-0">Already have an account? <a href='#' class='font-weight-medium' data-view='#modal-signin-view'>Sign in</a></p>
+                </form>
+              </div>
+            </div>
+            <div class="modal-body text-center px-4 pt-2 pb-4">
+              <hr>
+              <p class="font-size-sm font-weight-medium text-heading pt-4">Or sign in with</p><a class="social-btn sb-facebook sb-lg mx-1 mb-2" href="#"><i class="fe-facebook"></i></a><a class="social-btn sb-twitter sb-lg mx-1 mb-2" href="#"><i class="fe-twitter"></i></a><a class="social-btn sb-instagram sb-lg mx-1 mb-2" href="#"><i class="fe-instagram"></i></a><a class="social-btn sb-google sb-lg mx-1 mb-2" href="#"><i class="fe-google"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Navbar (Floating light)-->
+      <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
+      <header class="cs-header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header>
+        <div class="container px-0 px-xl-3">
+          <button class="navbar-toggler ml-n2 mr-2" type="button" data-toggle="offcanvas" data-offcanvas-id="primaryMenu"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand order-lg-1 mx-auto ml-lg-0 pr-lg-2 mr-lg-4" href="index.html"><img class="navbar-floating-logo d-none d-lg-block" width="153" src="img/logo/logo-light.png" alt="Around"/><img class="navbar-stuck-logo" width="153" src="img/logo/logo-dark.png" alt="Around"/><img class="d-lg-none" width="58" src="img/logo/logo-icon.png" alt="Around"/></a>
+          <div class="d-flex align-items-center order-lg-3 ml-lg-auto"><a class="nav-link-style font-size-sm text-nowrap" href="#modal-signin" data-toggle="modal" data-view="#modal-signin-view"><i class="fe-user font-size-xl mr-2"></i>Sign in</a><a class="btn btn-primary ml-grid-gutter d-none d-lg-inline-block navbar-btn" href="#modal-signin" data-toggle="modal" data-view="#modal-signup-view">Sign up</a><a class="btn btn-primary ml-grid-gutter d-none d-lg-inline-block navbar-stuck-btn" href="#modal-signin" data-toggle="modal" data-view="#modal-signup-view">Sign up</a></div>
+          <div class="cs-offcanvas-collapse order-lg-2" id="primaryMenu">
+            <div class="cs-offcanvas-cap navbar-box-shadow">
+              <h5 class="mt-1 mb-0">Menu</h5>
+              <button class="close lead" type="button" data-toggle="offcanvas" data-offcanvas-id="primaryMenu"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="cs-offcanvas-body">
+              <!-- Menu-->
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown dropdown-mega active"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Demos</a>
+                  <div class="dropdown-menu"><a class="dropdown-column dropdown-column-img bg-secondary" href="index.html" style="background-image: url(img/demo/menu-banner.jpg);"></a>
+                    <div class="dropdown-column"><a class="dropdown-item" href="index.html">Web Template Presentation</a><a class="dropdown-item" href="demo-business-consulting.html">Business Consulting</a><a class="dropdown-item" href="demo-shop-homepage.html">Shop Homepage</a><a class="dropdown-item" href="demo-booking-directory.html">Booking / Directory</a><a class="dropdown-item" href="demo-creative-agency.html">Creative Agency</a><a class="dropdown-item" href="demo-web-studio.html">Web Studio</a><a class="dropdown-item" href="demo-product-software.html">Product Landing - Software</a></div>
+                    <div class="dropdown-column"><a class="dropdown-item" href="demo-product-gadget.html">Product Landing - Gadget</a><a class="dropdown-item" href="demo-mobile-app.html">Mobile App Showcase</a><a class="dropdown-item" href="demo-coworking-space.html">Coworking Space</a><a class="dropdown-item" href="demo-event-landing.html">Event Landing</a><a class="dropdown-item" href="demo-marketing-seo.html">Digital Marketing &amp; SEO</a></div>
+                  </div>
+                </li>
+                <li class="nav-item dropdown dropdown-mega"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Templates</a>
+                  <div class="dropdown-menu">
+                    <div class="dropdown-column mb-2 mb-lg-0">
+                      <h5 class="dropdown-header">Blog</h5><a class="dropdown-item" href="blog-grid-rs.html">Grid Right Sidebar</a><a class="dropdown-item" href="blog-grid-ls.html">Grid Left Sidebar</a><a class="dropdown-item" href="blog-grid-ns.html">Grid No Sidebar</a><a class="dropdown-item" href="blog-list-rs.html">List Right Sidebar</a><a class="dropdown-item" href="blog-list-ls.html">List Left Sidebar</a><a class="dropdown-item" href="blog-list-ns.html">List No Sidebar</a><a class="dropdown-item" href="blog-single-rs.html">Single Post Right Sidebar</a><a class="dropdown-item" href="blog-single-ls.html">Single Post Left Sidebar</a><a class="dropdown-item" href="blog-single-ns.html">Single Post No Sidebar</a>
+                    </div>
+                    <div class="dropdown-column mb-2 mb-lg-0">
+                      <h5 class="dropdown-header">Portfolio</h5><a class="dropdown-item" href="portfolio-style-1.html">Grid Style 1</a><a class="dropdown-item" href="portfolio-style-2.html">Grid Style 2</a><a class="dropdown-item" href="portfolio-style-3.html">Grid Style 3</a><a class="dropdown-item" href="portfolio-single-side-gallery-grid.html">Project Side Gallery (Grid)</a><a class="dropdown-item" href="portfolio-single-side-gallery-list.html">Project Side Gallery (List)</a><a class="dropdown-item" href="portfolio-single-carousel.html">Project Carousel</a><a class="dropdown-item" href="portfolio-single-wide-gallery.html">Project Wide Gallery</a>
+                    </div>
+                    <div class="dropdown-column mb-2 mb-lg-0">
+                      <h5 class="dropdown-header">Shop</h5><a class="dropdown-item" href="shop-ls.html">Grid Left Sidebar</a><a class="dropdown-item" href="shop-rs.html">Grid Right Sidebar</a><a class="dropdown-item" href="shop-ns.html">Grid No Sidebar</a><a class="dropdown-item" href="shop-single.html">Single Product</a><a class="dropdown-item" href="checkout.html">Cart &amp; Checkout</a><a class="dropdown-item" href="order-tracking.html">Order Tracking</a>
+                    </div>
+                  </div>
+                </li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Account</a>
+                  <ul class="dropdown-menu">
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Dashboard</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="dashboard-orders.html">Orders</a></li>
+                        <li><a class="dropdown-item" href="dashboard-sales.html">Sales</a></li>
+                        <li><a class="dropdown-item" href="dashboard-messages.html">Messages</a></li>
+                        <li><a class="dropdown-item" href="dashboard-followers.html">Followers</a></li>
+                        <li><a class="dropdown-item" href="dashboard-reviews.html">Reviews</a></li>
+                        <li><a class="dropdown-item" href="dashboard-favorites.html">Favorites</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Account Settings</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="account-profile.html">Profile Info</a></li>
+                        <li><a class="dropdown-item" href="account-payment.html">Payment Methods</a></li>
+                        <li><a class="dropdown-item" href="account-notifications.html">Notifications</a></li>
+                      </ul>
+                    </li>
+                    <li><a class="dropdown-item" href="signin-illustration.html">Sign In - Illustration</a></li>
+                    <li><a class="dropdown-item" href="signin-image.html">Sign In - Image</a></li>
+                    <li><a class="dropdown-item" href="signin-signup.html">Sign In - Sign Up</a></li>
+                    <li><a class="dropdown-item" href="password-recovery.html">Password Recovery</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Pages</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="about.html">About</a></li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Contacts</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="contacts-v1.html">Contacts v.1</a></li>
+                        <li><a class="dropdown-item" href="contacts-v2.html">Contacts v.2</a></li>
+                        <li><a class="dropdown-item" href="contacts-v3.html">Contacts v.3</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Help Center</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="help-topics.html">Help Topics</a></li>
+                        <li><a class="dropdown-item" href="help-single-topic.html">Single Topic</a></li>
+                        <li><a class="dropdown-item" href="help-submit-request.html">Submit a Request</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">404 Not Found</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="404-simple.html">Simple Text</a></li>
+                        <li><a class="dropdown-item" href="404-illustration.html">Illustration</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Coming Soon</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="coming-soon-image.html">Image</a></li>
+                        <li><a class="dropdown-item" href="coming-soon-illustration.html">Illustration</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Docs / UI Kit</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="docs/dev-setup.html">
+                        <div class="d-flex align-items-center">
+                          <div class="font-size-xl text-muted"><i class="fe-file-text"></i></div>
+                          <div class="pl-3"><span class="d-block text-heading">Documentation</span><small class="d-block text-muted">Kick-start customization</small></div>
+                        </div></a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="components/typography.html">
+                        <div class="d-flex align-items-center">
+                          <div class="font-size-xl text-muted"><i class="fe-layers"></i></div>
+                          <div class="pl-3"><span class="d-block text-heading">UI Kit<span class="badge badge-danger ml-2">50+</span></span><small class="d-block text-muted">Flexible components</small></div>
+                        </div></a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="docs/changelog.html">
+                        <div class="d-flex align-items-center">
+                          <div class="font-size-xl text-muted"><i class="fe-edit"></i></div>
+                          <div class="pl-3"><span class="d-block text-heading">Changelog<span class="badge badge-success ml-2">v1.1.1</span></span><small class="d-block text-muted">Regular updates</small></div>
+                        </div></a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="mailto:support@createx.studio">
+                        <div class="d-flex align-items-center">
+                          <div class="font-size-xl text-muted"><i class="fe-life-buoy"></i></div>
+                          <div class="pl-3"><span class="d-block text-heading">Support</span><small class="d-block text-muted">support@createx.studio</small></div>
+                        </div></a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Page content-->
+      <!-- Hero-->
+      <section class="jarallax bg-dark py-7" data-jarallax data-speed="0.25">
+        <div class="jarallax-img" style="background-image: url(img/demo/booking/hero-bg.jpg);"></div>
+        <div class="container py-5 py-sm-7 text-center">
+          <div class="py-md-6">
+            <h1 class="text-light pb-1">Search for cheap airline tickets</h1>
+            <p class="font-size-lg text-light">Makes it easier to experience the world.</p>
+          </div>
+        </div>
+      </section>
+      <!-- Booking form-->
+      <form class="container bg-overlay-content" style="margin-top: -68px;">
+        <div class="d-lg-flex align-items-center bg-secondary border rounded-lg px-4 pt-4 pb-3">
+          <div class="d-sm-flex align-items-center">
+            <div class="form-group w-100 mb-sm-4 mr-sm-3">
+              <label class="form-label" for="from-destination">From</label>
+              <select class="form-control custom-select" id="from-destination">
+                <option value="" disabled hidden>From where?</option>
+                <option value="Abu Dhabi, UAE">Abu Dhabi, UAE</option>
+                <option value="Amsterdam, NL">Amsterdam, NL</option>
+                <option value="Berlin, GER">	Berlin, GER</option>
+                <option value="Brussels, BE">	Brussels, BE</option>
+                <option value="Buenos Aires, ARG">Buenos Aires, ARG</option>
+                <option value="Canberra, AU">Canberra, AU</option>
+                <option value="London, UK" selected>London, UK</option>
+                <option value="Madrid, SP">Madrid, SP</option>
+                <option value="Monaco, MON">Monaco, MON</option>
+                <option value="Moscow, RU">Moscow, RU</option>
+                <option value="Stockholm, SW">Stockholm, SW</option>
+              </select>
+            </div>
+            <div class="form-group w-100 mb-sm-4 mr-sm-3">
+              <label class="form-label" for="to-destination">To</label>
+              <select class="form-control custom-select" id="to-destination">
+                <option value="" selected disabled hidden>To where?</option>
+                <option value="Abu Dhabi, UAE">Abu Dhabi, UAE</option>
+                <option value="Amsterdam, NL">Amsterdam, NL</option>
+                <option value="Berlin, GER">	Berlin, GER</option>
+                <option value="Brussels, BE">	Brussels, BE</option>
+                <option value="Buenos Aires, ARG">Buenos Aires, ARG</option>
+                <option value="Canberra, AU">Canberra, AU</option>
+                <option value="London, UK">London, UK</option>
+                <option value="Madrid, SP">Madrid, SP</option>
+                <option value="Monaco, MON">Monaco, MON</option>
+                <option value="Moscow, RU">Moscow, RU</option>
+                <option value="Stockholm, SW">Stockholm, SW</option>
+              </select>
+            </div>
+          </div>
+          <div class="d-sm-flex align-items-center">
+            <div class="form-group w-100 mb-sm-4 mr-sm-3">
+              <label class="form-label">Depart</label>
+              <div class="input-group-overlay">
+                <input class="form-control appended-form-control cs-date-picker cs-date-range" type="text" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;, &quot;defaultDate&quot;: &quot;today&quot;, &quot;minDate&quot;: &quot;today&quot;}" data-linked-input="#return-date">
+                <div class="input-group-append-overlay"><span class="input-group-text"><i class="fe-calendar"></i></span></div>
+              </div>
+            </div>
+            <div class="form-group w-100 mb-sm-4 mr-sm-3">
+              <label class="form-label">Return</label>
+              <div class="input-group-overlay">
+                <input class="form-control appended-form-control cs-date-picker" type="text" placeholder="Choose date" data-datepicker-options="{&quot;altInput&quot;: true, &quot;altFormat&quot;: &quot;F j, Y&quot;, &quot;dateFormat&quot;: &quot;Y-m-d&quot;}" id="return-date">
+                <div class="input-group-append-overlay"><span class="input-group-text"><i class="fe-calendar"></i></span></div>
+              </div>
+            </div>
+            <div class="text-center text-sm-left mt-2 mt-sm-4 mb-4">
+              <button class="btn btn-primary" type="submit">Search Flights</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- Offers carousel-->
+      <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+        <h2 class="text-center mb-4">Hot offers</h2>
+        <div class="cs-carousel">
+          <div class="cs-carousel-progress ml-auto mb-3">
+            <div class="text-sm text-muted text-center mb-2"><span class="cs-current-slide mr-1"></span>of<span class="cs-total-slides ml-1"></span></div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar"></div>
+            </div>
+          </div>
+          <div class="cs-carousel-inner" data-carousel-options="{&quot;items&quot;: 3, &quot;nav&quot;: false, &quot;gutter&quot;: 23, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;540&quot;:{&quot;items&quot;:2},&quot;900&quot;:{&quot;items&quot;:3}}}">
+            <div class="pb-2"><a class="card border-0 box-shadow card-hover mx-1" href="#"><span class="badge badge-lg badge-floating badge-floating-right badge-danger" style="width: 5rem;">$25</span>
+                <div class="card-img-top card-img-gradient"><img src="img/demo/booking/offers/01.jpg" alt="Burano"/><span class="card-floating-text text-light font-weight-medium">Discover the trip<i class="fe-chevron-right font-size-lg ml-1"></i></span>
+                </div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">London to Burano</h3>
+                  <p class="font-size-sm text-muted mb-2">Feb 04, 2020</p>
+                </div></a></div>
+            <div class="pb-2"><a class="card border-0 box-shadow card-hover mx-1" href="#"><span class="badge badge-lg badge-floating badge-floating-right badge-danger" style="width: 5rem;">$40</span>
+                <div class="card-img-top card-img-gradient"><img src="img/demo/booking/offers/02.jpg" alt="New York"/><span class="card-floating-text text-light font-weight-medium">Discover the trip<i class="fe-chevron-right font-size-lg ml-1"></i></span>
+                </div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">London to New York</h3>
+                  <p class="font-size-sm text-muted mb-2">Mar 15, 2020</p>
+                </div></a></div>
+            <div class="pb-2"><a class="card border-0 box-shadow card-hover mx-1" href="#"><span class="badge badge-lg badge-floating badge-floating-right badge-danger" style="width: 5rem;">$100</span>
+                <div class="card-img-top card-img-gradient"><img src="img/demo/booking/offers/03.jpg" alt="Maldives"/><span class="card-floating-text text-light font-weight-medium">Discover the trip<i class="fe-chevron-right font-size-lg ml-1"></i></span>
+                </div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">London to Maldives</h3>
+                  <p class="font-size-sm text-muted mb-2">Apr 19, 2020</p>
+                </div></a></div>
+            <div class="pb-2"><a class="card border-0 box-shadow card-hover mx-1" href="#"><span class="badge badge-lg badge-floating badge-floating-right badge-danger" style="width: 5rem;">$116</span>
+                <div class="card-img-top card-img-gradient"><img src="img/demo/booking/offers/04.jpg" alt="Buenos Aires"/><span class="card-floating-text text-light font-weight-medium">Discover the trip<i class="fe-chevron-right font-size-lg ml-1"></i></span>
+                </div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">London to Buenos Aires</h3>
+                  <p class="font-size-sm text-muted mb-2">Apr 23, 2020</p>
+                </div></a></div>
+            <div class="pb-2"><a class="card border-0 box-shadow card-hover mx-1" href="#"><span class="badge badge-lg badge-floating badge-floating-right badge-danger" style="width: 5rem;">$38</span>
+                <div class="card-img-top card-img-gradient"><img src="img/demo/booking/offers/05.jpg" alt="Rome"/><span class="card-floating-text text-light font-weight-medium">Discover the trip<i class="fe-chevron-right font-size-lg ml-1"></i></span>
+                </div>
+                <div class="card-body text-center">
+                  <h3 class="h5 pt-1 mb-3">London to Rome</h3>
+                  <p class="font-size-sm text-muted mb-2">May 17, 2020</p>
+                </div></a></div>
+          </div>
+        </div>
+      </section>
+      <!-- Features CTA-->
+      <section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
+        <div class="bg-overlay bg-size-cover opacity-100" style="background-color: transparent; background-image: url(img/demo/booking/bg-pattern01.png);"></div>
+        <div class="bg-overlay-content container py-2">
+          <div class="row align-items-center">
+            <div class="col-lg-5 offset-lg-1 order-lg-2 pb-5 pb-lg-0 text-center text-lg-left">
+              <h2 class="text-light">What is Around?</h2>
+              <p class="text-light mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+              <div class="row">
+                <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center"><img class="bg-light rounded-circle mb-2" width="105" src="img/demo/booking/icons/01.svg" alt="Tickets"/>
+                    <p class="font-size-sm font-weight-medium text-light mb-0 pt-1">Make it easier to experience the world</p>
+                  </div>
+                </div>
+                <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center"><img class="bg-light rounded-circle mb-2" width="105" src="img/demo/booking/icons/02.svg" alt="Search"/>
+                    <p class="font-size-sm font-weight-medium text-light mb-0 pt-1">Advanced searching with filters</p>
+                  </div>
+                </div>
+                <div class="col-sm-4 mb-2 pb-4 mb-sm-0 pb-sm-0">
+                  <div class="px-2 text-center"><img class="bg-light rounded-circle mb-2" width="105" src="img/demo/booking/icons/03.svg" alt="Flight"/>
+                    <p class="font-size-sm font-weight-medium text-light mb-0 pt-1">Find the cheapest regular flights</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- FAQ-->
+      <section class="container py-5 my-4 my-sm-0 py-sm-6 py-md-7">
+        <h2 class="text-center pb-2 mb-5">Popular questions</h2>
+        <div class="row pb-2">
+          <div class="col-lg-6">
+            <div class="accordion accordion-alt" id="faq-accordion">
+              <div class="card border-0 box-shadow">
+                <div class="card-header">
+                  <h3 class="accordion-heading"><a class="collapsed" href="#questionOne" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="questionOne">How can I create a list of frequent destinations?<span class="accordion-indicator"></span></a></h3>
+                </div>
+                <div class="collapse" id="questionOne" data-parent="#faq-accordion">
+                  <div class="card-body font-size-md">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                </div>
+              </div>
+              <div class="card border-0 box-shadow card-active">
+                <div class="card-header">
+                  <h3 class="accordion-heading"><a href="#questionTwo" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="questionTwo">What will happen after I sign up?<span class="accordion-indicator"></span></a></h3>
+                </div>
+                <div class="collapse show" id="questionTwo" data-parent="#faq-accordion">
+                  <div class="card-body font-size-md">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                </div>
+              </div>
+              <div class="card border-0 box-shadow">
+                <div class="card-header">
+                  <h3 class="accordion-heading"><a class="collapsed" href="#questionThree" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="questionThree">Do I have to confirm all bookings?<span class="accordion-indicator"></span></a></h3>
+                </div>
+                <div class="collapse" id="questionThree" data-parent="#faq-accordion">
+                  <div class="card-body font-size-md">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                </div>
+              </div>
+              <div class="card border-0 box-shadow">
+                <div class="card-header">
+                  <h3 class="accordion-heading"><a class="collapsed" href="#questionFour" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="questionFour">What do I get for the commission I pay?<span class="accordion-indicator"></span></a></h3>
+                </div>
+                <div class="collapse" id="questionFour" data-parent="#faq-accordion">
+                  <div class="card-body font-size-md">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-none d-lg-block col-lg-5 offset-lg-1"><img src="img/demo/booking/illustration.svg" alt="Illustration"/>
+          </div>
+        </div>
+      </section>
+      <!-- Services (Split section)-->
+      <section class="row no-gutters mt-3">
+        <div class="col-md-6 bg-size-cover py-7" style="background-image: url(img/demo/booking/services-cover.jpg);">
+          <div class="py-6"></div>
+        </div>
+        <div class="col-md-6 border-top border-bottom px-3 pr-xl-0 pl-lg-5 pl-xl-7">
+          <div class="ml-sm-4 my-2 py-5 my-sm-0 py-sm-6 py-md-7" style="max-width: 495px;">
+            <h2 class="mb-4">Make your trip more comfortable</h2>
+            <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis eum modi, adipisci facilis.</p>
+            <div class="media mb-grid-gutter"><img width="47" src="img/demo/booking/icons/04.svg" alt="Hotel"/>
+              <div class="media-body pl-4">
+                <h3 class="h6 mb-2">Book hotel</h3>
+                <p class="font-size-sm mb-0">Save not only on airline tickets, but also on accommodation.</p>
+              </div>
+            </div>
+            <div class="media mb-grid-gutter"><img width="47" src="img/demo/booking/icons/05.svg" alt="Car rental"/>
+              <div class="media-body pl-4">
+                <h3 class="h6 mb-2">Rent a car</h3>
+                <p class="font-size-sm mb-0">Booking a car rental with us is as simple as booking a flight.</p>
+              </div>
+            </div>
+            <div class="media mb-grid-gutter"><img width="47" src="img/demo/booking/icons/06.svg" alt="Medical insurance"/>
+              <div class="media-body pl-4">
+                <h3 class="h6 mb-2">Medical insurance</h3>
+                <p class="font-size-sm mb-0">With every flight booking you can order a medical insurance. Insurance options include cover for medical expenses, personal accident expenses, baggage, and more.</p>
+              </div>
+            </div>
+            <div class="pl-5 mt-n1"><a class="cs-fancy-link ml-4" href="#">Read more</a></div>
+          </div>
+        </div>
+      </section>
+      <!-- Mobile app CTA-->
+      <section class="container mt-3 pt-5 mt-md-0 pt-md-7">
+        <div class="row align-items-end align-items-lg-start">
+          <div class="col-md-6 pb-5 pb-md-6 pt-lg-6 text-center text-md-left">
+            <h2 class="pb-1">Access the best deals anywhere</h2>
+            <p class="mx-auto mb-5 mx-md-0" style="max-width: 496px;">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est.</p><a class="btn-market btn-apple mx-2 mr-md-3 mb-3" href="#" role="button"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">App Store</span></a><a class="btn-market btn-google mx-2 mb-3" href="#" role="button"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">Google Play</span></a>
+          </div>
+          <div class="col-md-6 col-xl-5 offset-xl-1"><img class="d-block mx-auto" src="img/demo/booking/mobile.jpg" alt="Mobile App"/>
+          </div>
+        </div>
+      </section>
+      <!-- Subscribe CTA-->
+      <section class="bg-gradient position-relative pt-6 pb-5 py-sm-6">
+        <div class="bg-overlay bg-size-cover opacity-100" style="background-color: transparent; background-image: url(img/demo/booking/bg-pattern02.png);"></div>
+        <div class="bg-overlay-content container pb-3 pt-sm-2">
+          <div class="mx-auto" style="max-width: 460px;">
+            <h2 class="text-light text-center pt-sm-2">Subscribe to our newsletter</h2>
+            <p class="text-light text-center mb-grid-gutter">Find unique flight and hotel rates.</p>
+            <form class="input-group mb-4">
+              <input class="form-control" type="email" placeholder="Your email" required>
+              <div class="input-group-append">
+                <button class="btn btn-success" type="submit"><i class="fe-send font-size-xl mr-1"></i></button>
+              </div>
+            </form>
+            <div class="text-center pt-3">
+              <div class="font-size-sm font-weight-medium text-light pb-1 mb-2">We are social</div><a class="social-btn sb-outline sb-facebook sb-light sb-lg mr-2 mb-2" href="#"><i class="fe-facebook"></i></a><a class="social-btn sb-outline sb-twitter sb-light sb-lg mr-2 mb-2" href="#"><i class="fe-twitter"></i></a><a class="social-btn sb-outline sb-instagram sb-light sb-lg mr-2 mb-2" href="#"><i class="fe-instagram"></i></a><a class="social-btn sb-outline sb-google sb-light sb-lg mr-2 mb-2" href="#"><i class="fe-google"></i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer bg-dark pt-5 pb-4">
+      <div class="container d-md-flex justify-content-between align-items-center text-center">
+        <ul class="list-inline font-size-sm mb-3 order-md-2">
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="#">Support</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="#">Contacts</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style nav-link-light" href="#">Terms &amp; Conditions</a></li>
+        </ul>
+        <p class="font-size-sm mb-3 order-md-1"><span class="text-light opacity-50 mr-1">© All rights reserved. Made by</span><a class="nav-link-style nav-link-light" href="https://createx.studio/" target="_blank" rel="noopener">Createx Studio</a></p>
+      </div>
+    </footer>
+    <!-- Back to top button--><a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted font-size-sm mr-2">Top</span><i class="btn-scroll-top-icon fe-arrow-up">   </i></a>
+    <!-- Vendor scrits: js libraries and plugins-->
+    <script src="vendor/jquery/dist/jquery.slim.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <script src="vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <script src="vendor/jarallax/dist/jarallax.min.js"></script>
+    <script src="vendor/tiny-slider/dist/min/tiny-slider.js"></script>
+    <script src="vendor/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="vendor/flatpickr/dist/plugins/rangePlugin.js"></script>
+    <!-- Main theme script-->
+    <script src="js/theme.min.js"></script>
+  </body>
+</html>

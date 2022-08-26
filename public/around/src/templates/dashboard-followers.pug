@@ -1,0 +1,177 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var parentMenu = 'Account'
+  - var pageTitle = 'Dashboard - Followers'
+  - var bodyBgColor = '#f7f7fc'
+
+//- Navbar
+block navbar
+  include partials/navbar-dashboard
+
+//- Page Content
+block content
+
+  // Slanted background
+  .position-relative.bg-gradient(style='height: 480px;')
+    .cs-shape.cs-shape-bottom.cs-shape-slant.bg-secondary.d-none.d-lg-block
+      svg(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3000 260')
+        polygon(fill='currentColor' points='0,257 0,260 3000,260 3000,0')
+
+
+  // Page content
+  .container.bg-overlay-content.pb-4.mb-md-3(style='margin-top: -350px;')
+    .row
+
+      // Sidebar
+      .col-lg-4.mb-4.mb-lg-0
+        //- Include sidebar-account.pug partial
+        include partials/sidebar-account
+
+
+      // Content
+      .col-lg-8
+        .d-flex.flex-column.h-100.bg-light.rounded-lg.box-shadow-lg.p-4
+          .py-2.p-md-3
+
+            // Title
+            h1.h3.mb-3.text-nowrap.text-center.text-sm-left
+              | Followers
+              span.d-inline-block.align-middle.bg-faded-dark.font-size-ms.font-weight-medium.rounded-sm.py-1.px-2.ml-2 34
+                        
+            
+            // Follower
+            .d-md-flex.align-items-center.py-grid-gutter.border-bottom
+              .media.media-ie-fix.align-items-center.mr-md-4.mb-4.mb-md-0(style='max-width: 264px;')
+                a(href='#').d-block
+                  +image('dashboard/followers/01.jpg', 'Emili Parker')(width='90').d-block.rounded-circle
+                .media-body.pl-3
+                  h2.font-size-base.nav-heading.mb-1
+                    a(href='#') Emili Parker
+                  .font-size-xs.text-muted.mb-2.pb-1 @emiliParker, United States
+                  button(type='button').btn.btn-translucent-primary.btn-sm Follow
+              .d-flex.ml-auto.pl-md-1
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/architecture/01.jpg', 'Architecture')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/architecture/02.jpg', 'Architecture')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/architecture/03.jpg', 'Architecture')(width='102').d-block
+                a(href='#').d-block
+                  +image('dashboard/followers/architecture/04.jpg', 'Architecture')(width='102').d-block
+            
+            // Follower
+            .d-md-flex.align-items-center.py-grid-gutter.border-bottom
+              .media.media-ie-fix.align-items-center.mr-md-4.mb-4.mb-md-0(style='max-width: 264px;')
+                a(href='#').d-block
+                  +image('dashboard/followers/02.jpg', 'Tim Brooks')(width='90').d-block.rounded-circle
+                .media-body.pl-3
+                  h2.font-size-base.nav-heading.mb-1
+                    a(href='#') Tim Brooks
+                  .font-size-xs.text-muted.mb-2.pb-1 @timmy, Australia
+                  button(type='button').btn.btn-translucent-primary.btn-sm Follow
+              .d-flex.ml-auto.pl-md-1
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/nature/01.jpg', 'Nature')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/nature/02.jpg', 'Nature')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/nature/03.jpg', 'Nature')(width='102').d-block
+                a(href='#').d-block
+                  +image('dashboard/followers/nature/04.jpg', 'Nature')(width='102').d-block
+            
+            // Follower
+            .d-md-flex.align-items-center.py-grid-gutter.border-bottom
+              .media.media-ie-fix.align-items-center.mr-md-4.mb-4.mb-md-0(style='max-width: 264px;')
+                a(href='#').d-block
+                  +image('dashboard/followers/03.jpg', 'Abstract Shapes')(width='90').d-block.rounded-circle
+                .media-body.pl-3
+                  h2.font-size-base.nav-heading.mb-1
+                    a(href='#') Abstract Shapes
+                  .font-size-xs.text-muted.mb-2.pb-1 @abs_shapes, Poland
+                  button(type='button').btn.btn-secondary.btn-sm Unfollow
+              .d-flex.ml-auto.pl-md-1
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/abstract/01.jpg', 'Abstract')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/abstract/02.jpg', 'Abstract')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/abstract/03.jpg', 'Abstract')(width='102').d-block
+                a(href='#').d-block
+                  +image('dashboard/followers/abstract/04.jpg', 'Abstract')(width='102').d-block
+            
+            // Follower
+            .d-md-flex.align-items-center.py-grid-gutter.border-bottom
+              .media.media-ie-fix.align-items-center.mr-md-4.mb-4.mb-md-0(style='max-width: 264px;')
+                a(href='#').d-block
+                  +image('dashboard/followers/04.jpg', 'Fernando Gonzalez')(width='90').d-block.rounded-circle
+                .media-body.pl-3
+                  h2.font-size-base.nav-heading.mb-1
+                    a(href='#') Fernando Gonzalez
+                  .font-size-xs.text-muted.mb-2.pb-1 @f_gonzalez, Spain
+                  button(type='button').btn.btn-translucent-primary.btn-sm Follow
+              .d-flex.ml-auto.pl-md-1
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/animals/01.jpg', 'Animals')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/animals/02.jpg', 'Animals')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/animals/03.jpg', 'Animals')(width='102').d-block
+                a(href='#').d-block
+                  +image('dashboard/followers/animals/04.jpg', 'Animals')(width='102').d-block
+            
+            // Follower
+            .d-md-flex.align-items-center.py-grid-gutter.border-bottom
+              .media.media-ie-fix.align-items-center.mr-md-4.mb-4.mb-md-0(style='max-width: 264px;')
+                a(href='#').d-block
+                  +image('dashboard/followers/05.jpg', 'City Shots Inc.')(width='90').d-block.rounded-circle
+                .media-body.pl-3
+                  h2.font-size-base.nav-heading.mb-1
+                    a(href='#') City Shots Inc.
+                  .font-size-xs.text-muted.mb-2.pb-1 @city_shots, France
+                  button(type='button').btn.btn-translucent-primary.btn-sm Follow
+              .d-flex.ml-auto.pl-md-1
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/cities/01.jpg', 'Cities')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/cities/02.jpg', 'Cities')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/cities/03.jpg', 'Cities')(width='102').d-block
+                a(href='#').d-block
+                  +image('dashboard/followers/cities/04.jpg', 'Cities')(width='102').d-block
+            
+            // Follower
+            .d-md-flex.align-items-center.py-grid-gutter.border-bottom
+              .media.media-ie-fix.align-items-center.mr-md-4.mb-4.mb-md-0(style='max-width: 264px;')
+                a(href='#').d-block
+                  +image('dashboard/followers/06.jpg', 'Barbara Miller')(width='90').d-block.rounded-circle
+                .media-body.pl-3
+                  h2.font-size-base.nav-heading.mb-1
+                    a(href='#') Barbara Miller
+                  .font-size-xs.text-muted.mb-2.pb-1 @barbyM, United Kingdom
+                  button(type='button').btn.btn-secondary.btn-sm Unfollow
+              .d-flex.ml-auto.pl-md-1
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/cars/01.jpg', 'Cars')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/cars/02.jpg', 'Cars')(width='102').d-block
+                a(href='#' style='margin-right: 10px;').d-block
+                  +image('dashboard/followers/cars/03.jpg', 'Cars')(width='102').d-block
+                a(href='#').d-block
+                  +image('dashboard/followers/cars/04.jpg', 'Cars')(width='102').d-block
+            
+            
+            // Pagination
+            nav.d-md-flex.justify-content-between.align-items-center.text-center.text-md-left.pt-grid-gutter
+              .d-md-flex.align-items-center.w-100
+                span.font-size-sm.text-muted.mr-md-3 Showing 6 of 34 followers
+                .progress.w-100.my-3.mx-auto.mx-md-0(style='max-width: 10rem; height: 4px;')
+                  .progress-bar(role='progressbar' style='width: 18%;' aria-valuenow='18' aria-valuemin='0' aria-valuemax='100')
+              button(type='button').btn.btn-outline-primary.btn-sm Show more followers
+
+
+
+//- Footer
+block footer
+  include partials/footer-simple

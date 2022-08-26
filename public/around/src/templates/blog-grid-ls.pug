@@ -1,0 +1,292 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var vendorScripts = ['imagesloaded/imagesloaded.pkgd.min.js', 'shufflejs/dist/shuffle.min.js']
+  - var parentMenu = 'Templates'
+  - var pageTitle = 'Blog Grid Left Sidebar'
+  - var isSidebar = true
+
+//- Navbar
+block navbar
+  include partials/navbar-solid-shadow
+
+//- Page Content
+block content
+  .cs-sidebar-enabled
+    .container
+      .row
+
+        // Sidebar
+        .cs-sidebar.col-lg-3.pt-lg-5
+          #blog-sidebar.cs-offcanvas-collapse
+            .cs-offcanvas-cap.navbar-box-shadow.px-4.mb-3
+              h5.mt-1.mb-0 Sidebar
+              button(type='button' data-toggle='offcanvas' data-offcanvas-id='blog-sidebar').close.lead
+                span(aria-hidden='true') &times;
+            .cs-offcanvas-body.px-4.pt-3.pt-lg-0.pl-lg-0.pr-lg-2.pr-xl-4(data-simplebar)
+              //- partials/sidebar-blog.pug
+              include partials/sidebar-blog
+
+        .col-lg-9.cs-content.py-4.mb-2.mb-sm-0.pb-sm-5
+          +breadcrumb([{'title': 'Blog', 'link': '#'}, {'title': 'Grid left sidebar'}]).py-1.my-2
+          h1.mb-5 Blog
+
+          // Blog grid
+          .cs-masonry-grid.overflow-hidden(data-columns='3')
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                a(href='blog-single-ls.html').card-img-top
+                  +image('blog/01.jpg', 'Post thumbnail')
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Digital design
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') Designers should always keep their users in mind
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/01.jpg', 'Emma Brown')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Emma Brown
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;6
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Feb 19
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Brand strategy
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') Simple steps to an effective brand strategy. Real life examples
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/02.jpg', 'Charlie Welch')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Charlie Welch
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;8
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Feb 15
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                a(href='blog-single-ls.html').card-img-top
+                  +image('blog/02.jpg', 'Post thumbnail')
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Technology
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') How technological advancements affect our decisions
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/03.jpg', 'Jessica Miller')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Jessica Miller
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;3
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Feb 4
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                a(href='blog-single-ls.html').card-img-top
+                  +image('blog/03.jpg', 'Post thumbnail')
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Business
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') Open space - new trend in office design
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/05.jpg', 'Daniel Adams')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Daniel Adams
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;12
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Jan 10
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Project management
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') What you can learn about managing projects
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/04.jpg', 'Sanomi Smith')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Sanomi Smith
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;17
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Jan 23
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                a(href='blog-single-ls.html').card-img-top
+                  +image('blog/07.jpg', 'Post thumbnail')
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Travel &amp; Vacation
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') Escape to mountains with only one backpack
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/01.jpg', 'Emma Brown')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Emma Brown
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;31
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Dec 25
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                a(href='blog-single-ls.html').card-img-top
+                  +image('blog/05.jpg', 'Post thumbnail')
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Technology
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') Payments made easy. How new Tech will affect E-Commerce industry?
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/06.jpg', 'Barbara Palson')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Barbara Palson
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;4
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Dec 12
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Digital design
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') Top 5 Secrets of Making Successful Corporate Identity Design
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/02.jpg', 'Charlie Welch')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Charlie Welch
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;22
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Dec 18
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Project management
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') 3 things everyone knows about Management that you don't
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/05.jpg', 'Daniel Adams')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Daniel Adams
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;29
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Nov 27
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                a(href='blog-single-ls.html').card-img-top
+                  +image('blog/06.jpg', 'Post thumbnail')
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Business
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') Business offices of Fortune 500 companies
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/06.jpg', 'Barbara Palson')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Barbara Palson
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;5
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Nov 20
+
+            // Post
+            .cs-grid-item
+              article.card.card-hover
+                .card-body
+                  a(href='#').meta-link.font-size-sm.mb-2 Travel &amp; Vacation
+                  h2.h5.nav-heading.mb-4
+                    a(href='blog-single-ls.html') Global travel on a tight budget. Tips &amp; tricks
+                  a(href='#').media.meta-link.font-size-sm.align-items-center.pt-3
+                    +image('blog/avatar/03.jpg', 'Jessica Miller')(width='36').rounded-circle
+                    .media-body.pl-2.ml-1.mt-n1
+                      | by
+                      span.font-weight-semibold.ml-1 Jessica Miller
+                  .mt-3.text-right.text-nowrap
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-message-square.mr-1
+                      | &nbsp;16
+                    span.meta-divider
+                    a(href='#').meta-link.font-size-xs
+                      i.fe-calendar.mr-1.mt-n1
+                      | &nbsp;Nov 13
+
+          //- Pagination
+          //- partials/pagination-blog.pug
+          include partials/pagination-blog
+
+//- Footer
+block footer
+  include partials/footer-blog
+
+  // Sidebar toggle button
+  button(type='button' data-toggle='offcanvas' data-offcanvas-id='blog-sidebar').btn.btn-primary.btn-sm.cs-sidebar-toggle
+    i.fe-sidebar.font-size-base.mr-2
+    | Sidebar

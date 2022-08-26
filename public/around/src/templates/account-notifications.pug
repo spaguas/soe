@@ -1,0 +1,79 @@
+extends partials/layout
+
+//- Override default config variables
+append config
+  - var parentMenu = 'Account'
+  - var pageTitle = 'Account - Notifications'
+  - var bodyBgColor = '#f7f7fc'
+
+//- Navbar
+block navbar
+  include partials/navbar-dashboard
+
+//- Page Content
+block content
+
+  // Slanted background
+  .position-relative.bg-gradient(style='height: 480px;')
+    .cs-shape.cs-shape-bottom.cs-shape-slant.bg-secondary.d-none.d-lg-block
+      svg(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3000 260')
+        polygon(fill='currentColor' points='0,257 0,260 3000,260 3000,0')
+
+
+  // Page content
+  .container.bg-overlay-content.pb-4.mb-md-3(style='margin-top: -350px;')
+    .row
+
+      // Sidebar
+      .col-lg-4.mb-4.mb-lg-0
+        //- Include sidebar-account.pug partial
+        include partials/sidebar-account
+
+
+      // Content
+      .col-lg-8
+        .d-flex.flex-column.h-100.bg-light.rounded-lg.box-shadow-lg.p-4
+          .py-2.p-md-3
+
+            // Title
+            h1.h3.mb-3.pb-2.text-center.text-sm-left Notifications
+
+            // Notification settings
+            #notification-settings
+              .bg-secondary.rounded-lg.p-4.font-size-sm.text-heading
+                | Use the master switch on the left hand side (Accoun menu) to 
+                span.font-weight-medium Enable / disable all notifications
+              .border-bottom.py-4.p-sm-4
+                .custom-control.custom-switch
+                  input(type='checkbox' id='nf-product-sold' checked).custom-control-input
+                  label(for='nf-product-sold').custom-control-label.text-heading Product sold notifications
+                small.form-text Send an email when someone purchased one of my products
+              .border-bottom.py-4.p-sm-4
+                .custom-control.custom-switch
+                  input(type='checkbox' id='nf-product-updated' checked).custom-control-input
+                  label(for='nf-product-updated').custom-control-label.text-heading Product update notifications
+                small.form-text Send an email when a product I've purchased is updated
+              .border-bottom.py-4.p-sm-4
+                .custom-control.custom-switch
+                  input(type='checkbox' id='nf-product-comment').custom-control-input
+                  label(for='nf-product-comment').custom-control-label.text-heading Product comment notifications
+                small.form-text Send an email when someone comments on one of my products
+              .border-bottom.py-4.p-sm-4
+                .custom-control.custom-switch
+                  input(type='checkbox' id='nf-product-review' checked).custom-control-input
+                  label(for='nf-product-review').custom-control-label.text-heading Product review notification
+                small.form-text Send an email when someone leaves a review with their rating
+              .border-bottom.py-4.p-sm-4
+                .custom-control.custom-switch
+                  input(type='checkbox' id='nf-daily-summary').custom-control-input
+                  label(for='nf-daily-summary').custom-control-label.text-heading Daily summary emails
+                small.form-text Send me a daily summary of all products sold, commented or reviewed
+              .text-center.text-sm-right.mt-4.pt-2
+                button(type='button').btn.btn-primary
+                  i.fe-save.font-size-lg.mr-2
+                  | Save changes
+            
+
+//- Footer
+block footer
+  include partials/footer-simple

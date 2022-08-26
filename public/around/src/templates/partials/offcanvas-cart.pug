@@ -1,0 +1,62 @@
+// Shopping cart off-canvas
+#shoppingCart.cs-offcanvas.cs-offcanvas-collapse-always.cs-offcanvas-right
+  .cs-offcanvas-cap.navbar-box-shadow.px-4.mb-2
+    h5.mt-1.mb-0 Your cart
+    button(type='button' data-toggle='offcanvas' data-offcanvas-id='shoppingCart').close.lead
+      span(aria-hidden='true') &times;
+  .cs-offcanvas-body.p-4(data-simplebar)
+    .media.align-items-center.mb-3
+      a(href='shop-single.html').d-block
+        +image('demo/shop-homepage/thumbnails/05.jpg', 'Product')(width='60').rounded
+      .media-body.pl-2.ml-1
+        .d-flex.align-items-center.justify-content-between
+          .mr-3
+            h4.nav-heading.font-size-md.mb-1
+              a(href='shop-single.html').font-weight-medium
+                | Smart Watch Series 5
+            .d-flex.align-items-center.font-size-sm
+              span.mr-2 $364.99
+              span.mr-2 x
+              input(type='number' style='max-width: 3.5rem;' value='1').form-control.form-control-sm.px-2
+          .pl-3.border-left
+            a(href='#' data-toggle='tooltip' title='Remove').d-block.text-danger.text-decoration-none.font-size-xl
+              i.fe-x-circle
+    .media.align-items-center.mb-3
+      a(href='shop-single.html').d-block
+        +image('demo/shop-homepage/thumbnails/02.jpg', 'Product')(width='60').rounded
+      .media-body.pl-2.ml-1
+        .d-flex.align-items-center.justify-content-between
+          .mr-3
+            h4.nav-heading.font-size-md.mb-1
+              a(href='shop-single.html').font-weight-medium
+                | Running Sneakers, Collection
+            .d-flex.align-items-center.font-size-sm
+              span.mr-2 $145.00
+              span.mr-2 x
+              input(type='number' style='max-width: 3.5rem;' value='1').form-control.form-control-sm.px-2
+          .pl-3.border-left
+            a(href='#' data-toggle='tooltip' title='Remove').d-block.text-danger.text-decoration-none.font-size-xl
+              i.fe-x-circle
+    .media.align-items-center.mb-3
+      a(href='shop-single.html').d-block
+        +image('demo/shop-homepage/thumbnails/06.jpg', 'Product')(width='60').rounded
+      .media-body.pl-2.ml-1
+        .d-flex.align-items-center.justify-content-between
+          .mr-3
+            h4.nav-heading.font-size-md.mb-1
+              a(href='shop-single.html').font-weight-medium
+                | Wireless Bluetooth Headset
+            .d-flex.align-items-center.font-size-sm
+              span.mr-2 $258.00
+              span.mr-2 x
+              input(type='number' style='max-width: 3.5rem;' value='1').form-control.form-control-sm.px-2
+          .pl-3.border-left
+            a(href='#' data-toggle='tooltip' title='Remove').d-block.text-danger.text-decoration-none.font-size-xl
+              i.fe-x-circle
+  .cs-offcanvas-cap.d-block.border-top.px-4.mb-2
+    .d-flex.justify-content-between.mb-4
+      span Total:
+      span.h6.mb-0 $776.99
+    a(href='checkout.html').btn.btn-primary.btn-sm.btn-block
+      i.fe-credit-card.font-size-base.mr-2
+      | Checkout

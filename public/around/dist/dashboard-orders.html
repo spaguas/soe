@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Around | Dashboard - Orders</title>
+    <!-- SEO Meta Tags-->
+    <meta name="description" content="Around - Multipurpose Bootstrap Template">
+    <meta name="keywords" content="bootstrap, business, consulting, coworking space, services, creative agency, dashboard, e-commerce, mobile app showcase, multipurpose, product landing, shop, software, ui kit, web studio, landing, html5, css3, javascript, gallery, slider, touch, creative">
+    <meta name="author" content="Createx Studio">
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" color="#5bbad5" href="safari-pinned-tab.svg">
+    <meta name="msapplication-TileColor" content="#766df4">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Page loading styles-->
+    <style>
+      .cs-page-loading {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -webkit-transition: all .4s .2s ease-in-out;
+        transition: all .4s .2s ease-in-out;
+        background-color: #fff;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 9999;
+      }
+      .cs-page-loading.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .cs-page-loading-inner {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        -webkit-transition: opacity .2s ease-in-out;
+        transition: opacity .2s ease-in-out;
+        opacity: 0;
+      }
+      .cs-page-loading.active > .cs-page-loading-inner {
+        opacity: 1;
+      }
+      .cs-page-loading-inner > span {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        font-weight: normal;
+        color: #737491;
+      }
+      .cs-page-spinner {
+        display: inline-block;
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-bottom: .75rem;
+        vertical-align: text-bottom;
+        border: .15em solid #766df4;
+        border-right-color: transparent;
+        border-radius: 50%;
+        -webkit-animation: spinner .75s linear infinite;
+        animation: spinner .75s linear infinite;
+      }
+      @-webkit-keyframes spinner {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spinner {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+      
+    </style>
+    <!-- Page loading scripts-->
+    <script>
+      (function () {
+        window.onload = function () {
+          var preloader = document.querySelector('.cs-page-loading');
+          preloader.classList.remove('active');
+          setTimeout(function () {
+            preloader.remove();
+          }, 2000);
+        };
+      })();
+      
+    </script>
+    <!-- Vendor Styles-->
+    <link rel="stylesheet" media="screen" href="vendor/simplebar/dist/simplebar.min.css"/>
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="css/theme.min.css">
+  </head>
+  <!-- Body-->
+  <body style="background-color:#f7f7fc;">
+    <!-- Page loading spinner-->
+    <div class="cs-page-loading active">
+      <div class="cs-page-loading-inner">
+        <div class="cs-page-spinner"></div><span>Loading...</span>
+      </div>
+    </div>
+    <main class="cs-page-wrapper">
+      <!-- Navbar (Floating light)-->
+      <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
+      <header class="cs-header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header>
+        <div class="container px-0 px-xl-3">
+          <button class="navbar-toggler ml-n2 mr-2" type="button" data-toggle="offcanvas" data-offcanvas-id="primaryMenu"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand order-lg-1 mx-auto ml-lg-0 pr-lg-2 mr-lg-4" href="index.html"><img class="navbar-floating-logo d-none d-lg-block" width="153" src="img/logo/logo-light.png" alt="Around"/><img class="navbar-stuck-logo" width="153" src="img/logo/logo-dark.png" alt="Around"/><img class="d-lg-none" width="58" src="img/logo/logo-icon.png" alt="Around"/></a>
+          <div class="d-flex align-items-center order-lg-3 ml-lg-auto">
+            <div class="navbar-tool dropdown"><a class="navbar-tool-icon-box" href="account-profile.html"><img class="navbar-tool-icon-box-img" src="img/dashboard/avatar/main-sm.jpg" alt="Avatar"/></a><a class="navbar-tool-label dropdown-toggle" href="account-profile.html"><small>Hello,</small>Amanda</a>
+              <ul class="dropdown-menu dropdown-menu-right" style="width: 15rem;">
+                <li><a class="dropdown-item d-flex align-items-center" href="dashboard-orders.html"><i class="fe-shopping-bag font-size-base opacity-60 mr-2"></i>Orders<span class="nav-indicator"></span><span class="ml-auto font-size-xs text-muted">2</span></a></li>
+                <li class="dropdown-divider"></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="dashboard-sales.html"><i class="fe-dollar-sign font-size-base opacity-60 mr-2"></i>Sales<span class="ml-auto font-size-xs text-muted">$735.00</span></a></li>
+                <li class="dropdown-divider"></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="dashboard-messages.html"><i class="fe-message-square font-size-base opacity-60 mr-2"></i>Messages<span class="nav-indicator"></span><span class="ml-auto font-size-xs text-muted">1</span></a></li>
+                <li class="dropdown-divider"></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="dashboard-followers.html"><i class="fe-users font-size-base opacity-60 mr-2"></i>Followers<span class="ml-auto font-size-xs text-muted">34</span></a></li>
+                <li class="dropdown-divider"></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="dashboard-reviews.html"><i class="fe-star font-size-base opacity-60 mr-2"></i>Reviews<span class="ml-auto font-size-xs text-muted">15</span></a></li>
+                <li class="dropdown-divider"></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="dashboard-favorites.html"><i class="fe-heart font-size-base opacity-60 mr-2"></i>Favorites<span class="ml-auto font-size-xs text-muted">6</span></a></li>
+                <li class="dropdown-divider"></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="signin-illustration.html"><i class="fe-log-out font-size-base opacity-60 mr-2"></i>Sign out</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="cs-offcanvas-collapse order-lg-2" id="primaryMenu">
+            <div class="cs-offcanvas-cap navbar-box-shadow">
+              <h5 class="mt-1 mb-0">Menu</h5>
+              <button class="close lead" type="button" data-toggle="offcanvas" data-offcanvas-id="primaryMenu"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="cs-offcanvas-body">
+              <!-- Menu-->
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown dropdown-mega"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Demos</a>
+                  <div class="dropdown-menu"><a class="dropdown-column dropdown-column-img bg-secondary" href="index.html" style="background-image: url(img/demo/menu-banner.jpg);"></a>
+                    <div class="dropdown-column"><a class="dropdown-item" href="index.html">Web Template Presentation</a><a class="dropdown-item" href="demo-business-consulting.html">Business Consulting</a><a class="dropdown-item" href="demo-shop-homepage.html">Shop Homepage</a><a class="dropdown-item" href="demo-booking-directory.html">Booking / Directory</a><a class="dropdown-item" href="demo-creative-agency.html">Creative Agency</a><a class="dropdown-item" href="demo-web-studio.html">Web Studio</a><a class="dropdown-item" href="demo-product-software.html">Product Landing - Software</a></div>
+                    <div class="dropdown-column"><a class="dropdown-item" href="demo-product-gadget.html">Product Landing - Gadget</a><a class="dropdown-item" href="demo-mobile-app.html">Mobile App Showcase</a><a class="dropdown-item" href="demo-coworking-space.html">Coworking Space</a><a class="dropdown-item" href="demo-event-landing.html">Event Landing</a><a class="dropdown-item" href="demo-marketing-seo.html">Digital Marketing &amp; SEO</a></div>
+                  </div>
+                </li>
+                <li class="nav-item dropdown dropdown-mega"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Templates</a>
+                  <div class="dropdown-menu">
+                    <div class="dropdown-column mb-2 mb-lg-0">
+                      <h5 class="dropdown-header">Blog</h5><a class="dropdown-item" href="blog-grid-rs.html">Grid Right Sidebar</a><a class="dropdown-item" href="blog-grid-ls.html">Grid Left Sidebar</a><a class="dropdown-item" href="blog-grid-ns.html">Grid No Sidebar</a><a class="dropdown-item" href="blog-list-rs.html">List Right Sidebar</a><a class="dropdown-item" href="blog-list-ls.html">List Left Sidebar</a><a class="dropdown-item" href="blog-list-ns.html">List No Sidebar</a><a class="dropdown-item" href="blog-single-rs.html">Single Post Right Sidebar</a><a class="dropdown-item" href="blog-single-ls.html">Single Post Left Sidebar</a><a class="dropdown-item" href="blog-single-ns.html">Single Post No Sidebar</a>
+                    </div>
+                    <div class="dropdown-column mb-2 mb-lg-0">
+                      <h5 class="dropdown-header">Portfolio</h5><a class="dropdown-item" href="portfolio-style-1.html">Grid Style 1</a><a class="dropdown-item" href="portfolio-style-2.html">Grid Style 2</a><a class="dropdown-item" href="portfolio-style-3.html">Grid Style 3</a><a class="dropdown-item" href="portfolio-single-side-gallery-grid.html">Project Side Gallery (Grid)</a><a class="dropdown-item" href="portfolio-single-side-gallery-list.html">Project Side Gallery (List)</a><a class="dropdown-item" href="portfolio-single-carousel.html">Project Carousel</a><a class="dropdown-item" href="portfolio-single-wide-gallery.html">Project Wide Gallery</a>
+                    </div>
+                    <div class="dropdown-column mb-2 mb-lg-0">
+                      <h5 class="dropdown-header">Shop</h5><a class="dropdown-item" href="shop-ls.html">Grid Left Sidebar</a><a class="dropdown-item" href="shop-rs.html">Grid Right Sidebar</a><a class="dropdown-item" href="shop-ns.html">Grid No Sidebar</a><a class="dropdown-item" href="shop-single.html">Single Product</a><a class="dropdown-item" href="checkout.html">Cart &amp; Checkout</a><a class="dropdown-item" href="order-tracking.html">Order Tracking</a>
+                    </div>
+                  </div>
+                </li>
+                <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Account</a>
+                  <ul class="dropdown-menu">
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Dashboard</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="dashboard-orders.html">Orders</a></li>
+                        <li><a class="dropdown-item" href="dashboard-sales.html">Sales</a></li>
+                        <li><a class="dropdown-item" href="dashboard-messages.html">Messages</a></li>
+                        <li><a class="dropdown-item" href="dashboard-followers.html">Followers</a></li>
+                        <li><a class="dropdown-item" href="dashboard-reviews.html">Reviews</a></li>
+                        <li><a class="dropdown-item" href="dashboard-favorites.html">Favorites</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Account Settings</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="account-profile.html">Profile Info</a></li>
+                        <li><a class="dropdown-item" href="account-payment.html">Payment Methods</a></li>
+                        <li><a class="dropdown-item" href="account-notifications.html">Notifications</a></li>
+                      </ul>
+                    </li>
+                    <li><a class="dropdown-item" href="signin-illustration.html">Sign In - Illustration</a></li>
+                    <li><a class="dropdown-item" href="signin-image.html">Sign In - Image</a></li>
+                    <li><a class="dropdown-item" href="signin-signup.html">Sign In - Sign Up</a></li>
+                    <li><a class="dropdown-item" href="password-recovery.html">Password Recovery</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Pages</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="about.html">About</a></li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Contacts</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="contacts-v1.html">Contacts v.1</a></li>
+                        <li><a class="dropdown-item" href="contacts-v2.html">Contacts v.2</a></li>
+                        <li><a class="dropdown-item" href="contacts-v3.html">Contacts v.3</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Help Center</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="help-topics.html">Help Topics</a></li>
+                        <li><a class="dropdown-item" href="help-single-topic.html">Single Topic</a></li>
+                        <li><a class="dropdown-item" href="help-submit-request.html">Submit a Request</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">404 Not Found</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="404-simple.html">Simple Text</a></li>
+                        <li><a class="dropdown-item" href="404-illustration.html">Illustration</a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Coming Soon</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="coming-soon-image.html">Image</a></li>
+                        <li><a class="dropdown-item" href="coming-soon-illustration.html">Illustration</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Docs / UI Kit</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="docs/dev-setup.html">
+                        <div class="d-flex align-items-center">
+                          <div class="font-size-xl text-muted"><i class="fe-file-text"></i></div>
+                          <div class="pl-3"><span class="d-block text-heading">Documentation</span><small class="d-block text-muted">Kick-start customization</small></div>
+                        </div></a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="components/typography.html">
+                        <div class="d-flex align-items-center">
+                          <div class="font-size-xl text-muted"><i class="fe-layers"></i></div>
+                          <div class="pl-3"><span class="d-block text-heading">UI Kit<span class="badge badge-danger ml-2">50+</span></span><small class="d-block text-muted">Flexible components</small></div>
+                        </div></a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="docs/changelog.html">
+                        <div class="d-flex align-items-center">
+                          <div class="font-size-xl text-muted"><i class="fe-edit"></i></div>
+                          <div class="pl-3"><span class="d-block text-heading">Changelog<span class="badge badge-success ml-2">v1.1.1</span></span><small class="d-block text-muted">Regular updates</small></div>
+                        </div></a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="mailto:support@createx.studio">
+                        <div class="d-flex align-items-center">
+                          <div class="font-size-xl text-muted"><i class="fe-life-buoy"></i></div>
+                          <div class="pl-3"><span class="d-block text-heading">Support</span><small class="d-block text-muted">support@createx.studio</small></div>
+                        </div></a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Page content-->
+      <!-- Slanted background-->
+      <div class="position-relative bg-gradient" style="height: 480px;">
+        <div class="cs-shape cs-shape-bottom cs-shape-slant bg-secondary d-none d-lg-block">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+            <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+          </svg>
+        </div>
+      </div>
+      <!-- Page content-->
+      <div class="container bg-overlay-content pb-4 mb-md-3" style="margin-top: -350px;">
+        <div class="row">
+          <!-- Sidebar-->
+          <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="bg-light rounded-lg box-shadow-lg">
+              <div class="px-4 py-4 mb-1 text-center"><img class="d-block rounded-circle mx-auto my-2" width="110" src="img/dashboard/avatar/main.jpg" alt="Amanda Wilson"/>
+                <h6 class="mb-0 pt-1">Amanda Wilson</h6><span class="text-muted font-size-sm">@amanda_w</span>
+              </div>
+              <div class="d-lg-none px-4 pb-4 text-center"><a class="btn btn-primary px-5 mb-2" href="#account-menu" data-toggle="collapse"><i class="fe-menu mr-2"></i>Account menu</a></div>
+              <div class="d-lg-block collapse pb-2" id="account-menu">
+                <h3 class="d-block bg-secondary font-size-sm font-weight-semibold text-muted mb-0 px-4 py-3">Dashboard</h3><a class="d-flex align-items-center nav-link-style px-4 py-3 active" href="dashboard-orders.html"><i class="fe-shopping-bag font-size-lg opacity-60 mr-2"></i>Orders<span class="nav-indicator"></span><span class="text-muted font-size-sm font-weight-normal ml-auto">2</span></a><a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-sales.html"><i class="fe-dollar-sign font-size-lg opacity-60 mr-2"></i>Sales<span class="text-muted font-size-sm font-weight-normal ml-auto">$735.00</span></a><a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-messages.html"><i class="fe-message-square font-size-lg opacity-60 mr-2"></i>Messages<span class="nav-indicator"></span><span class="text-muted font-size-sm font-weight-normal ml-auto">1</span></a><a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-followers.html"><i class="fe-users font-size-lg opacity-60 mr-2"></i>Followers<span class="text-muted font-size-sm font-weight-normal ml-auto">34</span></a><a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-reviews.html"><i class="fe-star font-size-lg opacity-60 mr-2"></i>Reviews<span class="text-muted font-size-sm font-weight-normal ml-auto">15</span></a><a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-favorites.html"><i class="fe-heart font-size-lg opacity-60 mr-2"></i>Favorites<span class="text-muted font-size-sm font-weight-normal ml-auto">6</span></a>
+                <h3 class="d-block bg-secondary font-size-sm font-weight-semibold text-muted mb-0 px-4 py-3">Account settings</h3><a class="d-flex align-items-center nav-link-style px-4 py-3" href="account-profile.html">Profile info</a><a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="account-payment.html">Payment methods</a>
+                <div class="d-flex align-items-center border-top"><a class="d-block w-100 nav-link-style px-4 py-3" href="account-notifications.html">Notifications</a>
+                  <div class="ml-auto px-3">
+                    <div class="custom-control custom-switch">
+                      <input class="custom-control-input" type="checkbox" id="notifications-switch" data-master-checkbox-for="#notification-settings" checked>
+                      <label class="custom-control-label" for="notifications-switch"></label>
+                    </div>
+                  </div>
+                </div><a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="signin-illustration.html"><i class="fe-log-out font-size-lg opacity-60 mr-2"></i>Sign out</a>
+              </div>
+            </div>
+          </div>
+          <!-- Content-->
+          <div class="col-lg-8">
+            <div class="d-flex flex-column h-100 bg-light rounded-lg box-shadow-lg p-4">
+              <div class="py-2 p-md-3">
+                <!-- Title + Filters-->
+                <div class="d-sm-flex align-items-center justify-content-between pb-2">
+                  <h1 class="h3 mb-3 text-center text-sm-left">Orders history</h1>
+                  <div class="d-flex align-items-center mb-3">
+                    <label class="text-nowrap pr-1 mr-2 mb-0">Sort orders</label>
+                    <select class="form-control custom-select custom-select-sm">
+                      <option>All</option>
+                      <option>In progress</option>
+                      <option>Delivered</option>
+                      <option>Canceled</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Accordion with orders-->
+                <div class="accordion" id="orders-accordion">
+                  <!-- Order-->
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="accordion-heading"><a class="d-flex flex-wrap align-items-center justify-content-between pr-4" href="#order-1" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="order-1">
+                          <div class="font-size-sm font-weight-medium text-nowrap my-1 mr-2"><i class="fe-hash font-size-base mr-1"></i><span class="d-inline-block align-middle">34VB5540K83</span></div>
+                          <div class="text-nowrap text-body font-size-sm font-weight-normal my-1 mr-2"><i class="fe-clock text-muted mr-1"></i>Aug 04, 2020</div>
+                          <div class="bg-faded-info text-info font-size-xs font-weight-medium py-1 px-3 rounded-sm my-1 mr-2">In progress</div>
+                          <div class="text-body font-size-sm font-weight-medium my-1">$187.65</div></a></div>
+                    </div>
+                    <div class="collapse show" id="order-1" data-parent="#orders-accordion">
+                      <div class="card-body pt-4 border-top bg-secondary">
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/01.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Mom High Waist Shorts</a></h5>
+                              <div><span class="text-muted mr-1">Size:</span>XS</div>
+                              <div><span class="text-muted mr-1">Color:</span>Blue</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$49.50</div>
+                          </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/02.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Cotton T-shirt with Print</a></h5>
+                              <div><span class="text-muted mr-1">Size:</span>XS</div>
+                              <div><span class="text-muted mr-1">Color:</span>Black / Printed</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$17.99</div>
+                          </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/03.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Floral Printed Sneakers</a></h5>
+                              <div><span class="text-muted mr-1">Size:</span>8.5</div>
+                              <div><span class="text-muted mr-1">Color:</span>Floral print</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$86.00</div>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between pt-3 border-top">
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Subtotal:</span><span class="font-weight-medium">$153.49</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Shipping:</span><span class="font-weight-medium">$27.31</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Tax:</span><span class="font-weight-medium">$6.85</span></div>
+                          <div class="font-size-sm my-2"><span class="text-muted mr-1">Total:</span><span class="font-weight-medium">$187.65</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Order-->
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="accordion-heading"><a class="collapsed d-flex flex-wrap align-items-center justify-content-between pr-4" href="#order-2" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="order-2">
+                          <div class="font-size-sm font-weight-medium text-nowrap my-1 mr-2"><i class="fe-hash font-size-base mr-1"></i><span class="d-inline-block align-middle">47H76G09F33</span></div>
+                          <div class="text-nowrap text-body font-size-sm font-weight-normal my-1 mr-2"><i class="fe-clock text-muted mr-1"></i>Jul 30, 2020</div>
+                          <div class="bg-faded-info text-info font-size-xs font-weight-medium py-1 px-3 rounded-sm my-1 mr-2">In progress</div>
+                          <div class="text-body font-size-sm font-weight-medium my-1">$789.34</div></a></div>
+                    </div>
+                    <div class="collapse" id="order-2" data-parent="#orders-accordion">
+                      <div class="card-body pt-4 border-top bg-secondary">
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/04.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Smart Watch Series 5</a></h5>
+                              <div><span class="text-muted mr-1">Screen:</span>42"</div>
+                              <div><span class="text-muted mr-1">Band color:</span>White</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$49.50</div>
+                          </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/05.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Sport Running Sneakers</a></h5>
+                              <div><span class="text-muted mr-1">Size:</span>10.5</div>
+                              <div><span class="text-muted mr-1">Color:</span>White / Orange</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$145.00</div>
+                          </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/06.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Wireless Bluetooth Headset</a></h5>
+                              <div><span class="text-muted mr-1">Brand:</span>Beats</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$258.00</div>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between pt-3 border-top">
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Subtotal:</span><span class="font-weight-medium">$776.99</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Shipping:</span><span class="font-weight-medium">$12.35</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Tax:</span><span class="font-weight-medium">&mdash;</span></div>
+                          <div class="font-size-sm my-2"><span class="text-muted mr-1">Total:</span><span class="font-weight-medium">$789.34</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Order-->
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="accordion-heading"><a class="collapsed d-flex flex-wrap align-items-center justify-content-between pr-4" href="#order-3" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="order-3">
+                          <div class="font-size-sm font-weight-medium text-nowrap my-1 mr-2"><i class="fe-hash font-size-base mr-1"></i><span class="d-inline-block align-middle">78A6431D409</span></div>
+                          <div class="text-nowrap text-body font-size-sm font-weight-normal my-1 mr-2"><i class="fe-clock text-muted mr-1"></i>Jul 16, 2020</div>
+                          <div class="bg-faded-danger text-danger font-size-xs font-weight-medium py-1 px-3 rounded-sm my-1 mr-2">Canceled</div>
+                          <div class="text-body font-size-sm font-weight-medium my-1">$215.40</div></a></div>
+                    </div>
+                    <div class="collapse" id="order-3" data-parent="#orders-accordion">
+                      <div class="card-body pt-4 border-top bg-secondary">
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/07.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">360 Degrees Camera</a></h5>
+                              <div><span class="text-muted mr-1">Category:</span>Electronics</div>
+                              <div><span class="text-muted mr-1">Color:</span>White</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$110.00</div>
+                          </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/08.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Vintage Travel Backpack</a></h5>
+                              <div><span class="text-muted mr-1">Color:</span>Green / Brown</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$81.45</div>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between pt-3 border-top">
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Subtotal:</span><span class="font-weight-medium">$191.45</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Shipping:</span><span class="font-weight-medium">$15.20</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Tax:</span><span class="font-weight-medium">$8.75</span></div>
+                          <div class="font-size-sm my-2"><span class="text-muted mr-1">Total:</span><span class="font-weight-medium">$215.40</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Order-->
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="accordion-heading"><a class="collapsed d-flex flex-wrap align-items-center justify-content-between pr-4" href="#order-4" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="order-4">
+                          <div class="font-size-sm font-weight-medium text-nowrap my-1 mr-2"><i class="fe-hash font-size-base mr-1"></i><span class="d-inline-block align-middle">112P45A90V2</span></div>
+                          <div class="text-nowrap text-body font-size-sm font-weight-normal my-1 mr-2"><i class="fe-clock text-muted mr-1"></i>May 28, 2020</div>
+                          <div class="bg-faded-success text-success font-size-xs font-weight-medium py-1 px-3 rounded-sm my-1 mr-2">Delivered</div>
+                          <div class="text-body font-size-sm font-weight-medium my-1">$94.75</div></a></div>
+                    </div>
+                    <div class="collapse" id="order-4" data-parent="#orders-accordion">
+                      <div class="card-body pt-4 border-top bg-secondary">
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/09.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Sport Running Sneakers</a></h5>
+                              <div><span class="text-muted mr-1">Size:</span>11</div>
+                              <div><span class="text-muted mr-1">Color:</span>Gray</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$82.00</div>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between pt-3 border-top">
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Subtotal:</span><span class="font-weight-medium">$82.00</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Shipping:</span><span class="font-weight-medium">$9.00</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Tax:</span><span class="font-weight-medium">$3.75</span></div>
+                          <div class="font-size-sm my-2"><span class="text-muted mr-1">Total:</span><span class="font-weight-medium">$94.75</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Order-->
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="accordion-heading"><a class="collapsed d-flex flex-wrap align-items-center justify-content-between pr-4" href="#order-5" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="order-5">
+                          <div class="font-size-sm font-weight-medium text-nowrap my-1 mr-2"><i class="fe-hash font-size-base mr-1"></i><span class="d-inline-block align-middle">502TR872W2</span></div>
+                          <div class="text-nowrap text-body font-size-sm font-weight-normal my-1 mr-2"><i class="fe-clock text-muted mr-1"></i>Apr 05, 2020</div>
+                          <div class="bg-faded-success text-success font-size-xs font-weight-medium py-1 px-3 rounded-sm my-1 mr-2">Delivered</div>
+                          <div class="text-body font-size-sm font-weight-medium my-1">$128.00</div></a></div>
+                    </div>
+                    <div class="collapse" id="order-5" data-parent="#orders-accordion">
+                      <div class="card-body pt-4 border-top bg-secondary">
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/10.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Military Cotton Cap</a></h5>
+                              <div><span class="text-muted mr-1">Category:</span>Accessories</div>
+                              <div><span class="text-muted mr-1">Color:</span>Military</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$16.00</div>
+                          </div>
+                        </div>
+                        <!-- Item-->
+                        <div class="d-sm-flex justify-content-between mb-3 pb-1">
+                          <div class="order-item media media-ie-fix d-block d-sm-flex mr-sm-3"><a class="d-table mx-auto" href="#"><img class="d-block rounded" width="105" src="img/dashboard/orders/11.jpg" alt="Thumbnail"/></a>
+                            <div class="media-body font-size-sm pt-2 pl-sm-3 text-center text-sm-left">
+                              <h5 class="nav-heading font-size-sm mb-2"><a href="#">Women Colorblock Sneakers</a></h5>
+                              <div><span class="text-muted mr-1">Size:</span>8.5</div>
+                            </div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2 mr-sm-3">
+                            <div class="text-muted">Quantity:</div>
+                            <div class="font-weight-medium">1</div>
+                          </div>
+                          <div class="font-size-sm text-center pt-2">
+                            <div class="text-muted">Subtotal:</div>
+                            <div class="font-weight-medium">$102.00</div>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between pt-3 border-top">
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Subtotal:</span><span class="font-weight-medium">$118.00</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Shipping:</span><span class="font-weight-medium">$7.50</span></div>
+                          <div class="font-size-sm my-2 mr-2"><span class="text-muted mr-1">Tax:</span><span class="font-weight-medium">$2.50</span></div>
+                          <div class="font-size-sm my-2"><span class="text-muted mr-1">Total:</span><span class="font-weight-medium">$128.00</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Pagination-->
+                <nav class="d-md-flex justify-content-between align-items-center text-center text-md-left pt-grid-gutter">
+                  <div class="d-md-flex align-items-center w-100"><span class="font-size-sm text-muted mr-md-3">Showing 5 of 13 orders</span>
+                    <div class="progress w-100 my-3 mx-auto mx-md-0" style="max-width: 10rem; height: 4px;">
+                      <div class="progress-bar" role="progressbar" style="width: 38%;" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm" type="button">Load more orders</button>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Footer-->
+    <footer class="cs-footer py-4">
+      <div class="container d-md-flex align-items-center justify-content-between py-2 text-center text-md-left">
+        <ul class="list-inline font-size-sm mb-3 mb-md-0 order-md-2">
+          <li class="list-inline-item my-1"><a class="nav-link-style" href="#">Support</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style" href="#">Contacts</a></li>
+          <li class="list-inline-item my-1"><a class="nav-link-style" href="#">Terms &amp; Conditions</a></li>
+        </ul>
+        <p class="font-size-sm mb-0 mr-3 order-md-1"><span class="text-muted mr-1">© All rights reserved. Made by</span><a class="nav-link-style font-weight-normal" href="https://createx.studio/" target="_blank" rel="noopener">Createx Studio</a></p>
+      </div>
+    </footer>
+    <!-- Back to top button--><a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted font-size-sm mr-2">Top</span><i class="btn-scroll-top-icon fe-arrow-up">   </i></a>
+    <!-- Vendor scrits: js libraries and plugins-->
+    <script src="vendor/jquery/dist/jquery.slim.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <script src="vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <!-- Main theme script-->
+    <script src="js/theme.min.js"></script>
+  </body>
+</html>
