@@ -8,11 +8,22 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
     crossorigin=""/>
+
+    <script
+    src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+    crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
      <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
+
+    <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
     <style>
 
@@ -47,10 +58,11 @@
       <nav class="navbar navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">SOE-DAEE</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-            <span class="navbar-toggler-icon"></span>
+          <button class="navbar-toggler" type="button" data-bs-toggle="modal" data-bs-target="#cityFilter" aria-controls="offcanvasNavbar">
+            <!--<span class="navbar-toggler-icon"></span>-->
+            <i class="bi bi-filter text-success"></i>
           </button>
-          <div class="offcanvas text-bg-dark offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <!--<div class="offcanvas text-bg-dark offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
               <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -79,24 +91,288 @@
               </ul>
               
             </div>
-          </div>
+          </div>-->
         </div>
       </nav>
+
+      <!-- Modal -->
+      <div class="modal fade" id="infoOutorga" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Resumo</button>
+                  <button class="nav-link" id="nav-discharges-tab" data-bs-toggle="tab" data-bs-target="#nav-discharges" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Vazões</button>
+                  <button class="nav-link" id="nav-charts-tab" data-bs-toggle="tab" data-bs-target="#nav-charts" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Gráfico</button>
+                  
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                  <br/>
+                  <table class="table table-bordered table-sm">
+                    <thead>
+                      <th>Município</th>
+                      <th>Diretoria</th>
+                      <th>Ugrhi</th>
+                      <th>Coordenadas</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="info-municipio">-</td>
+                        <td class="info-diretoria">-</td>
+                        <td class="info-ugrhi">-</td>
+                        <td class="info-coordenadas">-</td>
+                      </tr>                     
+                    </tbody>
+
+                    <thead>
+                      <th>Tipo</th>
+                      <th>Sub-Tipo</th>
+                      <th>Finalidade</th>
+                      <th>Decisão(PTO)</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="info-tipo">-</td>
+                        <td class="info-sub-tipo">-</td>
+                        <td class="info-finalidade">-</td>
+                        <td class="info-decisao">-</td>
+                      </tr>                     
+                    </tbody>
+
+                    <thead>
+                      <th>Processo</th>
+                      <th>Portaria</th>
+                      <th>Finalidade</th>
+                      <th>Decisão(PTO)</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="info-processo">-</td>
+                        <td class="info-portaria">-</td>
+                        <td class="info-finalidade">-</td>
+                        <td class="info-decisao">-</td>
+                      </tr>                     
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="nav-discharges" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                  <br/>
+                  <table class="table table-bordered table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Mês</th>
+                        <th scope="col">Dias</th>
+                        <th scope="col">Horas</th>
+                        <th scope="col">Vazão(m³/h)</th>
+                        <th scope="col">Vol.Mensal(m³)</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-vazoes">
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab" tabindex="0">...</div>
+              </div>
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="cityFilter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">SOE - Filtro Dinâmico</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="form_search" action="#" method="GET">
+                <div class="mb-3">
+                  <label for="nro_requerimento" class="form-label">Número de Requerimento</label>
+                  <input type="text" class="form-control" id="nro_requerimento" name="nro_requerimento" aria-describedby="emailHelp">
+                  <div id="nro_requerimento_help" class="form-text">Código que identifica a outorga.</div>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="municipio" class="form-label">Municipio</label>
+                  <input type="text" class="form-control" id="municipio" name="municipio">
+                </div>
+
+                <div class="mb-3">
+                  <label for="diretoria_req" class="form-label">Diretoria</label>
+                  <input type="text" class="form-control" id="diretoria_req" name="diretoria_req">
+                </div>
+
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <button type="button" class="btn btn-warning">Exportar CSV</button>
+              <button type="button" class="btn btn-primary" id="btn_filter">Filtrar Outorgas</button>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <div id="map"></div>
       
 
       <script>
-        var map = L.map('map').setView([-22.524, -45.524], 7);
+        var map = L.map('map').setView([-22.524, -46.524], 7);
+        let bounds = L.latLngBounds([]);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        let rst = '<%= outorgas %>';
-        console.log(JSON.parse(rst.replaceAll("&#34;","\"")));
+        L.control.scale().addTo(map);
 
+        let rst = '<%= outorgas %>';
+
+        var markers = L.markerClusterGroup();
+
+        
+        if(rst != ""){
+          let outorgas = JSON.parse(rst.replaceAll("&#34;","\""));
+
+          //console.log(outorgas);
+
+          outorgas.forEach(element => {
+            let source = element._source;
+            
+            let discharges = [];
+            //Calculate discharge 12 months
+            for(let i = 1; i <= 12; i++){
+              let x = (""+i).padStart(2,'0');
+              let days  = source["dm_"+x];
+              let hours = source["hd_"+x];
+              let mins  = source["minh_"+x];
+              let vaz   = source["vz_"+x];
+              let dis   = days * (hours + (mins/60)) * vaz;
+
+              discharges.push({
+                dias: days,
+                horas: hours,
+                minutos: mins,
+                vazao: vaz,
+                volume: dis
+              });
+
+              //console.log("Discharge: ", dis," - [days: ",days,", hours: ",hours,", minutes: ",mins,"]");
+            }
+
+            element._source["vazoes"] = discharges;
+            element._source["volume_anual"] = _.sumBy(discharges, 'volume');
+
+            let marker = L.marker([element._source.latitude, element._source.longitude],{
+              title: element._id,
+              data: element
+            }).on('click', function(e){
+              console.log("Clicou no marker: ", e);
+
+              let opts = e.sourceTarget.options.data;
+
+              const md = new bootstrap.Modal('#infoOutorga', {
+                keyboard: false
+              });
+
+              md.show();
+              
+              $("#infoOutorga").find(".modal-title").html(element._id);
+              $("#infoOutorga").find(".modal-body").find(".table-vazoes").empty();
+
+              $(".info-municipio").html(opts._source.municipio);
+              $(".info-diretoria").html(opts._source.diretoria_req);
+              $(".info-ugrhi").html(opts._source.ugrhi);
+              $(".info-coordenadas").html(truncateString(""+opts._source.latitude, 6)+","+truncateString(""+opts._source.longitude,6));
+
+              $(".info-tipo").html(opts._source.tipo_de_req_simplificado);
+              $(".info-sub-tipo").html(opts._source.tp_uso_subtipo1);
+              $(".info-finalidade").html(opts._source.finalidade_1630);
+              $(".info-decisao").html(opts._source.decisao_pto);
+              $(".info-processo").html(opts._source.processo);
+              $(".info-portaria").html(opts._source.portaria);
+              $(".info-data-publicacao").html(opts._source.data_publicacao);
+
+              $.each(element._source.vazoes, function(k,v){
+                console.log(k," => ",v);
+                let line = ""
+                line += "<tr>";
+                  line += "<td class='scope'>"+(k+1)+"</td>";
+                  line += "<td class='scope'>"+getMonthName(k+1)+"</td>";
+                  line += "<td class='scope'>"+v.dias+"</td>";
+                  line += "<td class='scope'>"+(v.horas + (v.minutos/60)).toLocaleString()+"</td>";
+                  line += "<td class='scope'>"+v.vazao.toLocaleString()+"</td>";
+                  line += "<td class='scope'>"+v.volume.toLocaleString()+"</td>";
+                line += "</tr>";
+
+                $("#infoOutorga").find(".modal-body").find(".table-vazoes").append(line);
+              })
+            });
+
+            console.log(marker);
+            markers.addLayer(marker);
+            bounds.extend([element._source.latitude, element._source.longitude]);
+          });
+
+          map.addLayer(markers);
+          if(bounds.isValid()){
+            map.fitBounds(bounds);
+          }
+        }
+
+        $("#btn_filter").on('click', function(e){
+          console.log("Filter Button Clicked...");
+          $("#form_search").submit();
+        });
+
+        function truncateString(str, num) {
+          if (str.length > num) {
+            return str.slice(0, num) + "...";
+          } else {
+            return str;
+          }
+        }
+
+        function getMonthName(month){
+          let ret = "";
+
+          if(month == 1){ret = "Janeiro";}
+          else if(month == 2){ret = "Fevereiro";}
+          else if(month == 3){ret = "Março";}
+          else if(month == 4){ret = "Abril";}
+          else if(month == 5){ret = "Maio";}
+          else if(month == 6){ret = "Junho";}
+          else if(month == 7){ret = "Julho"}
+          else if(month == 8){ret = "Agosto"}
+          else if(month == 9){ret = "Setembro";}
+          else if(month == 10){ret = "Outubro";}
+          else if(month == 11){ret = "Novembro";}
+          else if(month == 12){ret = "Dezembro";}
+          else{
+            ret = "Desconhecido";
+          }
+          return ret;
+        }
+
+        function calculate_discharge_per_month(minutes,hours,days,discharge){
+          return (((minutes/60)+hours)*days)*discharge;
+        }
 
       </script>
     </body>

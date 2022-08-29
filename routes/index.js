@@ -6,58 +6,94 @@ var elasticClient = require('../backend/elastic-client');
 router.get('/', function(req, res, next) {
 
   async function run(){
-    console.log("Starting Async Search");
+
+    console.log("Starting Async Search => ",req.query);
     let rsts = [];
     let outorgas = [];
+    let must_filter = [];
 
-    const rst = await elasticClient.search({
-      index: 'outorgas',
-      // keep the search results "scrollable" for 30 seconds
-      scroll: '10s',
-      // for the sake of this example, we will get only one result per search
-      size: 10,
-      // filter the source to only include the quote field
-      //_source: ['uid','latitude','longitude','vz_1'],
-      query: {
-        match_all: {}
-      } 
-    });
+    if(!isEmpty(req.query)){
 
-    console.log("Result: ",rst);
+      for (var [key, value] of Object.entries(req.query)) {
+        if(value != ""){
+          
+          var field_name = ""+ key + ".keyword";
+          console.log(field_name," => ",value);
 
-    rsts.push(rst);
-
-    while(rsts.length){
-      const body = rsts.shift();
-
-      console.log("Body: ", body);
-      body.hits.hits.forEach(function(hit){
-        console.log(hit);
-        outorgas.push(hit);
-      });
-
-      // check to see if we have collected all of the quotes
-      if (body.hits.total.value === outorgas.length) {
-        //console.log('Outorgas Carregadas', outorgas);
-        
-        res.render('index', { title: 'SOE-DAEE', outorgas: JSON.stringify(outorgas).replaceAll("&#34;","\"")});
-        break
+          let obj = {};
+          obj[field_name]= value;
+          must_filter.push({match: obj});
+        }
       }
 
-       // get the next response if there are more quotes to fetch
-      rsts.push(
-        await elasticClient.scroll({
-          scroll_id: body._scroll_id,
-          scroll: '10s'
-        })
-      );
+      console.log("Obj: ", must_filter);
 
+      const rst = await elasticClient.search({
+        index: 'outorgas',
+        // keep the search results "scrollable" for 30 seconds
+        scroll: '10s',
+        // for the sake of this example, we will get only one result per search
+        size: 10,
+        // filter the source to only include the quote field
+        //_source: ['uid','latitude','longitude','decisao_pto','diretoria_req','finalidade_1630'],
+        query: {
+          bool:{
+            must: must_filter
+          }
+        }
+      });
+
+      console.log("Result: ",rst);
+      rsts.push(rst);
+
+      while(rsts.length){
+        const body = rsts.shift();
+
+        //console.log("Body: ", body);
+        body.hits.hits.forEach(function(hit){
+          console.log(hit);
+          outorgas.push(hit);
+        });
+
+        // check to see if we have collected all of the quotes
+        if (body.hits.total.value === outorgas.length) {
+          //console.log('Outorgas Carregadas', outorgas);
+          
+          res.render('index', { title: 'SOE-DAEE', outorgas: JSON.stringify(outorgas).replaceAll("&#34;","\"") });
+          break
+        }
+
+        // get the next response if there are more quotes to fetch
+        rsts.push(
+          await elasticClient.scroll({
+            scroll_id: body._scroll_id,
+            scroll: '10s'
+          })
+        );
+
+      }
     }
+    else{
+      console.log("Selecione um municipio para continuar...");
+      res.render('index', { title: 'SOE-DAEE', outorgas: "" });
+    }
+
+    
   };
 
   run().catch(console.log);
 
   
 });
+
+function isEmpty(obj) {
+  for(var prop in obj) {
+    if(Object.prototype.hasOwnProperty.call(obj, prop)) {
+      return false;
+    }
+  }
+
+  return JSON.stringify(obj) === JSON.stringify({});
+}
 
 module.exports = router;

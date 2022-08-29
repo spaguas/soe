@@ -9,6 +9,7 @@
     "@elastic/elasticsearch": "^8.2.1",
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",
+    "bootstrap-icons": "^1.9.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dot-env": "^0.0.1",
