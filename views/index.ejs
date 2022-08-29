@@ -149,15 +149,15 @@
                     <thead>
                       <th>Processo</th>
                       <th>Portaria</th>
-                      <th>Finalidade</th>
-                      <th>Decisão(PTO)</th>
+                      <th>Data de Publicação</th>
+                      <th>Sazonalidade</th>
                     </thead>
                     <tbody>
                       <tr>
                         <td class="info-processo">-</td>
                         <td class="info-portaria">-</td>
-                        <td class="info-finalidade">-</td>
-                        <td class="info-decisao">-</td>
+                        <td class="info-data-publicacao">-</td>
+                        <td class="info-sazonalidade">-</td>
                       </tr>                     
                     </tbody>
                   </table>
@@ -307,7 +307,8 @@
               $(".info-decisao").html(opts._source.decisao_pto);
               $(".info-processo").html(opts._source.processo);
               $(".info-portaria").html(opts._source.portaria);
-              $(".info-data-publicacao").html(opts._source.data_publicacao);
+              $(".info-data-publicacao").html(opts._source.data_publicacao.substring(0,10));
+              $(".info-sazonalidade").html(opts._source.sazonalidade);
 
               $.each(element._source.vazoes, function(k,v){
                 console.log(k," => ",v);
