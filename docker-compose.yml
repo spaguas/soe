@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: ./
-    command: node .
+    command: npm start
     restart: always
     ports:
       - "20000:3000"
