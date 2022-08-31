@@ -19,11 +19,26 @@
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-hash/0.2.1/leaflet-hash.min.js"></script>
+
     <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
+    <!-- Include Datatables -->
+    <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css" />
+    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+    <script src="municipios.js"></script>
+    <script src="ugrhis.js"></script>
 
     <style>
 
@@ -38,11 +53,11 @@
       }
 
       #map{
-        height: 100vh;
+        height: 96vh;
         width: 100vw;
         overflow: hidden;
         position: fixed;
-        margin-top: 50px !important; 
+        margin-top: 60px !important; 
         left: 0;
       }
 
@@ -55,44 +70,21 @@
     </head>
     <body class="bg-light">
       
-      <nav class="navbar navbar-dark bg-dark fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">SOE-DAEE</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="modal" data-bs-target="#cityFilter" aria-controls="offcanvasNavbar">
-            <!--<span class="navbar-toggler-icon"></span>-->
-            <i class="bi bi-filter text-success"></i>
-          </button>
-          <!--<div class="offcanvas text-bg-dark offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                  </ul>
-                </li>
-              </ul>
-              
-            </div>
-          </div>-->
-        </div>
+      <nav class="navbar navbar-dark bg-dark fixed-top ">
+
+          <form class="container-fluid justify-content-start">
+            <span class="navbar-text">
+              <a class="navbar-brand" href="#">SOE-DAEE</a>
+            </span>
+            
+            <button class="btn btn-outline-secondary me-2" type="button" data-bs-toggle="modal" data-bs-target="#modal-tabela-outorgas" aria-controls="offcanvasBottom">
+              <i class="bi bi-table text-primary"></i>
+            </button>
+            <button  class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#cityFilter" aria-controls="offcanvasNavbar">
+              <!--<span class="navbar-toggler-icon"></span>-->
+              <i class="bi bi-search text-success"></i>
+            </button>
+          </form>
       </nav>
 
       <!-- Modal -->
@@ -116,48 +108,47 @@
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                   <br/>
                   <table class="table table-bordered table-sm">
-                    <thead>
-                      <th>Município</th>
-                      <th>Diretoria</th>
-                      <th>Ugrhi</th>
-                      <th>Coordenadas</th>
-                    </thead>
+                    
                     <tbody>
                       <tr>
-                        <td class="info-municipio">-</td>
-                        <td class="info-diretoria">-</td>
-                        <td class="info-ugrhi">-</td>
-                        <td class="info-coordenadas">-</td>
-                      </tr>                     
-                    </tbody>
-
-                    <thead>
-                      <th>Tipo</th>
-                      <th>Sub-Tipo</th>
-                      <th>Finalidade</th>
-                      <th>Decisão(PTO)</th>
-                    </thead>
-                    <tbody>
+                        <th>Cidade</th><td class="info-municipio">-</td>
+                      </tr>
                       <tr>
-                        <td class="info-tipo">-</td>
-                        <td class="info-sub-tipo">-</td>
-                        <td class="info-finalidade">-</td>
-                        <td class="info-decisao">-</td>
-                      </tr>                     
-                    </tbody>
-
-                    <thead>
-                      <th>Processo</th>
-                      <th>Portaria</th>
-                      <th>Data de Publicação</th>
-                      <th>Sazonalidade</th>
-                    </thead>
-                    <tbody>
+                        <th>Diretoria</th><td class="info-diretoria">-</td>
+                      </tr>
                       <tr>
-                        <td class="info-processo">-</td>
-                        <td class="info-portaria">-</td>
-                        <td class="info-data-publicacao">-</td>
-                        <td class="info-sazonalidade">-</td>
+                        <th>Ugrhi</th><td class="info-ugrhi">-</td>
+                      </tr>
+                     
+                      <tr>
+                        <th>Tipo</th><td class="info-tipo">-</td>
+                      </tr> 
+                      <tr>
+                        <th>Sub-Tipo</th><td class="info-sub-tipo">-</td>
+                      </tr>  
+                      <tr>
+                        <th>Finalidade</th><td class="info-finalidade">-</td>
+                      </tr>
+                      <tr>
+                        <th>Decisão do Parecer Técnico</th><td class="info-decisao">-</td>
+                      </tr>      
+                      <tr>
+                        <th>Núm.Processo</th><td class="info-processo">-</td>
+                      </tr>
+                      <tr>
+                        <th>Núm.Portaria</th><td class="info-portaria">-</td>
+                      </tr>
+                      <tr>
+                        <th>Data da Publicação</th><td class="info-data-publicacao">-</td>
+                      </tr>
+                      <tr>
+                        <th>Vazão Sazonal?</th><td class="info-sazonalidade">-</td>
+                      </tr>
+                      <tr>
+                        <th>Volume Anual (m³)</th><td class="info-volume-anual"></td>
+                      </tr>
+                      <tr>
+                        <th>Vazão (m³/h)</th><td class="info-vazao-max"></td>
                       </tr>                     
                     </tbody>
                   </table>
@@ -185,7 +176,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              
             </div>
           </div>
         </div>
@@ -201,32 +192,97 @@
             </div>
             <div class="modal-body">
               <form id="form_search" action="#" method="GET">
-                <div class="mb-3">
+                <!--<div class="mb-3">
                   <label for="nro_requerimento" class="form-label">Número de Requerimento</label>
                   <input type="text" class="form-control" id="nro_requerimento" name="nro_requerimento" aria-describedby="emailHelp">
                   <div id="nro_requerimento_help" class="form-text">Código que identifica a outorga.</div>
-                </div>
+                </div>-->
                 
                 <div class="mb-3">
-                  <label for="municipio" class="form-label">Municipio</label>
-                  <input type="text" class="form-control" id="municipio" name="municipio">
+                  <label for="municipio" class="form-label">Município</label>
+                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  <select name="municipio" id="municipio" class="form-control">
+
+                  </select>
                 </div>
 
                 <div class="mb-3">
-                  <label for="diretoria_req" class="form-label">Diretoria</label>
-                  <input type="text" class="form-control" id="diretoria_req" name="diretoria_req">
+                  <label for="ugrhi" class="form-label">Ugrhis</label>
+                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  <select name="ugrhi" id="ugrhi" class="form-control">
+
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="data_publicacao" class="form-label">Data de Publicação</label>
+                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  <input name="data_publicacao" id="data_publicacao" type="date" html5=true class="form-control"></input>
                 </div>
 
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="button" class="btn btn-warning">Exportar CSV</button>
               <button type="button" class="btn btn-primary" id="btn_filter">Filtrar Outorgas</button>
             </div>
           </div>
         </div>
       </div>
+
+       <!-- Modal -->
+       <div class="modal fade" id="modal-tabela-outorgas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Tabela de Outorgas</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table id="tabela-outorgas" class="table table-bordered table-sm display compact">
+                <thead>
+                  <tr>
+                    <th>Uso</th>
+                    <th>Cidade</th>
+                    <th>Ugrhi</th>
+                    <th>Diretoria</th>
+                    <th>Coordenadas</th>
+                    <th>Tipo</th>
+                    <th>Sub-Tipo</th>
+                    <th>Finalidade</th>
+                    <th>Decisão</th>
+                    <th>Portaria</th>
+                    <th>Data Publicação</th>
+                    <th>Volume Anual</th>
+                    <th>Vazão(m³/h)</th>
+                    <th>Jan(m³)</th>
+                    <th>Fev(m³)</th>
+                    <th>Mar(m³)</th>
+                    <th>Abr(m³)</th>
+                    <th>Mai(m³)</th>
+                    <th>Jun(m³)</th>
+                    <th>Jul(m³)</th>
+                    <th>Ago(m³)</th>
+                    <th>Set(m³)</th>
+                    <th>Out(m³)</th>
+                    <th>Nov(m³)</th>
+                    <th>Dez(m³)</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <button type="button" class="btn btn-warning">Exportar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     
       
       <div id="map"></div>
       
@@ -240,17 +296,21 @@
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        L.control.scale().addTo(map);
+        populateMunicipiosSelect();
+        populateUgrhisSelect();
+        fillFormWithUrl();
 
         let rst = '<%= outorgas %>';
 
         var markers = L.markerClusterGroup();
 
+        let outorgas_table_obj = [];
         
+        var hash = new L.Hash(map);
+
+                
         if(rst != ""){
           let outorgas = JSON.parse(rst.replaceAll("&#34;","\""));
-
-          //console.log(outorgas);
 
           outorgas.forEach(element => {
             let source = element._source;
@@ -278,6 +338,9 @@
 
             element._source["vazoes"] = discharges;
             element._source["volume_anual"] = _.sumBy(discharges, 'volume');
+            element._source["vazao_max"] = _.maxBy(discharges, 'vazao');
+
+            renderRowToTable("#tabela-outorgas", element._source);
 
             let marker = L.marker([element._source.latitude, element._source.longitude],{
               title: element._id,
@@ -291,15 +354,15 @@
                 keyboard: false
               });
 
-              md.show();
+              md.show();            
               
-              $("#infoOutorga").find(".modal-title").html(element._id);
+              $("#infoOutorga").find(".modal-title").html("Código do Uso: "+element._source.uso_id);
               $("#infoOutorga").find(".modal-body").find(".table-vazoes").empty();
 
               $(".info-municipio").html(opts._source.municipio);
               $(".info-diretoria").html(opts._source.diretoria_req);
-              $(".info-ugrhi").html(opts._source.ugrhi);
-              $(".info-coordenadas").html(truncateString(""+opts._source.latitude, 6)+","+truncateString(""+opts._source.longitude,6));
+              $(".info-ugrhi").html(getUgrhi(opts._source.ugrhi));
+              $(".info-coordenadas").html(truncateString(""+opts._source.latitude, 12)+","+truncateString(""+opts._source.longitude,12));
 
               $(".info-tipo").html(opts._source.tipo_de_req_simplificado);
               $(".info-sub-tipo").html(opts._source.tp_uso_subtipo1);
@@ -307,33 +370,71 @@
               $(".info-decisao").html(opts._source.decisao_pto);
               $(".info-processo").html(opts._source.processo);
               $(".info-portaria").html(opts._source.portaria);
-              $(".info-data-publicacao").html(opts._source.data_publicacao.substring(0,10));
-              $(".info-sazonalidade").html(opts._source.sazonalidade);
+
+              if(opts._source.data_publicacao){
+                $(".info-data-publicacao").html(opts._source.data_publicacao.substring(0,10));
+              }
+              else{
+                $(".info-data-publicacao").html("-");
+              }
+              $(".info-sazonalidade").html((opts._source.sazonalidade.indexOf("NAO ") > -1)?"Não":"Sim");
+              $(".info-volume-anual").html(opts._source.volume_anual);
+              $(".info-vazao-max").html(opts._source.vazao_max.vazao);
+
+              if(element._source.vazoes[0].vazao == null){
+                $("#nav-discharges-tab").addClass("disabled");
+              }
+              else{
+                $("#nav-discharges-tab").removeClass("disabled");
+              }
 
               $.each(element._source.vazoes, function(k,v){
-                console.log(k," => ",v);
+                
                 let line = ""
-                line += "<tr>";
-                  line += "<td class='scope'>"+(k+1)+"</td>";
-                  line += "<td class='scope'>"+getMonthName(k+1)+"</td>";
-                  line += "<td class='scope'>"+v.dias+"</td>";
-                  line += "<td class='scope'>"+(v.horas + (v.minutos/60)).toLocaleString()+"</td>";
-                  line += "<td class='scope'>"+v.vazao.toLocaleString()+"</td>";
-                  line += "<td class='scope'>"+v.volume.toLocaleString()+"</td>";
-                line += "</tr>";
+                if(v.vazao != null){
+                  
+                  line += "<tr>";
+                    line += "<td class='scope'>"+(k+1)+"</td>";
+                    line += "<td class='scope'>"+getMonthName(k+1)+"</td>";
+                    line += "<td class='scope'>"+v.dias+"</td>";
+                    line += "<td class='scope'>"+(v.horas + (v.minutos/60)).toLocaleString()+"</td>";
+                    line += "<td class='scope'>"+v.vazao.toLocaleString()+"</td>";
+                    line += "<td class='scope'>"+v.volume.toLocaleString()+"</td>";
+                  line += "</tr>";
+                }
 
                 $("#infoOutorga").find(".modal-body").find(".table-vazoes").append(line);
-              })
-            });
+              });
 
-            console.log(marker);
+             
+            });
+            //console.log(marker);
+            //Append Data to Table
             markers.addLayer(marker);
             bounds.extend([element._source.latitude, element._source.longitude]);
           });
 
+          $('#tabela-outorgas').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel'
+            ],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json'
+            },
+            fnInitComplete: function(){
+              $('div.toolbar').html('<button class="btn btn-success"><i class="bi bi-trash"></i></button>');
+              $(".dt-buttons").find("button").addClass("btn btn-outline-success");
+            }
+          });
+
+          
+         
+
           map.addLayer(markers);
           if(bounds.isValid()){
-            map.fitBounds(bounds);
+            map.fitBounds(bounds);            
+            
           }
         }
 
@@ -347,6 +448,129 @@
             return str.slice(0, num) + "...";
           } else {
             return str;
+          }
+        }
+
+        function renderRowToTable(target,data){
+          let row = "";
+          row += "<tr>";
+            row += "<td>"+data.uso_id+"</td>";
+            row += "<td>"+data.municipio+"</td>";
+            row += "<td>"+getUgrhi(data.ugrhi)+"</td>";
+            row += "<td>"+getDirCod(data.diretoria_req)+"</td>";
+            row += "<td>"+parseFloat(data.latitude).toFixed(6)+""+parseFloat(data.longitude).toFixed(6)+"</td>";
+            row += "<td>"+data.tipo_de_req_simplificado+"</td>";
+            row += "<td>"+data.tp_uso_subtipo1+"</td>";
+            row += "<td>"+data.finalidade_1630+"</td>";
+            row += "<td>"+data.decisao_pto+"</td>";
+            row += "<td>"+data.portaria+"</td>";
+            
+            if(data.data_publicacao){ row += "<td>"+data.data_publicacao.substring(0,10) +"</td>"; }else{ row += "<td>-</td>"; }
+
+            row += "<td>"+data.volume_anual.toLocaleString()+"</td>";
+            
+            if(data.vazao_max){ row += "<td>"+data.vazao_max.vazao.toLocaleString()+"</td>"; }else{ row += "<td>-</td>"; }
+
+            $.each(data.vazoes, function(k,v){
+              //let mes = (k+1);
+              row += "<td>"+v.volume.toLocaleString()+"</td>";
+            });
+
+          row += "</tr>";
+
+          
+            
+          $(target).append(row);
+        }
+
+        // The download function takes a CSV string, the filename and mimeType as parameters
+        // Scroll/look down at the bottom of this snippet to see how download is called
+        var download = function(content, fileName, mimeType) {
+          var a = document.createElement('a');
+          mimeType = mimeType || 'application/octet-stream';
+
+          if (navigator.msSaveBlob) { // IE10
+            navigator.msSaveBlob(new Blob([content], {
+              type: mimeType
+            }), fileName);
+          } else if (URL && 'download' in a) { //html5 A[download]
+            a.href = URL.createObjectURL(new Blob([content], {
+              type: mimeType
+            }));
+            a.setAttribute('download', fileName);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          } else {
+            location.href = 'data:application/octet-stream,' + encodeURIComponent(content); // only this mime type is supported
+          }
+        }
+
+        function convertToCSV(arr) {
+          const array = [Object.keys(arr[0])].concat(arr)
+
+          return array.map(it => {
+            return Object.values(it).toString()
+          }).join('\n')
+        }
+
+        function getDirCod(name){
+          if(name == "Diretoria da Bacia do Alto Tietê e Baixada Santista"){
+            return "BAT-BS";
+          }
+          else if(name == "Diretoria da Bacia do Médio Tietê"){
+            return "BMT";
+          }
+          else if(name == "Diretoria de Bacia do Baixo Tietê"){
+            return "BBT";
+          }
+          else if(name == "Diretoria de Bacia do Peixe Paranapanema"){
+            return "BPP";
+          }
+          else if(name == "Diretoria de Bacia do Turvo Grande"){
+            return "BTG";
+          }
+          else if(name == "Diretoria de Bacia do Pardo Grande"){
+            return "BPG";
+          }
+          else if(name == "Diretoria de Bacia do Ribeira de Iguape e Litoral Sul"){
+            return "BRI-LS";
+          }
+          else if(name == "Diretoria de Bacia do Paraíba e Litoral Norte"){
+            return "BP-LN";
+          }
+          else{
+            return "Desconhecida";
+          }
+        }
+
+        function getUgrhi(cod){
+          if(cod == 1){ return "Mantiqueira"; }
+          else if(cod == 2){ return "Paraíba do Sul"; }
+          else if(cod == 3){ return "Litoral Norte" }
+          else if(cod == 4){ return "Pardo" }
+          else if(cod == 5){ return "Piracicaba/Capivari/Jundiaí" }
+          else if(cod == 6){ return "Alto Tietê" }
+          else if(cod == 7){ return "Baixada Santista" }
+          else if(cod == 8){ return "Sapucaí/Grande" }
+          else if(cod == 9){ return "Mogi-Guaçu" }
+          else if(cod == 10){ return "Tietê/Sorocaba" }
+          else if(cod == 11){ return "Ribeira de Iguape/Litoral" }
+          else if(cod == 12){ return "Baixo Pardo/Grande" }
+          else if(cod == 13){ return "Tietê/Jacaré" }
+          else if(cod == 14){ return "Alto Paranapanema" }
+          else if(cod == 15){ return "Turvo/Grande" }
+          else if(cod == 16){ return "Tietê/Batalha" }
+          else if(cod == 17){ return "Médio Paranapanema" }
+          else if(cod == 18){ return "São José dos Campos" }
+          else if(cod == 19){ return "Baixo Tietê" }
+          else if(cod == 20){ return "Aguapeí" }
+          else if(cod == 21){ return "Peixe" }
+          else if(cod == 22){ return "Pontal do Paranapanema" }
+          else if(cod == 99){ return "Não cadastrada"}
+          else if(cod == 9999){return "Fora do Estado de São Paulo"}
+          else{
+            return "Indefinida";
           }
         }
 
@@ -373,6 +597,40 @@
 
         function calculate_discharge_per_month(minutes,hours,days,discharge){
           return (((minutes/60)+hours)*days)*discharge;
+        }
+
+        function populateUgrhisSelect(){
+          $("#ugrhi").empty();
+          $("#ugrhi").append("<option value=''>-</option>");
+          $.each(ugrhis.ugrhis, function(k,v){
+            let obj = "<option value='"+v.codigo+"'>"+v.nome+"</option>";
+            //console.log(obj);
+            $("#ugrhi").append(obj);
+          });
+        }
+
+        function populateMunicipiosSelect(){
+          $("#municipio").empty();
+
+          $("#municipio").append("<option value=''>-</option>");
+          $.each(municipios.municipios, function(k,v){
+            
+            let obj = "<option value='"+v.nome+"'>"+v.nome+"</option>";
+            //console.log(obj);
+            $("#municipio").append(obj);
+          });
+        }
+
+        function fillFormWithUrl(){
+          console.log(window.location.search);
+          let params = new URLSearchParams(window.location.search);
+          //console.log(params);
+          //let q = params.get("municipio");
+          //console.log(q)
+
+          $("#municipio").val(params.get("municipio")).change();
+          $("#ugrhi").val(params.get("ugrhi")).change();
+          $("#data_publicacao").val(params.get("data_publicacao"));
         }
 
       </script>

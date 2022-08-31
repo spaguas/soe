@@ -17,7 +17,14 @@ router.get('/', function(req, res, next) {
       for (var [key, value] of Object.entries(req.query)) {
         if(value != ""){
           
-          var field_name = ""+ key + ".keyword";
+          var field_name = ""
+          
+          if(key.indexOf("ugrhi")>-1 || key.indexOf("data_publicacao")>-1){
+            field_name = key;
+          }
+          else{
+            field_name = key + ".keyword";
+          }
           console.log(field_name," => ",value);
 
           let obj = {};
@@ -26,7 +33,7 @@ router.get('/', function(req, res, next) {
         }
       }
 
-      console.log("Obj: ", must_filter);
+      //console.log("Obj: ", must_filter);
 
       const rst = await elasticClient.search({
         index: 'outorgas',
@@ -51,7 +58,7 @@ router.get('/', function(req, res, next) {
 
         //console.log("Body: ", body);
         body.hits.hits.forEach(function(hit){
-          console.log(hit);
+          //console.log(hit);
           outorgas.push(hit);
         });
 
@@ -74,7 +81,7 @@ router.get('/', function(req, res, next) {
       }
     }
     else{
-      console.log("Selecione um municipio para continuar...");
+      //console.log("Selecione um municipio para continuar...");
       res.render('index', { title: 'SOE-DAEE', outorgas: "" });
     }
 
