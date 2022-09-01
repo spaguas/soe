@@ -454,6 +454,9 @@
           $.ajax({
             url: url,
             cache: true,
+            data: {
+              cql_filter: "Codigo="+parseInt($("#ugrhi").val())
+            },
             beforeSend: function(){
               ugrhiLayer.clearLayers();
             },
@@ -487,6 +490,9 @@
           $.ajax({
             url: url,
             cache: true,
+            data: {
+              cql_filter: "Nome like '"+_.deburr($("#municipio").val().toLowerCase())+"'"
+            },
             beforeSend: function(){
               municipioLayer.clearLayers();
             },
