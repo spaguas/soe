@@ -100,7 +100,7 @@
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                   <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Resumo</button>
                   <button class="nav-link" id="nav-discharges-tab" data-bs-toggle="tab" data-bs-target="#nav-discharges" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Vazões</button>
-                  <button class="nav-link" id="nav-charts-tab" data-bs-toggle="tab" data-bs-target="#nav-charts" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Gráfico</button>
+                  <!--<button class="nav-link" id="nav-charts-tab" data-bs-toggle="tab" data-bs-target="#nav-charts" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Gráfico</button>-->
                   
                 </div>
               </nav>
@@ -129,9 +129,9 @@
                       <tr>
                         <th>Finalidade</th><td class="info-finalidade">-</td>
                       </tr>
-                      <tr>
+                      <!--<tr>
                         <th>Decisão do Parecer Técnico</th><td class="info-decisao">-</td>
-                      </tr>      
+                      </tr>-->      
                       <tr>
                         <th>Núm.Processo</th><td class="info-processo">-</td>
                       </tr>
@@ -170,7 +170,7 @@
                     </tbody>
                   </table>
                 </div>
-                <div class="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab" tabindex="0">...</div>
+                <!--<div class="tab-pane fade" id="nav-charts" role="tabpanel" aria-labelledby="nav-charts-tab" tabindex="0">...</div>-->
               </div>
               
             </div>
@@ -250,7 +250,7 @@
                     <th>Tipo</th>
                     <th>Sub-Tipo</th>
                     <th>Finalidade</th>
-                    <th>Decisão</th>
+                    <!--<th>Decisão</th>-->
                     <th>Portaria</th>
                     <th>Data Publicação</th>
                     <th>Volume Anual</th>
@@ -276,7 +276,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="button" class="btn btn-warning">Exportar</button>
+              
             </div>
           </div>
         </div>
@@ -295,6 +295,12 @@
             maxZoom: 19,
             attribution: '© OpenStreetMap'
         }).addTo(map);
+
+        let ugrhiLayer = L.layerGroup([]);
+        let municipioLayer = L.layerGroup([]);
+
+        municipioLayer.addTo(map);
+        ugrhiLayer.addTo(map);
 
         populateMunicipiosSelect();
         populateUgrhisSelect();
@@ -378,7 +384,7 @@
                 $(".info-data-publicacao").html("-");
               }
               $(".info-sazonalidade").html((opts._source.sazonalidade.indexOf("NAO ") > -1)?"Não":"Sim");
-              $(".info-volume-anual").html(opts._source.volume_anual);
+              $(".info-volume-anual").html(opts._source.volume_anual.toFixed(2));
               $(".info-vazao-max").html(opts._source.vazao_max.vazao);
 
               if(element._source.vazoes[0].vazao == null){
@@ -428,13 +434,12 @@
             }
           });
 
-          
-         
-
           map.addLayer(markers);
           if(bounds.isValid()){
             map.fitBounds(bounds);            
             
+            loadUgrhiLayer();
+            loadMunicipioLayer();
           }
         }
 
@@ -442,6 +447,70 @@
           console.log("Filter Button Clicked...");
           $("#form_search").submit();
         });
+
+        function loadUgrhiLayer(){
+          let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteUgrhiDAEE&maxFeatures=50&outputFormat=application%2Fjson";
+
+          $.ajax({
+            url: url,
+            cache: true,
+            beforeSend: function(){
+              ugrhiLayer.clearLayers();
+            },
+            success: function(data){
+              //console.log("Ugrhis: ", data);
+              //localStorage.setItem('ugrhis_geo', JSON.stringify(data));
+
+              var ll = L.geoJSON(data, {
+                  filter: function(feature){
+                    //console.log(feature.properties.Codigo," == ",parseInt($("#ugrhi").val()));
+                    return feature.properties.Codigo == parseInt($("#ugrhi").val());
+                  },
+                  style: function (feature) {
+                      return {color: '#aa66bb', opacity: 0.5};
+                  }
+              }).bindPopup(function (layer) {
+                  return layer.feature.properties;
+              });
+              
+              ugrhiLayer.addLayer(ll);
+            },
+            complete: function(){
+
+            }
+          });
+        }
+
+        function loadMunicipioLayer(){
+          let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteMunicipal&maxFeatures=700&outputFormat=application%2Fjson";
+
+          $.ajax({
+            url: url,
+            cache: true,
+            beforeSend: function(){
+              municipioLayer.clearLayers();
+            },
+            success: function(data){
+              console.log("Municipios: ", data);
+              //localStorage.setItem('municipios_geo', JSON.stringify(data));
+              var ll = L.geoJSON(data, {
+                  filter: function(feature){
+                    return _.deburr(feature.properties.Nome.toLowerCase()) == _.deburr($("#municipio").val().toLowerCase())
+                  },
+                  style: function (feature) {
+                      return {color: '#cc22ff', opacity: 0.5};
+                  }
+              }).bindPopup(function (layer) {
+                  return layer.feature.properties;
+              });
+
+              municipioLayer.addLayer(ll);
+            },
+            complete: function(){
+
+            }
+          });
+        }
 
         function truncateString(str, num) {
           if (str.length > num) {
@@ -458,11 +527,11 @@
             row += "<td>"+data.municipio+"</td>";
             row += "<td>"+getUgrhi(data.ugrhi)+"</td>";
             row += "<td>"+getDirCod(data.diretoria_req)+"</td>";
-            row += "<td>"+parseFloat(data.latitude).toFixed(6)+""+parseFloat(data.longitude).toFixed(6)+"</td>";
+            row += "<td>"+parseFloat(data.latitude).toFixed(6)+", "+parseFloat(data.longitude).toFixed(6)+"</td>";
             row += "<td>"+data.tipo_de_req_simplificado+"</td>";
             row += "<td>"+data.tp_uso_subtipo1+"</td>";
             row += "<td>"+data.finalidade_1630+"</td>";
-            row += "<td>"+data.decisao_pto+"</td>";
+            //row += "<td>"+data.decisao_pto+"</td>";
             row += "<td>"+data.portaria+"</td>";
             
             if(data.data_publicacao){ row += "<td>"+data.data_publicacao.substring(0,10) +"</td>"; }else{ row += "<td>-</td>"; }
