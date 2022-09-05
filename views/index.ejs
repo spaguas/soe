@@ -3,7 +3,7 @@
   <head>
     <title><%= title %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/style.scss' />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
@@ -19,11 +19,22 @@
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
 
+    <script src="https://kit.fontawesome.com/170baf7a52.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-hash/0.2.1/leaflet-hash.min.js"></script>
 
     <link href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <script src="libs/beautifyIcons/leaflet-beautify-marker-icon.js"></script>
+    <link href="libs/beautifyIcons/leaflet-beautify-marker-icon.css" rel="stylesheet" type="text/css" />
+
+    <script src="libs/sidePanel/leaflet-sidepanel.js"></script>
+    <link href="libs/sidePanel/leaflet-sidepanel.css" rel="stylesheet" type="text/css"/>
 
     <!-- Include Datatables -->
     <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
@@ -37,11 +48,12 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
+    
+
     <script src="municipios.js"></script>
     <script src="ugrhis.js"></script>
 
     <style>
-
       body {
           padding: 0;
           margin: 0;
@@ -64,7 +76,75 @@
       .selector-for-some-widget {
         box-sizing: content-box;
       }
-    
+
+      .text-purple{
+        color: #c101fc !important; 
+      }
+
+      .text-cyan {
+        color: #00c3ff !important;
+      }
+
+      .text-orange{
+        color: #ffa705 !important;
+      }
+
+      .text-teal{
+        color: #78b858 !important;
+      }
+
+      .text-blue{
+        color: #0d6efd !important;
+      }
+      .text-indigo{
+        color: #6610f2 !important;
+      }
+      .text-pink{
+        color: #6f42c1 !important;
+      }
+      .text-red{
+        color: #dc3545 !important;
+      }
+      .text-yellow{
+        color: #ffc107 !important;
+      }
+      .text-green{
+        color: #198754 !important;
+      }
+      
+      .info {
+          padding: 6px 8px;
+          font: 14px/16px Arial, Helvetica, sans-serif;
+          background: white;
+          background: rgba(255,255,255,0.8);
+          box-shadow: 0 0 15px rgba(0,0,0,0.2);
+          border-radius: 5px;
+      }
+      .info h4 {
+          margin: 0 0 5px;
+          color: #777;
+      }
+
+      .sidepanel-content {
+			font-size: 1rem;
+		}
+
+		.sidepanel-content h4 {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+
+		.sidepanel-content a {
+			text-decoration: none;
+			font-size: 1rem;
+			color: #199900;
+			transition: color 0.3s ease-in;
+		}
+
+		.sidepanel-content a:hover {
+			color: #116600;
+			text-decoration: underline;
+		}
     </style>
 
     </head>
@@ -80,10 +160,14 @@
             <button class="btn btn-outline-secondary me-2" type="button" data-bs-toggle="modal" data-bs-target="#modal-tabela-outorgas" aria-controls="offcanvasBottom">
               <i class="bi bi-table text-primary"></i>
             </button>
-            <button  class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#cityFilter" aria-controls="offcanvasNavbar">
+            <button  class="btn btn-outline-secondary me-2" type="button" data-bs-toggle="modal" data-bs-target="#modal-filtro" aria-controls="offcanvasNavbar">
               <!--<span class="navbar-toggler-icon"></span>-->
               <i class="bi bi-search text-success"></i>
             </button>
+
+            <!--<button  class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modal-help" aria-controls="offcanvasNavbar">
+              <i class="bi bi-book text-warning"></i>
+            </button>-->
           </form>
       </nav>
 
@@ -142,6 +226,9 @@
                         <th>Data da Publicação</th><td class="info-data-publicacao">-</td>
                       </tr>
                       <tr>
+                        <th>Data de vencimento</th><td class="info-validade-pto">-</td>
+                      </tr>
+                      <tr>
                         <th>Vazão Sazonal?</th><td class="info-sazonalidade">-</td>
                       </tr>
                       <tr>
@@ -183,7 +270,7 @@
       </div>
 
       <!-- Modal -->
-      <div class="modal fade" id="cityFilter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal fade" id="modal-filtro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
@@ -201,7 +288,7 @@
                 <div class="mb-3">
                   <label for="municipio" class="form-label">Município</label>
                   <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                  <select name="municipio" id="municipio" class="form-control">
+                  <select name="cod_ibge" id="municipio" class="form-control">
 
                   </select>
                 </div>
@@ -211,6 +298,26 @@
                   <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
                   <select name="ugrhi" id="ugrhi" class="form-control">
 
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="ugrhi" class="form-label">Finalidade</label>
+                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  <select name="finalidade_1630" id="finalidade" class="form-control">,
+                    <option value="">-</option>
+                    <option value="Irrigação">Irrigação</option>
+                    <option value="Industrial">Industrial</option>
+                    <option value="Doméstico">Doméstico</option>
+                    <option value="Aquicultura">Aquicultura</option>
+                    <option value="Outros">Outros</option>
+                    <option value="Comércio e Serviços">Comércio e Serviços</option>
+                    <option value="Recreação e Paisagismo">Recreação e Paisagismo</option>
+                    <option value="Regularização de Nível">Regularização de Nível</option>
+                    <option value="Mineração">Mineração</option>
+                    <option value="Rural">Rural</option>
+                    <option value="Controle de Cheias">Controle de Cheias</option>
+                    <option value="Geração de Energia">Geração de Energia</option>
                   </select>
                 </div>
 
@@ -229,6 +336,24 @@
           </div>
         </div>
       </div>
+
+           <!-- Modal -->
+           <div class="modal fade" id="modal-help" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Suporte - Ajuda</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
        <!-- Modal -->
        <div class="modal fade" id="modal-tabela-outorgas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -282,7 +407,78 @@
         </div>
       </div>
 
-     
+      <div id="panel-legend" class="sidepanel sidepanel-right tabs-left" aria-label="side panel" aria-hidden="false">
+        <div class="sidepanel-inner-wrapper">
+          <nav class="sidepanel-tabs-wrapper" aria-label="sidepanel tab navigation">
+            <ul class="sidepanel-tabs">
+              <li class="sidepanel-tab">
+                <a href="#" class="sidebar-tab-link active" role="tab" data-tab-link="tab-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>
+                  </svg>
+                </a>
+              </li>
+              <li class="sidepanel-tab">
+                <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-2">
+                  <i class="fa-solid fa-ranking-star"></i>
+                </a>
+              </li>
+              <li class="sidepanel-tab">
+                <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-3">
+                  <i class="fa-solid fa-cloud-showers-water"></i>
+                </a>
+              </li>
+              <li class="sidepanel-tab">
+                <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-4">
+                  <i class="fa-solid fa-calculator"></i>
+                </a>
+              </li>
+              <li class="sidepanel-tab">
+                <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-5">
+                  <i class="fa-solid fa-cog"></i>
+                </a>
+              </li>
+              <li class="sidepanel-tab">
+                <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-6">
+                  <i class="fa-solid fa-users"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <div class="sidepanel-content-wrapper">
+            <div class="sidepanel-content">
+              <div class="sidepanel-tab-content active" data-tab-content="tab-1">
+                <div id="tab-legenda"></div>
+              </div>
+              <div class="sidepanel-tab-content" data-tab-content="tab-2">
+                <h4>Ranking de Outorgas</h4><br/>
+                <p>Classificação aplicada as outorgas filtradas, apartir da outorga de maior vazão.</p>
+
+                <div id="tab-ranking"></div>
+              </div>
+              <div class="sidepanel-tab-content" data-tab-content="tab-3">
+                <h4>Regionalização Hidrológica</h4>
+                <p>Teste</p>
+              </div>
+              <div class="sidepanel-tab-content" data-tab-content="tab-4">
+                <h4>Estatísticas</h4>
+                <p>Informações Estatísticas Gerais</p>
+              </div>
+              <div class="sidepanel-tab-content" data-tab-content="tab-5">
+                <h4>Configurações</h4>
+                <p>Configurações Gerais</p>
+              </div>
+              <div class="sidepanel-tab-content" data-tab-content="tab-6">
+                <h4>Equipe</h4>
+                <p>Desenvolvido por</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidepanel-toggle-container">
+          <button class="sidepanel-toggle-button" type="button" aria-label="toggle side panel"></button>
+        </div>
+      </div>
       
       <div id="map"></div>
       
@@ -314,9 +510,10 @@
         
         var hash = new L.Hash(map);
 
+        let outorgas;
                 
         if(rst != ""){
-          let outorgas = JSON.parse(rst.replaceAll("&#34;","\""));
+          outorgas = JSON.parse(rst.replaceAll("&#34;","\""));
 
           outorgas.forEach(element => {
             let source = element._source;
@@ -348,9 +545,12 @@
 
             renderRowToTable("#tabela-outorgas", element._source);
 
+            let icon_options = getIconOptions(element._source);
+
             let marker = L.marker([element._source.latitude, element._source.longitude],{
               title: element._id,
-              data: element
+              data: element,
+              icon: L.BeautifyIcon.icon(icon_options)
             }).on('click', function(e){
               console.log("Clicou no marker: ", e);
 
@@ -379,6 +579,10 @@
 
               if(opts._source.data_publicacao){
                 $(".info-data-publicacao").html(opts._source.data_publicacao.substring(0,10));
+                let dt_vencimento = moment(opts._source.data_publicacao.substring(0,10),'YYYY-MM-DD').add(opts._source.validade_pto_meses,'months');
+
+                //console.log("Data: ", moment(opts._source.data_publicacao.substring(0,10)).format("YYYY-MM-DD")," => ",opts._source.validade_pto_meses," <> ",dt_vencimento.format("YYYY-MM-DD"));
+                $(".info-validade-pto").html(dt_vencimento.format("YYYY-MM-DD"));
               }
               else{
                 $(".info-data-publicacao").html("-");
@@ -440,6 +644,10 @@
             
             loadUgrhiLayer();
             loadMunicipioLayer();
+
+            renderCustomInfo();
+
+            
           }
         }
 
@@ -448,74 +656,181 @@
           $("#form_search").submit();
         });
 
+        function getIconClassByFinalidade(finalidade){
+          let finalidade_icon;
+
+          switch(finalidade){
+            case "Irrigação":
+              finalidade_icon = "fa-solid fa-leaf text-info";
+              break;
+            case "Urbano":
+              finalidade_icon = "fa-solid fa-building text-pink";
+              break;
+            case "Industrial":
+              finalidade_icon = "fa-solid fa-industry text-warning";
+              break;
+            case "Doméstico":
+              finalidade_icon = "fa-solid fa-home-user text-teal"
+              break;
+            case "Aquicultura":
+              finalidade_icon = "fa-solid fa-fish text-primary" ;
+              break;
+            case "Comércio e Serviços":
+              finalidade_icon = "fa-solid fa-cash-register text-orange";
+              break;
+            case "Recreação e Paisagismo":
+              finalidade_icon = "fa-solid fa-umbrella-beach text-purple";
+              break;
+            case "Regularização de Nível":
+              finalidade_icon = "fa-solid fa-water text-cyan";
+              break;
+            case "Rural":
+              finalidade_icon = "fa-solid fa-industry text-green";
+              break;
+            case "Controle de Cheias":
+              finalidade_icon = "fa-solid fa-house-flood-water-circle-arrow-right text-danger";
+              break;
+            case "Geração de Energia":
+              finalidade_icon = "fa-solid fa-bolt text-yellow";
+              break;
+            case "Mineração":
+              finalidade_icon = "fa-solid fa-gem text-red"
+              break;
+            default:
+              finalidade_icon = "fa-solid fa-user text-danger";
+          }
+
+          return finalidade_icon;
+        }
+
+        function getIconOptions(source){
+          let opt = {};
+          
+          opt["icon"] = getIconClassByFinalidade(source.finalidade_1630);
+          opt["iconShape"] = "circle";
+          opt["prefix"] = "";
+          opt["borderColor"] = "#000000";
+          opt["backgroundColor"] = "#ffffff";
+          opt["iconSize"] = [28,28];
+          opt["iconAnchor"] = [14,14];
+          opt["borderWidth"] = 2;
+          opt["innerIconAnchor"] = [0,5];
+          return opt;
+        }
+
         function loadUgrhiLayer(){
           let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteUgrhiDAEE&maxFeatures=50&outputFormat=application%2Fjson";
+          let filter_cql = {};
 
-          $.ajax({
-            url: url,
-            cache: true,
-            data: {
-              cql_filter: "Codigo="+parseInt($("#ugrhi").val())
-            },
-            beforeSend: function(){
-              ugrhiLayer.clearLayers();
-            },
-            success: function(data){
-              //console.log("Ugrhis: ", data);
-              //localStorage.setItem('ugrhis_geo', JSON.stringify(data));
+          if($("#ugrhi").val() != ""){
+            filter_cql['cql_filter'] = "Codigo="+parseInt($("#ugrhi").val());
 
-              var ll = L.geoJSON(data, {
-                  filter: function(feature){
-                    //console.log(feature.properties.Codigo," == ",parseInt($("#ugrhi").val()));
-                    return feature.properties.Codigo == parseInt($("#ugrhi").val());
-                  },
-                  style: function (feature) {
-                      return {color: '#aa66bb', opacity: 0.5};
-                  }
-              }).bindPopup(function (layer) {
-                  return layer.feature.properties;
-              });
-              
-              ugrhiLayer.addLayer(ll);
-            },
-            complete: function(){
+            $.ajax({
+              url: url,
+              cache: true,
+              data: filter_cql,
+              beforeSend: function(){
+                ugrhiLayer.clearLayers();
+              },
+              success: function(data){
+                console.log("Ugrhis: ", data);
+                //localStorage.setItem('ugrhis_geo', JSON.stringify(data));
 
-            }
+                var ll = L.geoJSON(data, {
+                    filter: function(feature){
+                      console.log("Ugrhi Properties: ", feature.properties);
+                      if(feature != undefined){
+                        return feature.properties.Codigo == parseInt($("#ugrhi").val());
+                      }
+                      else{
+                        return false;
+                      }
+                    },
+                    onEachFeature: function(feature,layer){
+                      layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight,
+                        click: zoomToFeature
+                      })
+                    },
+                    style: function (feature) {
+                        return {color: '#aa66bb', opacity: 0.5};
+                    }
+                }).bindPopup(function (layer) {
+                    return layer.feature.properties;
+                });
+                
+                ugrhiLayer.addLayer(ll);
+              },
+              complete: function(){
+
+              }
+            });
+          }
+
+          
+        }
+
+        function zoomToFeature(e) {
+          console.log("Zoom To Feature: ", e);
+          //map.fitBounds(e.target.getBounds());
+        }
+
+        function resetHighlight(e) {
+          console.log("Limpar estilos da camada...");
+        }
+
+        function highlightFeature(e){
+          var layer = e.target;
+
+          layer.setStyle({
+              weight: 5,
+              color: '#666',
+              dashArray: '',
+              fillOpacity: 0.3
           });
+
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+          }
         }
 
         function loadMunicipioLayer(){
           let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteMunicipal&maxFeatures=700&outputFormat=application%2Fjson";
 
-          $.ajax({
-            url: url,
-            cache: true,
-            data: {
-              cql_filter: "Nome like '"+_.deburr($("#municipio").val().toLowerCase())+"'"
-            },
-            beforeSend: function(){
-              municipioLayer.clearLayers();
-            },
-            success: function(data){
-              console.log("Municipios: ", data);
-              //localStorage.setItem('municipios_geo', JSON.stringify(data));
-              var ll = L.geoJSON(data, {
-                  filter: function(feature){
-                    return _.deburr(feature.properties.Nome.toLowerCase()) == _.deburr($("#municipio").val().toLowerCase())
-                  },
-                  style: function (feature) {
-                      return {color: '#cc22ff', opacity: 0.5};
-                  }
-              }).bindPopup(function (layer) {
-                  return layer.feature.properties;
-              });
+          let filter_cql = {};
 
-              municipioLayer.addLayer(ll);
-            },
-            complete: function(){
+          if($("#municipio").val() != ""){
+            filter_cql['cql_filter'] = "Cod_ibge = "+parseInt($("#municipio").val());
+            console.log("Filter CQL: ", filter_cql);
+            $.ajax({
+              url: url,
+              cache: true,
+              data: filter_cql,
+              beforeSend: function(){
+                municipioLayer.clearLayers();
+              },
+              success: function(data){
+                console.log("Municipios: ", data);
+                //localStorage.setItem('municipios_geo', JSON.stringify(data));
+                var ll = L.geoJSON(data, {
+                    filter: function(feature){
+                      return feature.properties.Cod_ibge == $("#municipio").val()
+                    },
+                    style: function (feature) {
+                        return {color: '#cc22ff', opacity: 0.5};
+                    }
+                }).bindPopup(function (layer) {
+                    return layer.feature.properties;
+                });
 
-            }
-          });
+                municipioLayer.addLayer(ll);
+              },
+              complete: function(){
+                console.log("Municipios Layers Loaded...");
+              }
+            });
+          }
         }
 
         function truncateString(str, num) {
@@ -690,7 +1005,7 @@
           $("#municipio").append("<option value=''>-</option>");
           $.each(municipios.municipios, function(k,v){
             
-            let obj = "<option value='"+v.nome+"'>"+v.nome+"</option>";
+            let obj = "<option value='"+v.codigo_ibge +"'>"+v.nome+"</option>";
             //console.log(obj);
             $("#municipio").append(obj);
           });
@@ -703,9 +1018,53 @@
           //let q = params.get("municipio");
           //console.log(q)
 
-          $("#municipio").val(params.get("municipio")).change();
+          $("#municipio").val(params.get("cod_ibge")).change();
           $("#ugrhi").val(params.get("ugrhi")).change();
           $("#data_publicacao").val(params.get("data_publicacao"));
+        }
+
+        function renderCustomInfo(){
+          
+          let el = '<h4>Outorgas Carregadas</h4></br>'
+
+          el += "<table width=100% bgcolor='#ffffff' class='table table-bordered'>";
+          el += "<thead class=\"table-secondary\"><th></th><th>Total</th><th>"+outorgas.length+"</th></thead>";
+          $.each(_.countBy(outorgas, function(o){ return o._source.finalidade_1630 }), function(k,v){
+            //console.log(k," => ",v);
+            el += '<tr><td><i class="'+getIconClassByFinalidade(k)+'"></i></td><td><b>'+k+'</b></td><td>'+v+"</td></tr>";
+          });
+
+          el += "</table>";
+
+          $("#tab-legenda").html(el);
+
+          console.log(outorgas);
+
+          let ranking_outorgas = _.sortBy(outorgas, function(o){ return o._source.volume_anual });
+
+          //console.log("Ranking: ", ranking_outorgas);
+
+          let elx = "<table bgcolor='#ffffff' class='table table-bordered table-hover'>";
+            elx += "<thead><th>#</th><th>Uso</th><th>Vol.Anual(m³)</th><thead>";
+            elx += "<tbody>";
+              $.each(_.reverse(ranking_outorgas), function(k,v){
+                //console.log("Each: ", v)
+                if(k < 10){
+                  elx += "<tr onclick='map.flyTo(["+v._source.location+"],17)'><td>"+(k+1)+"</td><td>"+v._source.uso_id+"</td><td>"+(v._source.volume_anual).toLocaleString()+"</td></tr>";
+                }
+              });
+            elx += "</tbody>";
+          elx += "</table>";
+
+          $("#tab-ranking").html(elx);
+
+          const panelRight = L.control.sidepanel('panel-legend', {
+              panelPosition: 'right',
+              hasTabs: true,
+              tabsPosition: 'left',
+              pushControls: true,
+              darkMode: true
+          }).addTo(map);
         }
 
       </script>
