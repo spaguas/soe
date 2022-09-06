@@ -293,13 +293,13 @@
                   </select>
                 </div>
 
-                <div class="mb-3">
+                <!--<div class="mb-3">
                   <label for="ugrhi" class="form-label">Ugrhis</label>
-                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  
                   <select name="ugrhi" id="ugrhi" class="form-control">
 
                   </select>
-                </div>
+                </div>-->
 
                 <div class="mb-3">
                   <label for="ugrhi" class="form-label">Finalidade</label>
@@ -318,6 +318,26 @@
                     <option value="Rural">Rural</option>
                     <option value="Controle de Cheias">Controle de Cheias</option>
                     <option value="Geração de Energia">Geração de Energia</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="tipo_uso" class="form-label">Tipo de Uso</label>
+                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  <select name="tp_uso_subtipo1" id="tipo_uso" class="form-control">,
+                    <option value="">-</option>
+                    <option value="Poço Tubular">Poço Tubular</option>
+                    <option value="Captação Superficial">Captação Superficial</option>
+                    <option value="Estrutura de Reservação">Estrutura de Reservação</option>
+                    <option value="Lançamento de Efluentes">Lançamento de Efluentes</option>
+                    <option value="Outros">Outros</option>
+                    <option value="Poço Escavado (cisterna/cacimba)">Poço Escavado (cisterna/cacimba)</option>
+                    <option value="Barramento Sem PNSB">Barramento Sem PNSB</option>
+                    <option value="Extração de Minério">Extração de Minério</option>
+                    <option value="Reversão entre Corpos de Água">Reversão entre Corpos de Água</option>
+                    <option value="Extração de Minério em Cava">Extração de Minério em Cava</option>
+                    <option value="Barramento">Barramento</option>
+                    <option value="Ponteira">Ponteira</option>
                   </select>
                 </div>
 
@@ -548,7 +568,7 @@
             let icon_options = getIconOptions(element._source);
 
             let marker = L.marker([element._source.latitude, element._source.longitude],{
-              title: element._id,
+              title: element._source.uso_id,
               data: element,
               icon: L.BeautifyIcon.icon(icon_options)
             }).on('click', function(e){
@@ -582,7 +602,9 @@
                 let dt_vencimento = moment(opts._source.data_publicacao.substring(0,10),'YYYY-MM-DD').add(opts._source.validade_pto_meses,'months');
 
                 //console.log("Data: ", moment(opts._source.data_publicacao.substring(0,10)).format("YYYY-MM-DD")," => ",opts._source.validade_pto_meses," <> ",dt_vencimento.format("YYYY-MM-DD"));
-                $(".info-validade-pto").html(dt_vencimento.format("YYYY-MM-DD"));
+                if(dt_vencimento.format("YYYY-MM-DD") != opts._source.data_publicacao.substring(0,10)){
+                  $(".info-validade-pto").html(dt_vencimento.format("YYYY-MM-DD"));
+                }
               }
               else{
                 $(".info-data-publicacao").html("-");
@@ -1002,7 +1024,7 @@
         function populateMunicipiosSelect(){
           $("#municipio").empty();
 
-          $("#municipio").append("<option value=''>-</option>");
+          //$("#municipio").append("<option value=''>-</option>");
           $.each(municipios.municipios, function(k,v){
             
             let obj = "<option value='"+v.codigo_ibge +"'>"+v.nome+"</option>";
@@ -1021,6 +1043,7 @@
           $("#municipio").val(params.get("cod_ibge")).change();
           $("#ugrhi").val(params.get("ugrhi")).change();
           $("#data_publicacao").val(params.get("data_publicacao"));
+          $("#tipo_uso").val(params.get("tp_uso_subtipo1"));
         }
 
         function renderCustomInfo(){
