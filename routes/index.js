@@ -11,6 +11,7 @@ router.get('/', function(req, res, next) {
     let rsts = [];
     let outorgas = [];
     let must_filter = [];
+    let geo_filter = {};
 
     if(!isEmpty(req.query)){
 
@@ -19,21 +20,38 @@ router.get('/', function(req, res, next) {
           
           var field_name = ""
           
-          if(key.indexOf("ugrhi")>-1 || key.indexOf("data_publicacao")>-1){
+          if(key.indexOf("ugrhi")>-1 || key.indexOf("data_publicacao")>-1 || key.indexOf("latitude")>-1 || key.indexOf("longitude") > -1 || key.indexOf("distance") > -1 || key.indexOf("location") > -1){
             field_name = key;
           }
           else{
             field_name = key + ".keyword";
           }
-          console.log(field_name," => ",value);
 
-          let obj = {};
-          obj[field_name]= value;
-          must_filter.push({match: obj});
+          if(key.indexOf("latitude") == -1 && key.indexOf("longitude") == -1 && key.indexOf("distance") == -1 && key.indexOf("location")){
+            let obj = {};
+            obj[field_name]= value;
+            must_filter.push({match: obj});
+          }
+          else{
+            //Forcing unit distance in kilometers
+            if(field_name == "distance"){
+              value = value + "km";
+            }
+
+            let obj = {};
+            //geo_filter[field_name] = value;
+            obj[field_name] = value;
+            Object.assign(geo_filter, obj);
+          }
         }
       }
+      
+      if(!isEmpty(geo_filter)){
+        console.log("GeoFilter: ", geo_filter);
+        must_filter.push({geo_distance: geo_filter});
+      }
 
-      //console.log("Obj: ", must_filter);
+      console.log("Filter: ", must_filter);
 
       const rst = await elasticClient.search({
         index: 'outorgas',

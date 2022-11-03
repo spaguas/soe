@@ -154,13 +154,17 @@
     </head>
     <body class="bg-light">
       
-      <nav class="navbar navbar-dark bg-dark fixed-top ">
-
-          <form class="container-fluid justify-content-start">
+      <nav class="navbar navbar-dark bg-dark fixed-top">
+        
+          <form class="container-fluid d-flex justify-content-center">
             <span class="navbar-text">
               <a class="navbar-brand" href="#">SOE-DAEE</a>
             </span>
-            
+
+            <span class="navbar-text d-none d-lg-block me-2">
+              Visualizador de Atos de Outorgas e Cadastros
+            </span>
+
             <button class="btn btn-outline-secondary me-2" type="button" data-bs-toggle="modal" data-bs-target="#modal-tabela-outorgas" aria-controls="offcanvasBottom">
               <i class="bi bi-table text-primary"></i>
             </button>
@@ -169,10 +173,15 @@
               <i class="bi bi-search text-success"></i>
             </button>
 
+            <button  class="btn btn-outline-secondary me-2" type="button" data-bs-toggle="modal" data-bs-target="#modal-coords" aria-controls="offcanvasNavbar">
+              <!--<span class="navbar-toggler-icon"></span>-->
+              <i class="bi bi-geo-fill text-warning"></i>
+            </button>
             <!--<button  class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modal-help" aria-controls="offcanvasNavbar">
               <i class="bi bi-book text-warning"></i>
             </button>-->
           </form>
+
       </nav>
 
       <!-- Modal -->
@@ -356,6 +365,55 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               <button type="button" class="btn btn-primary" id="btn_filter">Filtrar Outorgas</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="modal-coords" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Filtro Geo</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="form_geo" action="#" method="GET">
+                <!--<div class="mb-3">
+                  <label for="nro_requerimento" class="form-label">Número de Requerimento</label>
+                  <input type="text" class="form-control" id="nro_requerimento" name="nro_requerimento" aria-describedby="emailHelp">
+                  <div id="nro_requerimento_help" class="form-text">Código que identifica a outorga.</div>
+                </div>-->
+                
+                <div class="mb-3">
+                  <label for="latitude" class="form-label">Latitude</label>
+                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  <input type="text" id="latitude" onchange="updateLocationValue()" onkeyup="updateLocationValue()" class="form-control">
+
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="longitude" class="form-label">Longitude</label>
+                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  <input type="text" id="longitude" onchange="updateLocationValue()" onkeyup="updateLocationValue()" class="form-control">
+
+                  </select>
+                </div>
+
+                <input type="hidden" name="location" id="location" value="" />
+
+                <div class="mb-3">
+                  <label for="distance" class="form-label">Raio de Busca (km) => <span id="txt_raio_km"></span></label>
+                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                  <input name="distance" id="distance" type="range" oninput="changeRaioText('#txt_raio_km',this.value)" onchange="changeRaioText('#txt_raio_km',this.value)" min="0.1" max="50" step="0.1" value="50" html5=true class="form-control"></input>
+                </div>
+
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <button type="button" class="btn btn-primary" id="btn_filter_geo">Filtrar</button>
             </div>
           </div>
         </div>
@@ -593,9 +651,11 @@
 
         let ugrhiLayer = L.layerGroup([]);
         let municipioLayer = L.layerGroup([]);
+        let geo_distance_groups = L.layerGroup([]);
 
         municipioLayer.addTo(map);
         ugrhiLayer.addTo(map);
+        geo_distance_groups.addTo(map);
 
         populateMunicipiosSelect();
         populateUgrhisSelect();
@@ -608,6 +668,8 @@
         let outorgas_table_obj = [];
         
         var hash = new L.Hash(map);
+
+        
 
         let outorgas;
                 
@@ -757,6 +819,11 @@
         $("#btn_filter").on('click', function(e){
           console.log("Filter Button Clicked...");
           $("#form_search").submit();
+        });
+
+        $("#btn_filter_geo").on('click', function(e){
+          console.log("Filter Geo Clicked...");
+          $("#form_geo").submit();
         });
 
         function getIconClassByFinalidade(finalidade){
@@ -1137,6 +1204,34 @@
           $("#ugrhi").val(params.get("ugrhi")).change();
           $("#data_publicacao").val(params.get("data_publicacao"));
           $("#tipo_uso").val(params.get("tp_uso_subtipo1"));
+
+          if(params.get("location")){
+            let location = params.get("location").replaceAll("POINT ","").replaceAll("(","").replaceAll(")","").split(" ");
+            console.log("Location: ", location);
+            $("#latitude").val(location[1]);
+            $("#longitude").val(location[0]);
+          }
+          
+          $("#distance").val(params.get("distance"));
+
+          changeRaioText("#txt_raio_km", params.get("distance"));
+          updateLocationValue();
+        }
+
+        function updateLocationValue(){
+          let lat = $("#latitude").val();
+          let lon = $("#longitude").val();
+
+          $("#location").val("POINT ("+lon+" "+lat+")");
+
+          let distance_in_meters = parseFloat($("#distance").val())*1000;
+          geo_distance_groups.clearLayers();
+          geo_distance_groups.addLayer(L.circle([lat,lon],{radius: distance_in_meters}));
+        }
+
+        function changeRaioText(target,value){
+          const output = document.querySelector(""+target);
+          output.textContent = value;
         }
 
         function renderCustomInfo(){
