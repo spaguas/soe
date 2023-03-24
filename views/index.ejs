@@ -674,6 +674,17 @@
         
 
         let outorgas;
+
+        $("#nro_requerimento").on('keyup', function(e){
+          let value = $("#nro_requerimento").val();
+
+          if(value.length > 0){
+            $("#municipio #finalidade #tipo_uso #data_publicacao").prop( "disabled", true );
+          }
+          else{
+            $("#municipio #finalidade #tipo_uso #data_publicacao").prop( "disabled", false );
+          }
+        });
                 
         if(rst != ""){
           outorgas = JSON.parse(rst.replaceAll("&#34;","\""));
