@@ -797,9 +797,9 @@
             //console.log(marker);
             //Append Data to Table
             markers.addLayer(marker);
-            if($("#municipio").val() != ''){
+            //if($("#municipio").val() != ''){
               bounds.extend([element._source.latitude, element._source.longitude]);
-            }
+            //}
           });
 
           $('#tabela-outorgas').DataTable({
@@ -818,14 +818,11 @@
 
           map.addLayer(markers);
           if(bounds.isValid()){
-            map.fitBounds(bounds);            
-            
+            map.fitBounds(bounds);
+
             loadUgrhiLayer();
             loadMunicipioLayer();
-
-            renderCustomInfo();
-
-            
+            renderCustomInfo();                       
           }
         }
 
@@ -1241,7 +1238,11 @@
 
           let distance_in_meters = parseFloat($("#distance").val())*1000;
           geo_distance_groups.clearLayers();
-          geo_distance_groups.addLayer(L.circle([lat,lon],{radius: distance_in_meters}));
+
+          let circle = L.circle([lat,lon],{radius: distance_in_meters});
+          geo_distance_groups.addLayer(circle);
+
+          map.fitBounds(circle.getBounds());
         }
 
         function changeRaioText(target,value){
