@@ -27,7 +27,7 @@ router.get('/', function(req, res, next) {
             field_name = key + ".keyword";
           }
 
-          if(key.indexOf("latitude") == -1 && key.indexOf("longitude") == -1 && key.indexOf("distance") == -1 && key.indexOf("location")){
+          if(key.indexOf("latitude") == -1 && key.indexOf("longitude") == -1 && key.indexOf("distance") == -1 && key.indexOf("location") == -1){
             let obj = {};
             obj[field_name]= value;
             must_filter.push({match: obj});
@@ -43,6 +43,9 @@ router.get('/', function(req, res, next) {
             obj[field_name] = value;
             Object.assign(geo_filter, obj);
           }
+        }
+        else{
+          console.error("Value is empty => ", value);
         }
       }
       

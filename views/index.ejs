@@ -1028,6 +1028,7 @@
         function renderRowToTable(target,data){
           let row = "";
           row += "<tr>";
+            row += "<td>"+data.nro_requerimento+"</td>";
             row += "<td>"+data.uso_id+"</td>";
             row += "<td>"+data.municipio+"</td>";
             row += "<td>"+getUgrhi(data.ugrhi)+"</td>";
@@ -1202,6 +1203,7 @@
           //let q = params.get("municipio");
           //console.log(q)
 
+          $("#nro_requerimento").val(params.get("nro_requerimento")).change();
           $("#municipio").val(params.get("cod_ibge")).change();
           $("#ugrhi").val(params.get("ugrhi")).change();
           $("#data_publicacao").val(params.get("data_publicacao"));
