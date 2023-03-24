@@ -1198,7 +1198,7 @@
         function populateMunicipiosSelect(){
           $("#municipio").empty();
 
-          //$("#municipio").append("<option value=''>-</option>");
+          $("#municipio").append("<option value=''>-</option>");
           $.each(municipios.municipios, function(k,v){
             
             let obj = "<option value='"+v.codigo_ibge +"'>"+v.nome+"</option>";
