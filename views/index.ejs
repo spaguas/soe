@@ -679,10 +679,10 @@
           let value = $("#nro_requerimento").val();
 
           if(value.length > 0){
-            $("#municipio #finalidade #tipo_uso #data_publicacao").prop( "disabled", true );
+            $("#municipio,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", true );
           }
           else{
-            $("#municipio #finalidade #tipo_uso #data_publicacao").prop( "disabled", false );
+            $("#municipio,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", false );
           }
         });
                 
