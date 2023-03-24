@@ -207,6 +207,7 @@
                   <table class="table table-bordered table-sm">
                     
                     <tbody>
+                      
                       <tr>
                         <th>Cidade</th><td class="info-municipio">-</td>
                       </tr>
@@ -292,11 +293,11 @@
             </div>
             <div class="modal-body">
               <form id="form_search" action="#" method="GET">
-                <!--<div class="mb-3">
+                <div class="mb-3">
                   <label for="nro_requerimento" class="form-label">Número de Requerimento</label>
                   <input type="text" class="form-control" id="nro_requerimento" name="nro_requerimento" aria-describedby="emailHelp">
                   <div id="nro_requerimento_help" class="form-text">Código que identifica a outorga.</div>
-                </div>-->
+                </div>
                 
                 <div class="mb-3">
                   <label for="municipio" class="form-label">Município</label>
@@ -449,6 +450,7 @@
               <table id="tabela-outorgas" class="table table-bordered table-sm display compact">
                 <thead>
                   <tr>
+                    <th>Id</th>
                     <th>Uso</th>
                     <th>Cidade</th>
                     <th>Ugrhi</th>
@@ -723,7 +725,7 @@
 
               md.show();            
               
-              $("#infoOutorga").find(".modal-title").html("Código do Uso: "+element._source.uso_id);
+              $("#infoOutorga").find(".modal-title").html("Requerimento: "+element._source.uid+" - Código do Uso: "+element._source.uso_id);
               $("#infoOutorga").find(".modal-body").find(".table-vazoes").empty();
 
               $(".info-municipio").html(opts._source.municipio);
