@@ -10,8 +10,9 @@ const elasticClient = new Client({
     password: process.env.ELASTIC_PASSWORD,
   },
   maxRetries: 5,
-  requestTimeout: 60000,
-  sniffOnStart: true
+  requestTimeout: 6000,
+  //sniffOnStart: true,
+  //proxy: process.env.ELASTIC_PROXY
 });
 
 
