@@ -8,7 +8,10 @@ const elasticClient = new Client({
   auth: {
     username: process.env.ELASTIC_USERNAME,
     password: process.env.ELASTIC_PASSWORD,
-  }
+  },
+  maxRetries: 5,
+  requestTimeout: 60000,
+  sniffOnStart: true
 });
 
 

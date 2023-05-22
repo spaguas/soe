@@ -48,8 +48,6 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
-    
-
     <script src="municipios.js"></script>
     <script src="ugrhis.js"></script>
 
@@ -976,7 +974,8 @@
         }
 
         function loadMunicipioLayer(){
-          let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteMunicipal&maxFeatures=700&outputFormat=application%2Fjson";
+          //let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteMunicipal&maxFeatures=700&outputFormat=application%2Fjson";
+          let url = "./municipios/"+$("#municipio").val();
 
           let filter_cql = {};
 
@@ -986,7 +985,7 @@
             $.ajax({
               url: url,
               cache: true,
-              data: filter_cql,
+              //data: filter_cql,
               beforeSend: function(){
                 municipioLayer.clearLayers();
               },

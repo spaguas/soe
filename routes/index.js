@@ -1,6 +1,30 @@
 var express = require('express');
 var router = express.Router();
 var elasticClient = require('../backend/elastic-client');
+var municipios_json = require('../public/geojson/municipios.json');
+
+router.get('/municipios/:cod_ibge', function(req,res,next){
+
+  async function run(){
+    console.log("Search Municipios...");
+
+    let features = [];
+    console.log("Params: ", req.params);
+   
+    for(let i = 0; i < municipios_json.features.length; i++){
+      let element = municipios_json.features[i];
+      
+      if(element.properties.codarea == req.params['cod_ibge']){
+        console.log("Element => ", element.properties.codarea," => ", req.params['cod_ibge']);
+        features.push(element);
+      }
+    }
+   
+    res.render('municipios', { title: 'SOE-DAEE', municipios: JSON.stringify(features) });
+  }
+  run().catch(console.log);
+})
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -44,9 +68,9 @@ router.get('/', function(req, res, next) {
             Object.assign(geo_filter, obj);
           }
         }
-        else{
+        /*else{
           console.error("Value is empty => ", value);
-        }
+        }*/
       }
       
       if(!isEmpty(geo_filter)){
