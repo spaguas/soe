@@ -354,9 +354,16 @@
                 </div>
 
                 <div class="mb-3">
-                  <label for="data_publicacao" class="form-label">Data de Publicação</label>
-                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                  <input name="data_publicacao" id="data_publicacao" type="date" html5=true class="form-control"></input>
+                  <div class="row">
+                    <div class="col">
+                      <label for="data_publicacao" class="form-label">Publicado De</label>
+                      <input name="data_publicacao_gte" id="data_publicacao" type="date" html5=true class="form-control"></input>
+                    </div>
+                    <div class="col">
+                      <label for="data_publicacao" class="form-label">Publicado Até</label>
+                      <input name="data_publicacao_lte" id="data_publicacao" type="date" html5=true class="form-control"></input>
+                    </div>
+                  </div>
                 </div>
 
               </form>
@@ -364,6 +371,7 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               <button type="button" class="btn btn-primary" id="btn_filter">Filtrar Outorgas</button>
+              
             </div>
           </div>
         </div>
@@ -387,7 +395,7 @@
                 <div class="mb-3">
                   <label for="latitude" class="form-label">Latitude</label>
                   <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                  <input type="text" id="latitude" onchange="updateLocationValue()" onkeyup="updateLocationValue()" class="form-control">
+                  <input type="text" id="latitude" placeholder="-22.1231" onchange="updateLocationValue()" onkeyup="updateLocationValue()" class="form-control">
 
                   </select>
                 </div>
@@ -395,7 +403,7 @@
                 <div class="mb-3">
                   <label for="longitude" class="form-label">Longitude</label>
                   <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                  <input type="text" id="longitude" onchange="updateLocationValue()" onkeyup="updateLocationValue()" class="form-control">
+                  <input type="text" id="longitude" placeholder="-44.3231" onchange="updateLocationValue()" onkeyup="updateLocationValue()" class="form-control">
 
                   </select>
                 </div>
@@ -411,6 +419,7 @@
               </form>
             </div>
             <div class="modal-footer">
+              <button type="button" class="btn btn-success" id="btn_my_coords">Minha Localização</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               <button type="button" class="btn btn-primary" id="btn_filter_geo">Filtrar</button>
             </div>
@@ -826,7 +835,21 @@
 
         $("#btn_filter").on('click', function(e){
           console.log("Filter Button Clicked...");
+          
+          $("#btn_filter").append(" <span class=\"spinner-grow spinner-grow-sm\" role=\"status\" aria-hidden=\"true\"></span>");
           $("#form_search").submit();
+        });
+        
+        $("#btn_my_coords").on("click", function(e){
+          navigator.geolocation.getCurrentPosition((position) => {
+            let lat = position.coords.latitude;
+            let long = position.coords.longitude;
+
+            $("#latitude").val(lat);
+            $("#longitude").val(long);
+
+            updateLocationValue();
+          });
         });
 
         $("#btn_filter_geo").on('click', function(e){
@@ -1189,9 +1212,11 @@
 
           $("#nro_requerimento").val(params.get("nro_requerimento")).change();
           $("#municipio").val(params.get("cod_ibge")).change();
-          $("#ugrhi").val(params.get("ugrhi")).change();
-          $("#data_publicacao").val(params.get("data_publicacao"));
+          //$("#ugrhi").val(params.get("ugrhi")).change();
+          $('[name="data_publicacao_lte"]').val(params.get("data_publicacao_lte"));
+          $('[name="data_publicacao_gte"]').val(params.get("data_publicacao_gte"));
           $("#tipo_uso").val(params.get("tp_uso_subtipo1"));
+          $("#finalidade").val(params.get("finalidade_1630"));
 
           if(params.get("location")){
             let location = params.get("location").replaceAll("POINT ","").replaceAll("(","").replaceAll(")","").split(" ");
@@ -1216,7 +1241,15 @@
           geo_distance_groups.clearLayers();
 
           let circle = L.circle([lat,lon],{radius: distance_in_meters});
+          let marker = L.marker([lat,lon],{           
+            icon: L.BeautifyIcon.icon({
+              iconShape: 'circle-dot',
+              borderWidth: 5,
+              borderColor: 'blue'
+            })
+          });
           geo_distance_groups.addLayer(circle);
+          geo_distance_groups.addLayer(marker);
 
           map.fitBounds(circle.getBounds());
         }

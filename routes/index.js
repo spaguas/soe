@@ -39,6 +39,7 @@ router.get('/', function(req, res, next) {
     let outorgas = [];
     let must_filter = [];
     let geo_filter = {};
+    let date_filter = {};
 
     // Basic Authentication credentials
     const username = process.env.ELASTIC_USERNAME;
@@ -63,10 +64,17 @@ router.get('/', function(req, res, next) {
             field_name = key + ".keyword";
           }
 
-          if(key.indexOf("latitude") == -1 && key.indexOf("longitude") == -1 && key.indexOf("distance") == -1 && key.indexOf("location") == -1){
+          if(key.indexOf("data_publicacao") == -1 && key.indexOf("latitude") == -1 && key.indexOf("longitude") == -1 && key.indexOf("distance") == -1 && key.indexOf("location") == -1){
             let obj = {};
             obj[field_name]= value;
             must_filter.push({match: obj});
+          }
+          else if(key.indexOf("data_publicacao") > -1){
+            let stx = field_name.split("_");
+            let obj = {};
+            obj[stx[2]] = value;
+            
+            Object.assign(date_filter, obj);
           }
           else{
             //Forcing unit distance in kilometers
@@ -88,6 +96,13 @@ router.get('/', function(req, res, next) {
       if(!isEmpty(geo_filter)){
         console.log("GeoFilter: ", geo_filter);
         must_filter.push({geo_distance: geo_filter});
+      }
+
+      if(!isEmpty(date_filter)){
+        console.log("DateFilter: ", date_filter);
+        let obj = {range: {data_publicacao: date_filter}};
+        console.log(obj);
+        must_filter.push(obj);
       }
 
       console.log("Filter: ", must_filter);
