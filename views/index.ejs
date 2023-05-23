@@ -39,11 +39,14 @@
     <!-- Include Datatables -->
     <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css" />
+    <link href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css" />
+
     <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script> 
 
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -147,6 +150,21 @@
 			color: #116600;
 			text-decoration: underline;
 		}
+
+    table.dataTable td{
+      font-size: 12px;
+    }
+
+    table.dataTable th{
+      font-size: 12px;
+    }
+
+    /* Ensure that the demo table scrolls */
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+    }
     </style>
 
     </head>
@@ -454,7 +472,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <table id="tabela-outorgas" class="table table-bordered table-sm display compact">
+              <table id="tabela-outorgas" class="table table-bordered table-sm display compact row-border order-column" style="width:100%">
                 <thead>
                   <tr>
                     <th>Id</th>
@@ -471,19 +489,68 @@
                     <th>Data Publicação</th>
                     <th>Volume Anual</th>
                     <th>Vazão(m³/h)</th>
+                    
+                    <th>Jan(dias)</th>
+                    <th>Jan(horas)</th>
+                    <th>Jan(mins)</th>
                     <th>Jan(m³)</th>
+                    
+                    <th>Fev(dias)</th>
+                    <th>Fev(horas)</th>
+                    <th>Fev(mins)</th>
                     <th>Fev(m³)</th>
+                    
+                    <th>Mar(dias)</th>
+                    <th>Mar(horas)</th>
+                    <th>Mar(mins)</th>
                     <th>Mar(m³)</th>
+
+                    <th>Abr(dias)</th>
+                    <th>Abr(horas)</th>
+                    <th>Abr(mins)</th>
                     <th>Abr(m³)</th>
+
+                    <th>Mai(dias)</th>
+                    <th>Mai(horas)</th>
+                    <th>Mai(mins)</th>
                     <th>Mai(m³)</th>
+
+                    <th>Jun(dias)</th>
+                    <th>Jun(horas)</th>
+                    <th>Jun(mins)</th>
                     <th>Jun(m³)</th>
+
+                    <th>Jul(dias)</th>
+                    <th>Jul(horas)</th>
+                    <th>Jul(mins)</th>
                     <th>Jul(m³)</th>
+
+                    <th>Ago(dias)</th>
+                    <th>Ago(horas)</th>
+                    <th>Ago(mins)</th>
                     <th>Ago(m³)</th>
+
+                    <th>Set(dias)</th>
+                    <th>Set(horas)</th>
+                    <th>Set(mins)</th>
                     <th>Set(m³)</th>
+
+                    <th>Out(dias)</th>
+                    <th>Out(horas)</th>
+                    <th>Out(mins)</th>
                     <th>Out(m³)</th>
+
+                    <th>Nov(dias)</th>
+                    <th>Nov(horas)</th>
+                    <th>Nov(mins)</th>
                     <th>Nov(m³)</th>
+
+                    <th>Dez(dias)</th>
+                    <th>Dez(horas)</th>
+                    <th>Dez(mins)</th>
                     <th>Dez(m³)</th>
                   </tr>
+                  
                 </thead>
                 <tbody>
 
@@ -707,6 +774,12 @@
               let hours = source["hd_"+x];
               let mins  = source["minh_"+x];
               let vaz   = source["vz_"+x];
+
+              days = (days != '' && days != 'null' && days != null) ? days : 0;
+              hours = (hours != '' && hours != 'null' && hours != null) ? hours : 0;
+              mins = (mins != '' && mins != 'null' && mins != null) ? mins : 0;
+              vaz = (vaz != '' && vaz != 'null' && vaz != null) ? vaz : 0;
+
               let dis   = days * (hours + (mins/60)) * vaz;
 
               discharges.push({
@@ -809,19 +882,7 @@
             
           });
 
-          $('#tabela-outorgas').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel'
-            ],
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json'
-            },
-            fnInitComplete: function(){
-              $('div.toolbar').html('<button class="btn btn-success"><i class="bi bi-trash"></i></button>');
-              $(".dt-buttons").find("button").addClass("btn btn-outline-success");
-            }
-          });
+          
 
           map.addLayer(markers);
           if(bounds.isValid()){
@@ -830,6 +891,21 @@
             renderCustomInfo();                       
 
             map.fitBounds(bounds);
+
+            $('#tabela-outorgas').DataTable({
+              pageLength: 15,
+              dom: 'Bfrtip',
+              buttons: [
+                  'copy', 'csv', 'excel'
+              ],
+              language: {
+                  url: 'https://cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json'
+              },
+              fnInitComplete: function(){
+                $('div.toolbar').html('<button class="btn btn-success"><i class="bi bi-trash"></i></button>');
+                $(".dt-buttons").find("button").addClass("btn btn-outline-success");
+              }
+            });
           }
         }
 
@@ -1053,10 +1129,28 @@
             
             if(data.vazao_max){ row += "<td>"+data.vazao_max.vazao.toLocaleString()+"</td>"; }else{ row += "<td>-</td>"; }
 
-            $.each(data.vazoes, function(k,v){
+            //console.log("Vazões: ", data.vazoes);
+            /*$.each(data.vazoes, function(k,v){
               //let mes = (k+1);
+              
+              row += "<td>"+(v.dias > 0) ? v.dias : "-" +"</td>";
+              row += "<td>"+v.horas+"</td>";
+              row += "<td>"+v.minutos+"</td>";
               row += "<td>"+v.volume.toLocaleString()+"</td>";
-            });
+
+              console.log("Vazão: ", v);
+            });*/
+
+            for(let i = 0; i < 12; i++){
+              let v = data.vazoes[i];
+
+              row += "<td>"+v.dias+"</td>";
+              row += "<td>"+v.horas +"</td>";
+              row += "<td>"+v.minutos+"</td>";
+              row += "<td>"+v.volume.toLocaleString()+"</td>";
+
+              console.log("Vazão["+i+"]: ", v);
+            }
 
           row += "</tr>";
 
