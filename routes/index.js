@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var elasticClient = require('../backend/elastic-client');
 var municipios_json = require('../public/geojson/municipios.json');
+
 var axios = require('axios');
 require("dotenv").config();
 
@@ -22,7 +23,7 @@ router.get('/municipios/:cod_ibge', function(req,res,next){
       }
     }
    
-    res.render('municipios', { title: 'SOE-DAEE', municipios: JSON.stringify(features) });
+    res.render('municipios', { title: 'SOE-DAEE', municipios: JSON.stringify(features[0]) });
   }
   run().catch(console.log);
 })
@@ -34,15 +35,19 @@ router.get('/', function(req, res, next) {
   async function run(){
 
     console.log("Starting Async Search => ",req.query);
-    let rsts = [];
+
     let outorgas = [];
     let must_filter = [];
     let geo_filter = {};
 
     // Basic Authentication credentials
-    const username = 'elastic';
-    const password = 'changeme';
+    const username = process.env.ELASTIC_USERNAME;
+    const password = process.env.ELASTIC_PASSWORD;
+    
     let scrollId = null; // Scroll ID for subsequent requests
+
+    let totalHits;
+    let hits;
 
     if(!isEmpty(req.query)){
 
@@ -95,7 +100,7 @@ router.get('/', function(req, res, next) {
       const pageSize = 10; // Number of documents per page
       
 
-      axios.post(`${elasticsearchUrl}/${indexName}/_search?scroll=5m`,{
+      axios.post(`${elasticsearchUrl}/${indexName}/_search?scroll=1m`,{
         size: pageSize,
         query: {
           bool:{
@@ -110,8 +115,8 @@ router.get('/', function(req, res, next) {
       }).then(function (response) {
 
         // Handle the initial search response
-        const hits = response.data.hits.hits;
-        const totalHits = response.data.hits.total.value;
+        hits = response.data.hits.hits;
+        totalHits = response.data.hits.total.value;
         scrollId = response.data._scroll_id;
         
         console.log('Total hits:', totalHits);
@@ -119,7 +124,11 @@ router.get('/', function(req, res, next) {
         console.log("Outorgas: "+outorgas.length+"/"+totalHits);
         console.log('Scroll Id: '+scrollId);
 
-        outorgas.push(...hits);       
+        outorgas.push(...hits);
+        
+        performScrollRequest(scrollId, totalHits);
+        
+        
 
       }).catch(error => {
         // Handle the error
@@ -127,11 +136,11 @@ router.get('/', function(req, res, next) {
       });
 
       // Perform subsequent scroll requests for pagination
-      function performScrollRequest(scrollId) {
+      function performScrollRequest(scrollId, totalHits) {
         console.log("Scrolling to: ", scrollId);
 
         axios.post(`${elasticsearchUrl}/_search/scroll`, {
-          scroll: '5m',
+          scroll: '1m',
           scroll_id: scrollId,
         },{
           auth: {
@@ -146,21 +155,19 @@ router.get('/', function(req, res, next) {
             outorgas.push(...hits);
             
             // If there are more records, fetch them recursively
-            while (outorgas.length < totalHits) {
+            if (outorgas.length < totalHits) {
               console.log("Loading => "+outorgas.length+"/"+totalHits);
               scrollId = response.data._scroll_id;
-              performScrollRequest(scrollId);
+              performScrollRequest(scrollId, totalHits);
+            }else{           
+              //cleanUpScrollContext(scrollId);
+              console.log("Render Outorgas Page");
+              res.render('index', { title: 'SOE-DAEE', outorgas: JSON.stringify(outorgas).replaceAll("&#34;","\"") });
             }
-            
-            console.log("Render Outorgas Page");
-            res.render('index', { title: 'SOE-DAEE', outorgas: JSON.stringify(outorgas).replaceAll("&#34;","\"") });
-            
-
-            
           })
           .catch(error => {
             // Handle the error
-            console.error('Error performing scroll:', error.response.statusText);
+            console.error('Error performing scroll:', error);
           });
       }
 
@@ -169,6 +176,11 @@ router.get('/', function(req, res, next) {
         console.log('Scroll context cleaned up');
         axios.delete(`${elasticsearchUrl}/_search/scroll`, {
           data: { scroll_id: scrollId },
+        },{
+          auth: {
+            username: username,
+            password: password,
+          },
         })
           .then(response => {
             // Handle the scroll cleanup response
@@ -181,9 +193,9 @@ router.get('/', function(req, res, next) {
       }
 
       // Call the scroll request after the initial search request
-      if(scrollId != null){
-        performScrollRequest(scrollId);
-      }
+      
+      
+      
       // const rst = await elasticClient.search({
       //   index: 'outorgas',
       //   // keep the search results "scrollable" for 30 seconds

@@ -795,9 +795,9 @@
             //console.log(marker);
             //Append Data to Table
             markers.addLayer(marker);
-            //if($("#municipio").val() != ''){
-              bounds.extend([element._source.latitude, element._source.longitude]);
-            //}
+            
+            bounds.extend([element._source.latitude, element._source.longitude]);
+            
           });
 
           $('#tabela-outorgas').DataTable({
@@ -816,11 +816,11 @@
 
           map.addLayer(markers);
           if(bounds.isValid()){
-            map.fitBounds(bounds);
-
-            loadUgrhiLayer();
+            //loadUgrhiLayer();
             loadMunicipioLayer();
             renderCustomInfo();                       
+
+            map.fitBounds(bounds);
           }
         }
 
@@ -980,47 +980,24 @@
           let filter_cql = {};
 
           if($("#municipio").val() != ""){
-            filter_cql['cql_filter'] = "Cod_ibge = "+parseInt($("#municipio").val());
-            console.log("Filter CQL: ", filter_cql);
-            $.ajax({
-              url: url,
-              cache: true,
-              //data: filter_cql,
-              beforeSend: function(){
-                municipioLayer.clearLayers();
-              },
-              success: function(data){
-                console.log("Municipios: ", data);
-                //localStorage.setItem('municipios_geo', JSON.stringify(data));
-                var ll = L.geoJSON(data, {
-                    onEachFeature: function(feature,layer){
-                      if(feature.properties.Cod_ibge == $("#municipio").val()){
-                        map.fitBounds(layer.getBounds());
-                      }
-                    },
-                    filter: function(feature){
-                      if(feature != undefined && feature.properties != undefined){
-                        return feature.properties.Cod_ibge == $("#municipio").val()
-                      }else{
-                        return false;
-                      }
-                    },
-                    style: function (feature) {
-                        return {color: '#cc22ff', opacity: 0.5};
-                    }
-                }).bindPopup(function (layer) {
-                    return layer.feature.properties;
-                });
+            $.get(url).then(response => {
+              municipioLayer.clearLayers();
 
-                municipioLayer.addLayer(ll);
-              },
-              complete: function(){
-                console.log("Municipios Layers Loaded...",municipioLayer);
+              let res = JSON.parse(response.replaceAll("&#34;","\""));              
+              let ll = L.geoJSON(res,{
+                style: function(feature){
+                  return {
+                    backgroundColor: 'red'
+                  }
+                }
+              });
+              municipioLayer.addLayer(ll);
 
-                console.log(municipioLayer.getLayers())
-                
-              }
-            });
+              map.fitBounds(municipioLayer.getLayers()[0].getBounds());
+
+            }).catch(error => {
+              console.error(error);
+            })
           }
         }
 
