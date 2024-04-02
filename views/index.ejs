@@ -1325,7 +1325,9 @@
           $.each(ugrhis.ugrhis, function(k,v){
             let obj = "<option value='"+v.codigo+"'>"+v.nome+"</option>";
             //console.log(obj);
-            $("#ugrhi").append(obj);
+            if(v.codigo != 99 && v.codigo != 9999){
+              $("#ugrhi").append(obj);
+            }
           });
         }
 
