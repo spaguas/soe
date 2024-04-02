@@ -315,63 +315,59 @@
                   <div id="nro_requerimento_help" class="form-text">Código que identifica a outorga.</div>
                 </div>
                 
-                <div class="mb-3">
-                  <label for="municipio" class="form-label">Município</label>
-                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                  <select name="cod_ibge" id="municipio" class="form-control">
-
-                  </select>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="municipio" class="form-label">Município</label>
+                    <select name="cod_ibge" id="municipio" class="form-control">  
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="ugrhi" class="form-label">Ugrhis</label>                  
+                    <select name="ugrhi" id="ugrhi" class="form-control"></select>
+                  </div>                 
                 </div>
 
-                <div class="mb-3">
-                  <label for="ugrhi" class="form-label">Ugrhis</label>
-                  
-                  <select name="ugrhi" id="ugrhi" class="form-control">
-
-                  </select>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="finalidade" class="form-label">Finalidade</label>
+                    <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                    <select name="finalidade_1630" id="finalidade" class="form-control">,
+                      <option value="">-</option>
+                      <option value="Urbano">Urbano</option>
+                      <option value="Irrigação">Irrigação</option>
+                      <option value="Industrial">Industrial</option>
+                      <option value="Doméstico">Doméstico</option>
+                      <option value="Aquicultura">Aquicultura</option>
+                      <option value="Outros">Outros</option>
+                      <option value="Comércio e Serviços">Comércio e Serviços</option>
+                      <option value="Recreação e Paisagismo">Recreação e Paisagismo</option>
+                      <option value="Regularização de Nível">Regularização de Nível</option>
+                      <option value="Mineração">Mineração</option>
+                      <option value="Rural">Rural</option>
+                      <option value="Controle de Cheias">Controle de Cheias</option>
+                      <option value="Geração de Energia">Geração de Energia</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="tipo_uso" class="form-label">Tipo de Uso</label>
+                    <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
+                    <select name="tp_uso_subtipo1" id="tipo_uso" class="form-control">,
+                      <option value="">-</option>
+                      <option value="Poço Tubular">Poço Tubular</option>
+                      <option value="Captação Superficial">Captação Superficial</option>
+                      <option value="Estrutura de Reservação">Estrutura de Reservação</option>
+                      <option value="Lançamento de Efluentes">Lançamento de Efluentes</option>
+                      <option value="Outros">Outros</option>
+                      <option value="Poço Escavado (cisterna/cacimba)">Poço Escavado (cisterna/cacimba)</option>
+                      <option value="Barramento Sem PNSB">Barramento Sem PNSB</option>
+                      <option value="Extração de Minério">Extração de Minério</option>
+                      <option value="Reversão entre Corpos de Água">Reversão entre Corpos de Água</option>
+                      <option value="Extração de Minério em Cava">Extração de Minério em Cava</option>
+                      <option value="Barramento">Barramento</option>
+                      <option value="Ponteira">Ponteira</option>
+                    </select>
+                  </div>
                 </div>
-
-                <div class="mb-3">
-                  <label for="finalidade" class="form-label">Finalidade</label>
-                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                  <select name="finalidade_1630" id="finalidade" class="form-control">,
-                    <option value="">-</option>
-                    <option value="Urbano">Urbano</option>
-                    <option value="Irrigação">Irrigação</option>
-                    <option value="Industrial">Industrial</option>
-                    <option value="Doméstico">Doméstico</option>
-                    <option value="Aquicultura">Aquicultura</option>
-                    <option value="Outros">Outros</option>
-                    <option value="Comércio e Serviços">Comércio e Serviços</option>
-                    <option value="Recreação e Paisagismo">Recreação e Paisagismo</option>
-                    <option value="Regularização de Nível">Regularização de Nível</option>
-                    <option value="Mineração">Mineração</option>
-                    <option value="Rural">Rural</option>
-                    <option value="Controle de Cheias">Controle de Cheias</option>
-                    <option value="Geração de Energia">Geração de Energia</option>
-                  </select>
-                </div>
-
-                <div class="mb-3">
-                  <label for="tipo_uso" class="form-label">Tipo de Uso</label>
-                  <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                  <select name="tp_uso_subtipo1" id="tipo_uso" class="form-control">,
-                    <option value="">-</option>
-                    <option value="Poço Tubular">Poço Tubular</option>
-                    <option value="Captação Superficial">Captação Superficial</option>
-                    <option value="Estrutura de Reservação">Estrutura de Reservação</option>
-                    <option value="Lançamento de Efluentes">Lançamento de Efluentes</option>
-                    <option value="Outros">Outros</option>
-                    <option value="Poço Escavado (cisterna/cacimba)">Poço Escavado (cisterna/cacimba)</option>
-                    <option value="Barramento Sem PNSB">Barramento Sem PNSB</option>
-                    <option value="Extração de Minério">Extração de Minério</option>
-                    <option value="Reversão entre Corpos de Água">Reversão entre Corpos de Água</option>
-                    <option value="Extração de Minério em Cava">Extração de Minério em Cava</option>
-                    <option value="Barramento">Barramento</option>
-                    <option value="Ponteira">Ponteira</option>
-                  </select>
-                </div>
-
                 <div class="mb-3">
                   <div class="row">
                     <div class="col">
@@ -755,13 +751,34 @@
           let value = $("#nro_requerimento").val();
 
           if(value.length > 0){
-            $("#municipio,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", true );
+            $("#municipio,#ugrhi,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", true );
           }
           else{
-            $("#municipio,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", false );
+            $("#municipio,#ugrhi,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", false );
           }
         });
-                
+        
+        $("#ugrhi,#municipio").on('change', function(e){
+          //console.log("Select Ugrhi or Municipio Changed: ", $(e.currentTarget));
+          let el = $(this);
+          let current_id = el.attr('id');
+          let current_value = el.find(":selected").val();
+
+          //console.log("Element: ", el.attr('id'))
+          if($("#ugrhi").val() == "" && $("#municipio").val() == ""){
+            $("#municipio,#ugrhi").prop("disabled", false);
+          }
+          else if(current_id == 'municipio' && current_value != ''){
+            //Disable Ugrhi
+            $("#ugrhi").prop("disabled", true);
+          }
+          else if(current_id = 'ugrhi' && current_value != ''){
+            $("#municipio").prop("disabled", true);
+          }
+
+          //console.log("Element: ", el.find(":selected").val() );
+        })
+
         if(rst != ""){
           outorgas = JSON.parse(rst.replaceAll("&#34;","\""));
 
