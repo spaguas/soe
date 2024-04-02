@@ -88,9 +88,6 @@ router.get('/', function(req, res, next) {
             Object.assign(geo_filter, obj);
           }
         }
-        /*else{
-          console.error("Value is empty => ", value);
-        }*/
       }
       
       if(!isEmpty(geo_filter)){
@@ -152,7 +149,7 @@ router.get('/', function(req, res, next) {
 
       // Perform subsequent scroll requests for pagination
       function performScrollRequest(scrollId, totalHits) {
-        console.log("Scrolling to: ", scrollId);
+        //console.log("Scrolling to: ", scrollId);
 
         axios.post(`${elasticsearchUrl}/_search/scroll`, {
           scroll: '1m',

@@ -323,13 +323,13 @@
                   </select>
                 </div>
 
-                <!--<div class="mb-3">
+                <div class="mb-3">
                   <label for="ugrhi" class="form-label">Ugrhis</label>
                   
                   <select name="ugrhi" id="ugrhi" class="form-control">
 
                   </select>
-                </div>-->
+                </div>
 
                 <div class="mb-3">
                   <label for="finalidade" class="form-label">Finalidade</label>
@@ -880,7 +880,7 @@
             //Append Data to Table
             markers.addLayer(marker);
             
-            console.log("Bounds to element: ", element._source);
+            //console.log("Bounds to element: ", element._source);
             bounds.extend([element._source.latitude, element._source.longitude]);
             
           });
@@ -889,7 +889,7 @@
 
           map.addLayer(markers);
           if(bounds.isValid()){
-            //loadUgrhiLayer();
+            loadUgrhiLayer();
             loadMunicipioLayer();
             renderCustomInfo();                       
 
@@ -1002,7 +1002,7 @@
         }
 
         function loadUgrhiLayer(){
-          let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteUgrhiDAEE&maxFeatures=50&outputFormat=application%2Fjson";
+          let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteUgrhiDAEE&maxFeatures=50000&outputFormat=application%2Fjson";
           let filter_cql = {};
 
           if($("#ugrhi").val() != ""){
@@ -1049,6 +1049,9 @@
 
               }
             });
+          }
+          else{
+            console.log("Campo de Ugrhi não preenchido!")
           }
 
           
@@ -1155,7 +1158,7 @@
               row += "<td>"+v.minutos+"</td>";
               row += "<td>"+v.volume.toLocaleString()+"</td>";
 
-              console.log("Vazão["+i+"]: ", v);
+              //console.log("Vazão["+i+"]: ", v);
             }
 
           row += "</tr>";
@@ -1316,7 +1319,7 @@
 
           $("#nro_requerimento").val(params.get("nro_requerimento")).change();
           $("#municipio").val(params.get("cod_ibge")).change();
-          //$("#ugrhi").val(params.get("ugrhi")).change();
+          $("#ugrhi").val(params.get("ugrhi")).change();
           $('[name="data_publicacao_lte"]').val(params.get("data_publicacao_lte"));
           $('[name="data_publicacao_gte"]').val(params.get("data_publicacao_gte"));
           $("#tipo_uso").val(params.get("tp_uso_subtipo1"));
