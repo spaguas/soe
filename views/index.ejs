@@ -174,7 +174,7 @@
         
           <form class="container-fluid d-flex justify-content-center">
             <span class="navbar-text">
-              <a class="navbar-brand" href="#">SOE-DAEE</a>
+              <a class="navbar-brand" href="/">SOE-DAEE</a>
             </span>
 
             <span class="navbar-text d-none d-lg-block me-2">
@@ -304,7 +304,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">SOE - Filtro Dinâmico</h5>
+              <h5 class="modal-title" id="staticBackdropLabel">Filtro Dinâmico</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -332,10 +332,11 @@
                 </div>-->
 
                 <div class="mb-3">
-                  <label for="ugrhi" class="form-label">Finalidade</label>
+                  <label for="finalidade" class="form-label">Finalidade</label>
                   <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
                   <select name="finalidade_1630" id="finalidade" class="form-control">,
                     <option value="">-</option>
+                    <option value="Urbano">Urbano</option>
                     <option value="Irrigação">Irrigação</option>
                     <option value="Industrial">Industrial</option>
                     <option value="Doméstico">Doméstico</option>
@@ -720,6 +721,9 @@
         var map = L.map('map').setView([-22.524, -46.524], 7);
         let bounds = L.latLngBounds([]);
 
+        //$('#modal-filtro').modal('show');
+        const modal_filtro = new bootstrap.Modal('#modal-filtro');
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap'
@@ -744,8 +748,6 @@
         let outorgas_table_obj = [];
         
         var hash = new L.Hash(map);
-
-        
 
         let outorgas;
 
@@ -878,6 +880,7 @@
             //Append Data to Table
             markers.addLayer(marker);
             
+            console.log("Bounds to element: ", element._source);
             bounds.extend([element._source.latitude, element._source.longitude]);
             
           });
@@ -906,6 +909,9 @@
                 $(".dt-buttons").find("button").addClass("btn btn-outline-success");
               }
             });
+          }
+          else{
+            console.log("Invalid bounds: ", bounds);
           }
         }
 
@@ -1300,9 +1306,13 @@
         function fillFormWithUrl(){
           console.log(window.location.search);
           let params = new URLSearchParams(window.location.search);
-          //console.log(params);
+          console.log(params);
           //let q = params.get("municipio");
           //console.log(q)
+
+          if(window.location.search==''){
+            modal_filtro.show();
+          }
 
           $("#nro_requerimento").val(params.get("nro_requerimento")).change();
           $("#municipio").val(params.get("cod_ibge")).change();
@@ -1323,29 +1333,33 @@
 
           changeRaioText("#txt_raio_km", params.get("distance"));
           updateLocationValue();
+
+
         }
 
         function updateLocationValue(){
           let lat = $("#latitude").val();
           let lon = $("#longitude").val();
 
-          $("#location").val("POINT ("+lon+" "+lat+")");
+          if(lat != '' && lon != ''){
+            $("#location").val("POINT ("+lon+" "+lat+")");
 
-          let distance_in_meters = parseFloat($("#distance").val())*1000;
-          geo_distance_groups.clearLayers();
-
-          let circle = L.circle([lat,lon],{radius: distance_in_meters});
-          let marker = L.marker([lat,lon],{           
-            icon: L.BeautifyIcon.icon({
-              iconShape: 'circle-dot',
-              borderWidth: 5,
-              borderColor: 'blue'
-            })
-          });
-          geo_distance_groups.addLayer(circle);
-          geo_distance_groups.addLayer(marker);
-
-          map.fitBounds(circle.getBounds());
+            let distance_in_meters = parseFloat($("#distance").val())*1000;
+            geo_distance_groups.clearLayers();
+  
+            let circle = L.circle([lat,lon],{radius: distance_in_meters});
+            let marker = L.marker([lat,lon],{           
+              icon: L.BeautifyIcon.icon({
+                iconShape: 'circle-dot',
+                borderWidth: 5,
+                borderColor: 'blue'
+              })
+            });
+            geo_distance_groups.addLayer(circle);
+            geo_distance_groups.addLayer(marker);
+  
+            map.fitBounds(circle.getBounds());
+          }          
         }
 
         function changeRaioText(target,value){
