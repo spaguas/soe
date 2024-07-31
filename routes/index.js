@@ -29,6 +29,67 @@ router.get('/municipios/:cod_ibge', function(req,res,next){
 })
 
 
+router.get('/api/list_outorgas/', function(req,res,next){
+  async function run(){
+    console.log("Starting Async Search => ", req.query);
+
+    const username = process.env.ELASTIC_USERNAME;
+    const password = process.env.ELASTIC_PASSWORD;
+
+    const elasticsearchUrl = 'https://cth.daee.sp.gov.br/elasticsearch';
+    const indexName = 'outorgas';
+    const pageSize = 100;
+    outorgas = [];
+
+    //var requestUrl = (req.params['scroll_id'] != "" && req.params['scroll_id'] != undefined) ? `${elasticsearchUrl}/${indexName}/_search/scroll?scroll=1m&scroll_id=${req.params['scroll_id']}` : `${elasticsearchUrl}/${indexName}/_search?scroll=1m`
+    
+    var requestUrl = `${elasticsearchUrl}/${indexName}/_search?scroll=1m`;
+
+    var post_params = {size: pageSize };
+    console.log("Params: ", req.params);
+    console.log("Query: ", req.query['scroll_id']);
+
+    if(req.query['scroll_id'] != undefined && req.query['scroll_id'] != ''){
+      requestUrl = `${elasticsearchUrl}/_search/scroll`;
+      post_params = {scroll: '1m', scroll_id: req.query['scroll_id'] };
+    }else{
+      requestUrl = `${elasticsearchUrl}/${indexName}/_search?scroll=1m`;
+      post_params = {size: pageSize}
+    }
+    
+    console.log("Request: ", requestUrl);
+
+    axios.post(requestUrl, post_params,{
+        auth: {
+          username: username,
+          password: password,
+        },
+    }).then(function (response) {
+      hits = response.data.hits.hits;
+      totalHits = response.data.hits.total.value;
+      scrollId = response.data._scroll_id;
+      outorgas.push(...hits);
+
+      console.log('Total hits:', totalHits);
+      console.log('Search results:', hits.length);
+      console.log("Outorgas: "+outorgas.length+"/"+totalHits);
+      console.log('Scroll Id: '+scrollId);
+
+      res.status(200).json({
+        scrollId: scrollId,
+        total: totalHits,
+        size: hits.length,
+        outorgas: parserOutorgas(outorgas)
+      })
+    }).catch(err => {
+      console.log("Error Elastic: ", err.response);
+    })
+
+  }
+
+  run().catch(console.log);
+});
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
@@ -226,6 +287,97 @@ function isEmpty(obj) {
   }
 
   return JSON.stringify(obj) === JSON.stringify({});
+}
+
+function getSazonalityTime(outorga, month, unit){
+  let zeroMonth = String(""+month).padStart(2, '0');
+  let keySazon = "minh";
+  var ret;
+
+  if(unit == "minutes"){
+    keySazon = "minh";
+    if((ret == null || ret == "") || parseInt(ret) <= 0){ ret = 60 }else{ret = outorga._source[keySazon+"_"+zeroMonth];}
+  }
+  else if(unit == "days"){
+    keySazon = "dm"
+    if((ret == null || ret == "") || parseInt(ret) <= 0){ ret = 30 }else{ret = outorga._source[keySazon+"_"+zeroMonth];}
+  }
+  else if(unit == "hours"){
+    keySazon = "hd";
+    if((ret == null || ret == "") || parseInt(ret) <= 0){ ret = 24}else{ret = outorga._source[keySazon+"_"+zeroMonth];}
+  }
+  
+  return ret;
+}
+
+function getDischargeValue(outorga, month){
+  let zeroMonth = String(""+month).padStart(2, '0');
+  return outorga._source["vz_"+zeroMonth]
+}
+
+function calculateVolume(outorga, month){
+  var minutes = getSazonalityTime(outorga, month, 'minutes');
+  var hours   = getSazonalityTime(outorga, month, 'hours');
+  var days    = getSazonalityTime(outorga, month, 'days');
+  var discharge = getDischargeValue(outorga, month);
+
+  return ((minutes/60) * hours * days) * discharge;
+}
+
+function calculateTotalVolume(outorga){
+  var total = 0;
+  for(var i = 1; i <= 12; i++){
+    //console.log(i," => ", calculateVolume(outorga, i));
+    total += calculateVolume(outorga, i);
+  }
+
+  return total;
+}
+
+
+function parserOutorgas(outorgas){
+  let rets = [];
+
+  for(var i = 0; i < outorgas.length; i++){
+    let outorga = outorgas[i];
+    //console.log(outorga);
+
+    rets.push({
+      num_requerimento: outorga._id,
+      portaria: outorga._source.portaria,
+      processo: outorga._source.processo,
+      latitude: outorga._source.latitude,
+      longitude: outorga._source.longitude,
+      nro_uso: outorga._source.nro_uso,
+      tipo_uso: outorga._source.tipo_de_req_simplificado,
+      subtipo_uso: outorga._source.tp_uso_subtipo1,
+      finalidade: outorga._source.finalidade_1630,
+      sazonal: (outorga._source.sazonalidade.indexOf(" NAO SAZONAL") > -1) ? false : true,
+      ugrhi: outorga._source.ugrhi,
+      subugrhi: outorga._source.subugrhi,
+      municipio: {nome: outorga._source.municipio, cod_ibge: outorga._source.cod_ibge},
+      diretoria: outorga._source.diretoria_req,
+      data_publicacao: outorga._source.data_publicacao,
+      volume_total: calculateTotalVolume(outorga),
+      status: outorga._source.decisao_pto,
+      sazonalidade: {
+        jan: [getSazonalityTime(outorga, 1, "minutes"),  getSazonalityTime(outorga, 1, "hours"),  getSazonalityTime(outorga, 1, "days"),  getDischargeValue(outorga, 1)],
+        fev: [getSazonalityTime(outorga, 2, "minutes"),  getSazonalityTime(outorga, 2, "hours"),  getSazonalityTime(outorga, 2, "days"),  getDischargeValue(outorga, 2)],
+        mar: [getSazonalityTime(outorga, 3, "minutes"),  getSazonalityTime(outorga, 3, "hours"),  getSazonalityTime(outorga, 3, "days"),  getDischargeValue(outorga, 3)],
+        abr: [getSazonalityTime(outorga, 4, "minutes"),  getSazonalityTime(outorga, 4, "hours"),  getSazonalityTime(outorga, 4, "days"),  getDischargeValue(outorga, 4)],
+        mai: [getSazonalityTime(outorga, 5, "minutes"),  getSazonalityTime(outorga, 5, "hours"),  getSazonalityTime(outorga, 5, "days"),  getDischargeValue(outorga, 5)],
+        jun: [getSazonalityTime(outorga, 6, "minutes"),  getSazonalityTime(outorga, 6, "hours"),  getSazonalityTime(outorga, 6, "days"),  getDischargeValue(outorga, 6)],
+        jul: [getSazonalityTime(outorga, 7, "minutes"),  getSazonalityTime(outorga, 7, "hours"),  getSazonalityTime(outorga, 7, "days"),  getDischargeValue(outorga, 7)],
+        ago: [getSazonalityTime(outorga, 8, "minutes"),  getSazonalityTime(outorga, 8, "hours"),  getSazonalityTime(outorga, 8, "days"),  getDischargeValue(outorga, 8)],
+        set: [getSazonalityTime(outorga, 9, "minutes"),  getSazonalityTime(outorga, 9, "hours"),  getSazonalityTime(outorga, 9, "days"),  getDischargeValue(outorga, 9)],
+        out: [getSazonalityTime(outorga, 10, "minutes"), getSazonalityTime(outorga, 10, "hours"), getSazonalityTime(outorga, 10, "days"), getDischargeValue(outorga, 10)],
+        nov: [getSazonalityTime(outorga, 11, "minutes"), getSazonalityTime(outorga, 11, "hours"), getSazonalityTime(outorga, 11, "days"), getDischargeValue(outorga, 11)],
+        dez: [getSazonalityTime(outorga, 12, "minutes"), getSazonalityTime(outorga, 12, "hours"), getSazonalityTime(outorga, 12, "days"), getDischargeValue(outorga, 12)],
+      }
+    })
+  }
+
+  return rets;
 }
 
 module.exports = router;
