@@ -41,6 +41,60 @@ router.get('/api/list_outorgas/', function(req,res,next){
     const pageSize = 100;
     outorgas = [];
 
+    var must_filter = [];
+    let geo_filter = {};
+    let date_filter = {};
+
+    for (var [key, value] of Object.entries(req.query)) {
+      if(value != ""){
+        
+        var field_name = ""
+        
+        if(key.indexOf("ugrhi")>-1 || key.indexOf("data_publicacao")>-1 || key.indexOf("latitude")>-1 || key.indexOf("longitude") > -1 || key.indexOf("distance") > -1 || key.indexOf("location") > -1){
+          field_name = key;
+        }
+        else{
+          field_name = key + ".keyword";
+        }
+
+        if(key.indexOf("data_publicacao") == -1 && key.indexOf("latitude") == -1 && key.indexOf("longitude") == -1 && key.indexOf("distance") == -1 && key.indexOf("location") == -1){
+          let obj = {};
+          obj[field_name]= value;
+          must_filter.push({match: obj});
+        }
+        else if(key.indexOf("data_publicacao") > -1){
+          let stx = field_name.split("_");
+          let obj = {};
+          obj[stx[2]] = value;
+          
+          Object.assign(date_filter, obj);
+        }
+        else{
+          //Forcing unit distance in kilometers
+          if(field_name == "distance"){
+            value = value + "km";
+          }
+
+          let obj = {};
+          //geo_filter[field_name] = value;
+          obj[field_name] = value;
+          Object.assign(geo_filter, obj);
+        }
+      }
+    }
+    
+    if(!isEmpty(geo_filter)){
+      console.log("GeoFilter: ", geo_filter);
+      must_filter.push({geo_distance: geo_filter});
+    }
+
+    if(!isEmpty(date_filter)){
+      console.log("DateFilter: ", date_filter);
+      let obj = {range: {data_publicacao: date_filter}};
+      console.log(obj);
+      must_filter.push(obj);
+    }
+
     //var requestUrl = (req.params['scroll_id'] != "" && req.params['scroll_id'] != undefined) ? `${elasticsearchUrl}/${indexName}/_search/scroll?scroll=1m&scroll_id=${req.params['scroll_id']}` : `${elasticsearchUrl}/${indexName}/_search?scroll=1m`
     
     var requestUrl = `${elasticsearchUrl}/${indexName}/_search?scroll=1m`;
@@ -54,10 +108,13 @@ router.get('/api/list_outorgas/', function(req,res,next){
       post_params = {scroll: '1m', scroll_id: req.query['scroll_id'] };
     }else{
       requestUrl = `${elasticsearchUrl}/${indexName}/_search?scroll=1m`;
-      post_params = {size: pageSize}
+      post_params = {size: pageSize, query: { bool:{ must: must_filter } }}
     }
     
+    
+
     console.log("Request: ", requestUrl);
+    console.log("Filter: ", must_filter)
 
     axios.post(requestUrl, post_params,{
         auth: {
