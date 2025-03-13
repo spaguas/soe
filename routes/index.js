@@ -2,9 +2,30 @@ var express = require('express');
 var router = express.Router();
 var elasticClient = require('../backend/elastic-client');
 var municipios_json = require('../public/geojson/municipios.json');
+var ugrhis_json = require('../public/geojson/ugrhis.json');
 
 var axios = require('axios');
 require("dotenv").config();
+
+router.get('/ugrhis/:cod_ugrhi', function(req,res,next){
+  async function run(){
+    console.log("Find Ugrhi: ", req.params);
+    let features = [];
+
+    for(let i = 0; i < ugrhis_json.features.length; i++){
+      let element = ugrhis_json.features[i];
+
+      if(element.properties.codigo == req.params['cod_ugrhi']){
+        console.log("Element => ", element.properties.codigo," => ", req.params['cod_ugrhi']);
+        features.push(element);
+      }
+    }
+
+    res.render('ugrhis', {title: 'Localização Ugrhis', ugrhis: JSON.stringify(features[0])});
+  }
+
+  run().catch(console.log);
+});
 
 router.get('/municipios/:cod_ibge', function(req,res,next){
 
@@ -37,8 +58,9 @@ router.get('/api/list_outorgas/', function(req,res,next){
     const password = process.env.ELASTIC_PASSWORD;
 
     const elasticsearchUrl = 'https://cth.daee.sp.gov.br/elasticsearch';
-    const indexName = 'outorgas';
-    const pageSize = 100;
+    const indexName = 'outorgas-soe';
+    //const pageSize = (req.query['size']) ? parseInt(req.query['size']) : 1000;
+    const pageSize = 1000;
     outorgas = [];
 
     var must_filter = [];
@@ -111,8 +133,6 @@ router.get('/api/list_outorgas/', function(req,res,next){
       post_params = {size: pageSize, query: { bool:{ must: must_filter } }}
     }
     
-    
-
     console.log("Request: ", requestUrl);
     console.log("Filter: ", must_filter)
 
@@ -138,6 +158,7 @@ router.get('/api/list_outorgas/', function(req,res,next){
         size: hits.length,
         outorgas: parserOutorgas(outorgas)
       })
+      //res.status(200).json({})
     }).catch(err => {
       console.log("Error Elastic: ", err.response);
     })
@@ -224,7 +245,7 @@ router.get('/', function(req, res, next) {
 
       // Elasticsearch URL
       const elasticsearchUrl = 'https://cth.daee.sp.gov.br/elasticsearch';
-      const indexName = 'outorgas';
+      const indexName = 'outorgas-soe';
 
       // Set pagination parameters
       const pageSize = 10; // Number of documents per page
@@ -378,7 +399,7 @@ function calculateVolume(outorga, month){
   var days    = getSazonalityTime(outorga, month, 'days');
   var discharge = getDischargeValue(outorga, month);
 
-  return ((minutes/60) * hours * days) * discharge;
+  return (((minutes/60) + hours) * days) * discharge;
 }
 
 function calculateTotalVolume(outorga){

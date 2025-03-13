@@ -174,7 +174,7 @@
         
           <form class="container-fluid d-flex justify-content-center">
             <span class="navbar-text">
-              <a class="navbar-brand" href="/">SOE-DAEE</a>
+              <a class="navbar-brand" href="/">SOE-SP Águas</a>
             </span>
 
             <span class="navbar-text d-none d-lg-block me-2">
@@ -246,9 +246,9 @@
                       <!--<tr>
                         <th>Decisão do Parecer Técnico</th><td class="info-decisao">-</td>
                       </tr>-->      
-                      <tr>
+                      <!--<tr>
                         <th>Núm.Processo</th><td class="info-processo">-</td>
-                      </tr>
+                      </tr>-->
                       <tr>
                         <th>Núm.Portaria</th><td class="info-portaria">-</td>
                       </tr>
@@ -279,6 +279,7 @@
                         <th scope="col">Mês</th>
                         <th scope="col">Dias</th>
                         <th scope="col">Horas</th>
+                        <th scope="col">Minutos</th>
                         <th scope="col">Vazão(m³/h)</th>
                         <th scope="col">Vol.Mensal(m³)</th>
                       </tr>
@@ -310,8 +311,8 @@
             <div class="modal-body">
               <form id="form_search" action="#" method="GET">
                 <div class="mb-3">
-                  <label for="nro_requerimento" class="form-label">Número de Requerimento</label>
-                  <input type="text" class="form-control" id="nro_requerimento" name="nro_requerimento" aria-describedby="emailHelp">
+                  <label for="sol_req_num_cod" class="form-label">Número de Requerimento</label>
+                  <input type="text" class="form-control" id="sol_req_num_cod" name="sol_req_num_cod" aria-describedby="emailHelp">
                   <div id="nro_requerimento_help" class="form-text">Código que identifica a outorga.</div>
                 </div>
                 
@@ -323,7 +324,7 @@
                   </div>
                   <div class="col-md-6">
                     <label for="ugrhi" class="form-label">Ugrhis</label>                  
-                    <select name="ugrhi" id="ugrhi" class="form-control"></select>
+                    <select name="cod_ugrhi" id="cod_ugrhi" class="form-control"></select>
                   </div>                 
                 </div>
 
@@ -331,7 +332,7 @@
                   <div class="col-md-6">
                     <label for="finalidade" class="form-label">Finalidade</label>
                     <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                    <select name="finalidade_1630" id="finalidade" class="form-control">,
+                    <select name="finalidade" id="finalidade" class="form-control">,
                       <option value="">-</option>
                       <option value="Urbano">Urbano</option>
                       <option value="Irrigação">Irrigação</option>
@@ -351,7 +352,7 @@
                   <div class="col-md-6">
                     <label for="tipo_uso" class="form-label">Tipo de Uso</label>
                     <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                    <select name="tp_uso_subtipo1" id="tipo_uso" class="form-control">,
+                    <select name="tipo_uso" id="tipo_uso" class="form-control">,
                       <option value="">-</option>
                       <option value="Poço Tubular">Poço Tubular</option>
                       <option value="Captação Superficial">Captação Superficial</option>
@@ -574,6 +575,7 @@
                   </svg>
                 </a>
               </li>
+              
               <li class="sidepanel-tab">
                 <a href="#" class="sidebar-tab-link" role="tab" data-tab-link="tab-2">
                   <i class="fa-solid fa-ranking-star"></i>
@@ -750,32 +752,32 @@
 
         let outorgas;
 
-        $("#nro_requerimento").on('keyup', function(e){
-          let value = $("#nro_requerimento").val();
+        $("#sol_req_num_cod").on('keyup', function(e){
+          let value = $("#sol_req_num_cod").val();
 
           if(value.length > 0){
-            $("#municipio,#ugrhi,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", true );
+            $("#municipio,#cod_ugrhi,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", true );
             $("#btn_filter").prop("disabled", false);
           }
           else{
-            $("#municipio,#ugrhi,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", false );
+            $("#municipio,#cod_ugrhi,#finalidade,#tipo_uso,#data_publicacao").prop( "disabled", false );
           }
         });
         
-        $("#ugrhi,#municipio,#finalidade,#tipo_uso,#data_publicacao").on('change', function(e){
+        $("#cod_ugrhi,#municipio,#finalidade,#tipo_uso,#data_publicacao").on('change', function(e){
           //console.log("Select Ugrhi or Municipio Changed: ", $(e.currentTarget));
           let el = $(this);
           let current_id = el.attr('id');
           let current_value = el.find(":selected").val();
 
           //console.log("Element: ", el.attr('id'))
-          if($("#ugrhi").val() == "" && $("#municipio").val() == ""){
-            $("#municipio,#ugrhi").prop("disabled", false);
+          if($("#cod_ugrhi").val() == "" && $("#municipio").val() == ""){
+            $("#municipio,#cod_ugrhi").prop("disabled", false);
             $("#btn_filter").prop("disabled", true);
           }
           else if(current_id == 'municipio' && current_value != ''){
             //Disable Ugrhi
-            $("#ugrhi").prop("disabled", true);
+            $("#cod_ugrhi").prop("disabled", true);
             $("#btn_filter").prop("disabled", false);
           }
           else if(current_id = 'ugrhi' && current_value != ''){
@@ -796,20 +798,28 @@
             let source = element._source;
             
             let discharges = [];
+
+            let months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
+
             //Calculate discharge 12 months
-            for(let i = 1; i <= 12; i++){
-              let x = (""+i).padStart(2,'0');
-              let days  = source["dm_"+x];
-              let hours = source["hd_"+x];
-              let mins  = source["minh_"+x];
-              let vaz   = source["vz_"+x];
+            for(let i = 0; i < months.length; i++){
+              
+              //let x = (""+i).padStart(2,'0');
+              let x = months[i];
+              let days  = source["days_in_month_"+x];
+              let hours = source["hours_in_day_"+x];
+              let mins  = source["mins_in_hours_"+x];
+              let vaz   = source["vaz_"+x];
+              let vol   = source["total_vol_m3_"+x];
 
               days = (days != '' && days != 'null' && days != null) ? days : 0;
               hours = (hours != '' && hours != 'null' && hours != null) ? hours : 0;
               mins = (mins != '' && mins != 'null' && mins != null) ? mins : 0;
               vaz = (vaz != '' && vaz != 'null' && vaz != null) ? vaz : 0;
+              vol = (vol != '' && vol != 'null' && vol != null) ? vol : 0;
 
-              let dis   = days * (hours + (mins/60)) * vaz;
+              //let dis   = days * (hours + (mins/60)) * vaz;
+              let dis = vol;
 
               discharges.push({
                 dias: days,
@@ -845,25 +855,26 @@
 
               md.show();            
               
-              $("#infoOutorga").find(".modal-title").html("Requerimento: "+element._source.uid+" - Código do Uso: "+element._source.uso_id);
+              $("#infoOutorga").find(".modal-title").html("Requerimento: "+element._source.sol_req_num_cod+" - Código do Uso: "+element._source.uso_id);
               $("#infoOutorga").find(".modal-body").find(".table-vazoes").empty();
 
               $(".info-municipio").html(opts._source.municipio);
-              $(".info-diretoria").html(opts._source.diretoria_req);
-              $(".info-ugrhi").html(getUgrhi(opts._source.ugrhi));
+              $(".info-diretoria").html(opts._source.diretoria_nome);
+              $(".info-ugrhi").html(getUgrhi(opts._source.cod_ugrhi));
               $(".info-coordenadas").html(truncateString(""+opts._source.latitude, 12)+","+truncateString(""+opts._source.longitude,12));
 
-              $(".info-tipo").html(opts._source.tipo_de_req_simplificado);
-              $(".info-sub-tipo").html(opts._source.tp_uso_subtipo1);
-              $(".info-finalidade").html(opts._source.finalidade_1630);
+              $(".info-tipo").html(opts._source.tipo_uso);
+              $(".info-sub-tipo").html(opts._source.subtipo_uso);
+              $(".info-finalidade").html(opts._source.finalidade_simplificada);
               $(".info-decisao").html(opts._source.decisao_pto);
               $(".info-processo").html(opts._source.processo);
-              $(".info-portaria").html(opts._source.portaria);
+              $(".info-portaria").html(opts._source.numero_portaria);
 
               if(opts._source.data_publicacao){
                 $(".info-data-publicacao").html(opts._source.data_publicacao.substring(0,10));
-                let dt_vencimento = moment(opts._source.data_publicacao.substring(0,10),'YYYY-MM-DD').add(opts._source.validade_pto_meses,'months');
-
+                let dt_vencimento = moment(opts._source.data_publicacao.substring(0,10),'YYYY-MM-DD').add(opts._source.validade_meses_pto,'months');
+                
+                console.log("Data de Vencimento: ", dt_vencimento)
                 //console.log("Data: ", moment(opts._source.data_publicacao.substring(0,10)).format("YYYY-MM-DD")," => ",opts._source.validade_pto_meses," <> ",dt_vencimento.format("YYYY-MM-DD"));
                 if(dt_vencimento.format("YYYY-MM-DD") != opts._source.data_publicacao.substring(0,10)){
                   $(".info-validade-pto").html(dt_vencimento.format("YYYY-MM-DD"));
@@ -872,7 +883,8 @@
               else{
                 $(".info-data-publicacao").html("-");
               }
-              $(".info-sazonalidade").html((opts._source.sazonalidade.indexOf("NAO ") > -1)?"Não":"Sim");
+
+              //$(".info-sazonalidade").html((opts._source.sazonalidade.indexOf("SIM ") > -1)?"Não":"Sim");
               $(".info-volume-anual").html(opts._source.volume_anual.toFixed(2));
               $(".info-vazao-max").html(opts._source.vazao_max.vazao);
 
@@ -883,25 +895,37 @@
                 $("#nav-discharges-tab").removeClass("disabled");
               }
 
+              var total_volume = 0;
+
               $.each(element._source.vazoes, function(k,v){
                 
                 let line = ""
                 if(v.vazao != null){
-                  
+                  console.log("Vazão: ", v);
+                  total_volume += v.volume;
+
                   line += "<tr>";
                     line += "<td class='scope'>"+(k+1)+"</td>";
-                    line += "<td class='scope'>"+getMonthName(k+1)+"</td>";
+                    line += "<td class='scope'><b>"+getMonthName(k+1)+"</b></td>";
                     line += "<td class='scope'>"+v.dias+"</td>";
-                    line += "<td class='scope'>"+(v.horas + (v.minutos/60)).toLocaleString()+"</td>";
-                    line += "<td class='scope'>"+v.vazao.toLocaleString()+"</td>";
-                    line += "<td class='scope'>"+v.volume.toLocaleString()+"</td>";
+                    line += "<td class='scope'>"+(v.horas).toLocaleString()+"</td>";
+                    line += "<td class='scope'>"+(v.minutos).toLocaleString()+"</td>";
+                    line += "<td class='scope'>"+(v.vazao).toLocaleString()+"</td>";
+                    line += "<td class='scope'>"+(v.volume).toLocaleString()+"</td>";
                   line += "</tr>";
                 }
 
                 $("#infoOutorga").find(".modal-body").find(".table-vazoes").append(line);
               });
+              
+              let line = ""
 
-             
+              line += "<tr>";
+                line += "<td class='scope' style='text-align: center' colspan='6'><b>Volume Anual (m³)</b></td>";
+                line += "<td class='scope'>"+total_volume.toLocaleString()+"</td>";
+              line += "</tr>";
+
+              $("#infoOutorga").find(".modal-body").find(".table-vazoes").append(line);              
             });
             //console.log(marker);
             //Append Data to Table
@@ -912,13 +936,14 @@
             
           });
 
-          
-
           map.addLayer(markers);
+          
+          loadUgrhiLayer();
+          loadMunicipioLayer();
+
           if(bounds.isValid()){
-            loadUgrhiLayer();
-            loadMunicipioLayer();
-            renderCustomInfo();                       
+            
+            renderCustomInfoPerFinality();                       
 
             map.fitBounds(bounds);
 
@@ -992,7 +1017,7 @@
               finalidade_icon = "fa-solid fa-umbrella-beach text-purple";
               break;
             case "Regularização de Nível":
-              finalidade_icon = "fa-solid fa-water text-cyan";
+              finalidade_icon = "fa-solid fa-chart-line text-cyan";
               break;
             case "Rural":
               finalidade_icon = "fa-solid fa-industry text-green";
@@ -1017,14 +1042,14 @@
           console.log("Limpar filtro aqui");
           $("#form_search").trigger("reset");
 
-          $("#ugrhi").prop("disabled", false);
+          $("#cod_ugrhi").prop("disabled", false);
           $("#municipio").prop("disabled", false);
         }
 
         function getIconOptions(source){
           let opt = {};
           
-          opt["icon"] = getIconClassByFinalidade(source.finalidade_1630);
+          opt["icon"] = getIconClassByFinalidade(source.tipo_finalidade_grupo);
           opt["iconShape"] = "circle";
           opt["prefix"] = "";
           opt["borderColor"] = "#000000";
@@ -1036,61 +1061,61 @@
           return opt;
         }
 
-        function loadUgrhiLayer(){
-          let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteUgrhiDAEE&maxFeatures=50000&outputFormat=application%2Fjson";
-          let filter_cql = {};
+        // function loadUgrhiLayer(){
+        //   let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteUgrhiDAEE&maxFeatures=50000&outputFormat=application%2Fjson";
+        //   let filter_cql = {};
 
-          if($("#ugrhi").val() != ""){
-            filter_cql['cql_filter'] = "Codigo="+parseInt($("#ugrhi").val());
+        //   if($("#cod_ugrhi").val() != ""){
+        //     filter_cql['cql_filter'] = "Codigo="+parseInt($("#cod_ugrhi").val());
 
-            $.ajax({
-              url: url,
-              cache: true,
-              data: filter_cql,
-              beforeSend: function(){
-                ugrhiLayer.clearLayers();
-              },
-              success: function(data){
-                console.log("Ugrhis: ", data);
-                //localStorage.setItem('ugrhis_geo', JSON.stringify(data));
+        //     $.ajax({
+        //       url: url,
+        //       cache: true,
+        //       data: filter_cql,
+        //       beforeSend: function(){
+        //         ugrhiLayer.clearLayers();
+        //       },
+        //       success: function(data){
+        //         console.log("Ugrhis: ", data);
+        //         //localStorage.setItem('ugrhis_geo', JSON.stringify(data));
 
-                var ll = L.geoJSON(data, {
-                    filter: function(feature){
-                      console.log("Ugrhi Properties: ", feature.properties);
-                      if(feature != undefined && feature.properties != undefined){
-                        return feature.properties.Codigo == parseInt($("#ugrhi").val());
-                      }
-                      else{
-                        return false;
-                      }
-                    },
-                    onEachFeature: function(feature,layer){
-                      layer.on({
-                        mouseover: highlightFeature,
-                        mouseout: resetHighlight,
-                        click: zoomToFeature
-                      })
-                    },
-                    style: function (feature) {
-                        return {color: '#aa66bb', opacity: 0.5};
-                    }
-                }).bindPopup(function (layer) {
-                    return layer.feature.properties;
-                });
+        //         var ll = L.geoJSON(data, {
+        //             filter: function(feature){
+        //               console.log("Ugrhi Properties: ", feature.properties);
+        //               if(feature != undefined && feature.properties != undefined){
+        //                 return feature.properties.Codigo == parseInt($("#cod_ugrhi").val());
+        //               }
+        //               else{
+        //                 return false;
+        //               }
+        //             },
+        //             onEachFeature: function(feature,layer){
+        //               layer.on({
+        //                 mouseover: highlightFeature,
+        //                 mouseout: resetHighlight,
+        //                 click: zoomToFeature
+        //               })
+        //             },
+        //             style: function (feature) {
+        //                 return {color: '#aa66bb', opacity: 0.5};
+        //             }
+        //         }).bindPopup(function (layer) {
+        //             return layer.feature.properties;
+        //         });
                 
-                ugrhiLayer.addLayer(ll);
-              },
-              complete: function(){
+        //         ugrhiLayer.addLayer(ll);
+        //       },
+        //       complete: function(){
 
-              }
-            });
-          }
-          else{
-            console.log("Campo de Ugrhi não preenchido!")
-          }
+        //       }
+        //     });
+        //   }
+        //   else{
+        //     console.log("Campo de Ugrhi não preenchido!")
+        //   }
 
           
-        }
+        // }
 
         function zoomToFeature(e) {
           console.log("Zoom To Feature: ", e);
@@ -1116,6 +1141,28 @@
           }
         }
 
+        function loadUgrhiLayer(){
+          let url = "./ugrhis/"+$("#cod_ugrhi").val();
+
+          if($("#cod_ugrhi").val() != ""){
+            $.get(url).then(response => {
+              ugrhiLayer.clearLayers()
+
+              let res = JSON.parse(response.replaceAll("&#34;","\""));
+              console.log("Response Ugrhi: ", res);
+
+              let ll = L.geoJSON(res, {
+                style: function(feature){
+                  return {color: '#aa66bb', opacity: 0.5};
+                }
+              });
+
+              ugrhiLayer.addLayer(ll);
+              map.fitBounds(ugrhiLayer.getLayers()[0].getBounds())
+            })
+          }
+        }
+
         function loadMunicipioLayer(){
           //let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteMunicipal&maxFeatures=700&outputFormat=application%2Fjson";
           let url = "./municipios/"+$("#municipio").val();
@@ -1124,6 +1171,8 @@
 
           if($("#municipio").val() != ""){
             $.get(url).then(response => {
+              console.log("Get Cities: ", response);
+
               municipioLayer.clearLayers();
 
               let res = JSON.parse(response.replaceAll("&#34;","\""));              
@@ -1155,35 +1204,22 @@
         function renderRowToTable(target,data){
           let row = "";
           row += "<tr>";
-            row += "<td>"+data.nro_requerimento+"</td>";
+            row += "<td>"+data.sol_req_num_cod+"</td>";
             row += "<td>"+data.uso_id+"</td>";
             row += "<td>"+data.municipio+"</td>";
-            row += "<td>"+getUgrhi(data.ugrhi)+"</td>";
-            row += "<td>"+getDirCod(data.diretoria_req)+"</td>";
-            row += "<td>"+parseFloat(data.latitude).toFixed(6)+", "+parseFloat(data.longitude).toFixed(6)+"</td>";
-            row += "<td>"+data.tipo_de_req_simplificado+"</td>";
-            row += "<td>"+data.tp_uso_subtipo1+"</td>";
-            row += "<td>"+data.finalidade_1630+"</td>";
+            row += "<td>"+getUgrhi(data.cod_ugrhi)+"</td>";
+            row += "<td>"+getDirCod(data.diretoria_nome)+"</td>";
+            row += "<td>"+parseFloat(data.latitude).toFixed(8)+", "+parseFloat(data.longitude).toFixed(8)+"</td>";
+            row += "<td>"+data.tipo_uso+"</td>";
+            row += "<td>"+data.subtipo_uso+"</td>";
+            row += "<td>"+data.tipo_finalidade_grupo+"</td>";
             //row += "<td>"+data.decisao_pto+"</td>";
-            row += "<td>"+data.portaria+"</td>";
+            if(data.numero_portaria != null && data.numero_portaria != 'null' && data.numero_portaria != '') { row += "<td>"+ data.numero_portaria+"</td>"} else { row += "<td>-</td>"; };
             
             if(data.data_publicacao){ row += "<td>"+data.data_publicacao.substring(0,10) +"</td>"; }else{ row += "<td>-</td>"; }
 
-            row += "<td>"+data.volume_anual.toLocaleString()+"</td>";
-            
-            if(data.vazao_max){ row += "<td>"+data.vazao_max.vazao.toLocaleString()+"</td>"; }else{ row += "<td>-</td>"; }
-
-            //console.log("Vazões: ", data.vazoes);
-            /*$.each(data.vazoes, function(k,v){
-              //let mes = (k+1);
-              
-              row += "<td>"+(v.dias > 0) ? v.dias : "-" +"</td>";
-              row += "<td>"+v.horas+"</td>";
-              row += "<td>"+v.minutos+"</td>";
-              row += "<td>"+v.volume.toLocaleString()+"</td>";
-
-              console.log("Vazão: ", v);
-            });*/
+            if(data.volume_m3_anual){ row += "<td>"+data.volume_m3_anual.toLocaleString()+"</td>"; }else{ row += "<td>-</td>"; }
+            if(data.vazao_max){ row += "<td>"+data.vazao_max.vazao.toLocaleString()+"</td>"; }else{ row += "<td>-</td>" }
 
             for(let i = 0; i < 12; i++){
               let v = data.vazoes[i];
@@ -1191,14 +1227,10 @@
               row += "<td>"+v.dias+"</td>";
               row += "<td>"+v.horas +"</td>";
               row += "<td>"+v.minutos+"</td>";
-              row += "<td>"+v.volume.toLocaleString()+"</td>";
-
-              //console.log("Vazão["+i+"]: ", v);
+              row += "<td>"+v.volume+"</td>";
             }
 
           row += "</tr>";
-
-          
             
           $(target).append(row);
         }
@@ -1260,7 +1292,7 @@
             return "BP-LN";
           }
           else{
-            return "Desconhecida";
+            return "Desconhecida - "+name;
           }
         }
 
@@ -1320,13 +1352,13 @@
         }
 
         function populateUgrhisSelect(){
-          $("#ugrhi").empty();
-          $("#ugrhi").append("<option value=''>-</option>");
+          $("#cod_ugrhi").empty();
+          $("#cod_ugrhi").append("<option value=''>-</option>");
           $.each(ugrhis.ugrhis, function(k,v){
             let obj = "<option value='"+v.codigo+"'>"+v.nome+"</option>";
             //console.log(obj);
             if(v.codigo != 99 && v.codigo != 9999){
-              $("#ugrhi").append(obj);
+              $("#cod_ugrhi").append(obj);
             }
           });
         }
@@ -1356,11 +1388,11 @@
 
           $("#nro_requerimento").val(params.get("nro_requerimento")).change();
           $("#municipio").val(params.get("cod_ibge")).change();
-          $("#ugrhi").val(params.get("ugrhi")).change();
+          $("#cod_ugrhi").val(params.get("cod_ugrhi")).change();
           $('[name="data_publicacao_lte"]').val(params.get("data_publicacao_lte"));
           $('[name="data_publicacao_gte"]').val(params.get("data_publicacao_gte"));
-          $("#tipo_uso").val(params.get("tp_uso_subtipo1"));
-          $("#finalidade").val(params.get("finalidade_1630"));
+          $("#tipo_uso").val(params.get("tipo_uso"));
+          $("#finalidade").val(params.get("finalidade"));
 
           if(params.get("location")){
             let location = params.get("location").replaceAll("POINT ","").replaceAll("(","").replaceAll(")","").split(" ");
@@ -1407,13 +1439,13 @@
           output.textContent = value;
         }
 
-        function renderCustomInfo(){
+        function renderCustomInfoPerFinality(){
           
-          let el = '<h4>Outorgas Carregadas</h4></br>'
+          let el = '<h4>Outorgas por Finalidade</h4></br>'
 
           el += "<table width=100% bgcolor='#ffffff' class='table table-bordered'>";
           el += "<thead class=\"table-secondary\"><th></th><th>Total</th><th>"+outorgas.length+"</th></thead>";
-          $.each(_.countBy(outorgas, function(o){ return o._source.finalidade_1630 }), function(k,v){
+          $.each(_.countBy(outorgas, function(o){ return o._source.tipo_finalidade_grupo }), function(k,v){
             //console.log(k," => ",v);
             el += '<tr><td><i class="'+getIconClassByFinalidade(k)+'"></i></td><td><b>'+k+'</b></td><td>'+v+"</td></tr>";
           });
