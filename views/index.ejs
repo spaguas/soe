@@ -342,7 +342,7 @@
                   <div class="col-md-6">
                     <label for="finalidade" class="form-label">Finalidade</label>
                     <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
-                    <select name="finalidade" id="finalidade" class="form-control">,
+                    <select name="tipo_finalidade_grupo" id="finalidade" class="form-control">,
                       <option value="">-</option>
                       <option value="Urbano">Urbano</option>
                       <option value="Irrigação">Irrigação</option>
@@ -364,18 +364,36 @@
                     <!--<input type="text" class="form-control" id="municipio" name="municipio">-->
                     <select name="tipo_uso" id="tipo_uso" class="form-control">,
                       <option value="">-</option>
-                      <option value="Poço Tubular">Poço Tubular</option>
+                      <!--<option value="Autorização para perfuração de Poço Tubular">Poço Tubular</option>
                       <option value="Captação Superficial">Captação Superficial</option>
+                      <option value="Lançamento Superficial">Lançamento Superficial</option>
                       <option value="Estrutura de Reservação">Estrutura de Reservação</option>
-                      <option value="Lançamento de Efluentes">Lançamento de Efluentes</option>
-                      <option value="Outros">Outros</option>
                       <option value="Poço Escavado (cisterna/cacimba)">Poço Escavado (cisterna/cacimba)</option>
-                      <option value="Barramento Sem PNSB">Barramento Sem PNSB</option>
+                      <option value="Barramento">Barramento</option>
                       <option value="Extração de Minério">Extração de Minério</option>
                       <option value="Reversão entre Corpos de Água">Reversão entre Corpos de Água</option>
-                      <option value="Extração de Minério em Cava">Extração de Minério em Cava</option>
                       <option value="Barramento">Barramento</option>
-                      <option value="Ponteira">Ponteira</option>
+                      <option value="Retificação/Revogação">Retificação/Revogação</option>
+                      <option value="Travessia Subterrânea">Travesia Subterrânea</option>
+                      <option value="Travessia Aérea">Travesia Aérea</option>
+                      <option value="Obra ou Serviço de Proteção de Margem ou Leito">Obra/Serviço de Proteção de Margem/Leito</option>
+                      <option value="Outros">Outros</option>-->
+
+                      <option value="Travessia Subterrânea">Travessia Subterrânea</option>
+                      <option value="Autorização para perfuração de Poço Tubular">Poço Tubular</option>
+                      <option value="Lançamento Superficial">Lançamento Superficial</option>
+                      <option value="Captação Subterrânea">Captação Subterrânea</option>
+                      <option value="Captação Superficial">Captação Superficial</option>
+                      <option value="Reservatório de Acumulação">Reservatório de Acumulação</option>
+                      <option value="Obra ou Serviço de Proteção de Margem ou Leito">Obra ou Serviço</option>
+                      <option value="Retificação / Revogação">Retificação / Revogação</option>
+                      <option value="Canalização">Canalização</option>
+                      <option value="Travessia Aérea">Travessia Aérea</option>
+                      <option value="Barramento">Barramento</option>
+                      <option value="Desassoreamento e Limpeza de Margem">Desassoreamento</option>
+                      <option value="Travessia">Travessia</option>
+                      <option value="Extração de Minério">Extração de Minério</option>
+
                     </select>
                   </div>
                 </div>
@@ -875,7 +893,7 @@
 
               $(".info-tipo").html(opts._source.tipo_uso);
               $(".info-sub-tipo").html(opts._source.subtipo_uso);
-              $(".info-finalidade").html(opts._source.finalidade_simplificada);
+              $(".info-finalidade").html(opts._source.tipo_finalidade_grupo);
               $(".info-decisao").html(opts._source.decisao_pto);
               $(".info-processo").html(opts._source.processo);
               $(".info-portaria").html(opts._source.numero_portaria);
@@ -1402,7 +1420,7 @@
           $('[name="data_publicacao_lte"]').val(params.get("data_publicacao_lte"));
           $('[name="data_publicacao_gte"]').val(params.get("data_publicacao_gte"));
           $("#tipo_uso").val(params.get("tipo_uso"));
-          $("#finalidade").val(params.get("finalidade"));
+          $("#finalidade").val(params.get("tipo_finalidade_grupo"));
 
           if(params.get("location")){
             let location = params.get("location").replaceAll("POINT ","").replaceAll("(","").replaceAll(")","").split(" ");
