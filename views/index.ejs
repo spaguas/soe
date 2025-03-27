@@ -191,7 +191,7 @@
         
           <form class="container-fluid d-flex justify-content-center">
             <span class="navbar-text">
-              <a class="navbar-brand" href="/">SOE-SP Águas</a>
+              <a class="navbar-brand" href="./">SOE-SP Águas</a>
             </span>
 
             <span class="navbar-text d-none d-lg-block me-2">
@@ -283,7 +283,8 @@
                       </tr>
                       <tr>
                         <th>Vazão (m³/h)</th><td class="info-vazao-max"></td>
-                      </tr>                     
+                      </tr>
+                      <tr><th>Localização</th><td class="info-location"></td></tr>                     
                     </tbody>
                   </table>
                 </div>
@@ -343,6 +344,23 @@
                     <label for="ugrhi" class="form-label">Ugrhis</label>                  
                     <select name="cod_ugrhi" id="cod_ugrhi" class="form-control"></select>
                   </div>                 
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <label for="diretoria" class="form-label">Diretoria de Bacia</label>
+                    <select name="diretoria_sigla" id="diretoria" class="form-control">
+                      <option value="">-</option>
+                      <option value="BAT">Diretoria de Bacia do Alto Tietê e Baixada Santista</option>
+                      <option value="BMT">Diretoria da Bacia do Médio Tietê</option>
+                      <option value="BPB">Diretoria de Bacia do Paraíba e Litoral Norte</option>
+                      <option value="BPG">Diretoria de Bacia do Pardo Grande</option>
+                      <option value="BBT">Diretoria de Bacia do Baixo Tietê</option>
+                      <option value="BPP">Diretoria de Bacia do Peixe Paranapanema</option>
+                      <option value="BRB">Diretoria de Bacia do Ribeira de Iguape e Litoral Sul</option>
+                      <option value="BTG">Diretoria de Bacia do Turvo Grande</option>
+                    </select>
+                  </div>                              
                 </div>
 
                 <div class="row">
@@ -689,7 +707,7 @@
             [
                 {
                   title: 'SP Águas', // use any string
-                  layer: L.tileLayer('https://api.mapbox.com/styles/v1/diegomonteiro/cm6n8n8s600ba01qs2zcr7beb/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlybyIsImEiOiJjaWtpeTNucGYwNTdudTBtNjMzeW80Y2FsIn0.D1Y1o7NvJA6hwrKAs_NcIg', {
+                  layer: L.tileLayer('https://api.mapbox.com/styles/v1/diegomonteiro/cm6n8n8s600ba01qs2zcr7beb/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlybyIsImEiOiJjbThydng2b28wcmN5MnhwcWFtNDlzNzZpIn0.iAsj5bNqJNtZpEsWpI24IA', {
                           maxZoom: 19,
                           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   }), // any ILayer
@@ -705,7 +723,7 @@
                 },
                 {
                   title: 'Satélite', // use any string
-                  layer: L.tileLayer('https://api.mapbox.com/styles/v1/diegomonteiro/clrqvk62d00df01p1ci0zek7y/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlybyIsImEiOiJjaWtpeTNucGYwNTdudTBtNjMzeW80Y2FsIn0.D1Y1o7NvJA6hwrKAs_NcIg', {
+                  layer: L.tileLayer('https://api.mapbox.com/styles/v1/diegomonteiro/clrqvk62d00df01p1ci0zek7y/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlybyIsImEiOiJjbThydng2b28wcmN5MnhwcWFtNDlzNzZpIn0.iAsj5bNqJNtZpEsWpI24IA', {
                           maxZoom: 19,
                           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   }), // any ILayer
@@ -713,7 +731,7 @@
                 },
                 {
                   title: 'Outdoors', // use any string
-                  layer: L.tileLayer('https://api.mapbox.com/styles/v1/diegomonteiro/ckzsznqn1001b14k5jqpw442k/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlybyIsImEiOiJjaWtpeTNucGYwNTdudTBtNjMzeW80Y2FsIn0.D1Y1o7NvJA6hwrKAs_NcIg', {
+                  layer: L.tileLayer('https://api.mapbox.com/styles/v1/diegomonteiro/ckzsznqn1001b14k5jqpw442k/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlybyIsImEiOiJjbThydng2b28wcmN5MnhwcWFtNDlzNzZpIn0.iAsj5bNqJNtZpEsWpI24IA', {
                           maxZoom: 19,
                           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   }), // any ILayer
@@ -728,7 +746,7 @@
                 },
                 {
                   title: 'Mapbox Streets', // use any string
-                  layer: L.tileLayer('https://api.mapbox.com/styles/v1/diegomonteiro/ckzszgvlx000w15tda9cra69w/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlybyIsImEiOiJjaWtpeTNucGYwNTdudTBtNjMzeW80Y2FsIn0.D1Y1o7NvJA6hwrKAs_NcIg', {
+                  layer: L.tileLayer('https://api.mapbox.com/styles/v1/diegomonteiro/ckzszgvlx000w15tda9cra69w/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlybyIsImEiOiJjbThydng2b28wcmN5MnhwcWFtNDlzNzZpIn0.iAsj5bNqJNtZpEsWpI24IA', {
                           maxZoom: 19,
                           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   }), // any ILayer
@@ -790,24 +808,31 @@
           }
         });
         
-        $("#cod_ugrhi,#municipio,#finalidade,#tipo_uso,#data_publicacao").on('change', function(e){
+        $("#cod_ugrhi,#municipio,#diretoria,#finalidade,#tipo_uso,#data_publicacao").on('change', function(e){
           //console.log("Select Ugrhi or Municipio Changed: ", $(e.currentTarget));
           let el = $(this);
           let current_id = el.attr('id');
           let current_value = el.find(":selected").val();
 
           //console.log("Element: ", el.attr('id'))
-          if($("#cod_ugrhi").val() == "" && $("#municipio").val() == ""){
-            $("#municipio,#cod_ugrhi").prop("disabled", false);
+          if($("#cod_ugrhi").val() == "-" && $("#municipio").val() == "-" && ("#diretoria").val() == "-"){
+            $("#municipio,#cod_ugrhi,#diretoria").prop("disabled", false);
             $("#btn_filter").prop("disabled", true);
           }
           else if(current_id == 'municipio' && current_value != ''){
             //Disable Ugrhi
             $("#cod_ugrhi").prop("disabled", true);
+            $("#diretoria").prop("disabled", true);
             $("#btn_filter").prop("disabled", false);
           }
           else if(current_id = 'ugrhi' && current_value != ''){
             $("#municipio").prop("disabled", true);
+            $("#diretoria").prop("disabled", true);
+            $("#btn_filter").prop("disabled", false);
+          }
+          else if(current_id = 'diretoria' && current_value != ''){
+            $("#municipio").prop("disabled", true);
+            $("#cod_ugrhi").prop("disabled", true);
             $("#btn_filter").prop("disabled", false);
           }
 
@@ -913,6 +938,8 @@
               //$(".info-sazonalidade").html((opts._source.sazonalidade.indexOf("SIM ") > -1)?"Não":"Sim");
               $(".info-volume-anual").html(opts._source.volume_anual.toFixed(2));
               $(".info-vazao-max").html(opts._source.vazao_max.vazao);
+
+              $(".info-location").html("<a href='https://www.google.com.br/maps/q="+opts._source.location+"'>Ver no Google Maps</a>");
 
               if(element._source.vazoes[0].vazao == null){
                 $("#nav-discharges-tab").addClass("disabled");
@@ -1133,6 +1160,7 @@
 
           $("#cod_ugrhi").prop("disabled", false);
           $("#municipio").prop("disabled", false);
+          $("#diretoria").prop("disabled", false);
         }
 
         function getIconOptions(source){
@@ -1478,6 +1506,8 @@
           $("#nro_requerimento").val(params.get("nro_requerimento")).change();
           $("#municipio").val(params.get("cod_ibge")).change();
           $("#cod_ugrhi").val(params.get("cod_ugrhi")).change();
+          $("#diretoria").val(params.get("diretoria_sigla")).change();
+
           $('[name="data_publicacao_lte"]').val(params.get("data_publicacao_lte"));
           $('[name="data_publicacao_gte"]').val(params.get("data_publicacao_gte"));
           $("#tipo_uso").val(params.get("tipo_uso"));
