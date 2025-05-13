@@ -7,6 +7,27 @@ var ugrhis_json = require('../public/geojson/ugrhis.json');
 var axios = require('axios');
 require("dotenv").config();
 
+function escaparAspasDuplasInternas(obj) {
+  if (typeof obj === 'string') {
+    // Adapte esta lógica de escape conforme necessário
+    return obj.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replaceAll("'", "").trim();
+  } else if (typeof obj === 'object' && obj !== null) {
+    if (Array.isArray(obj)) {
+      return obj.map(escaparAspasDuplasInternas);
+    } else {
+      const novoObj = {};
+      for (const key in obj) {
+        if (Object.hasOwnProperty.call(obj, key)) {
+          novoObj[key] = escaparAspasDuplasInternas(obj[key]);
+        }
+      }
+      return novoObj;
+    }
+  } else {
+    return obj;
+  }
+}
+
 router.get('/ugrhis/:cod_ugrhi', function(req,res,next){
   async function run(){
     console.log("Find Ugrhi: ", req.params);
@@ -248,7 +269,7 @@ router.get('/', function(req, res, next) {
       const indexName = 'outorgas-soe';
 
       // Set pagination parameters
-      const pageSize = 10; // Number of documents per page
+      const pageSize = 1000; // Number of documents per page
       
 
       axios.post(`${elasticsearchUrl}/${indexName}/_search?scroll=1m`,{
@@ -313,7 +334,7 @@ router.get('/', function(req, res, next) {
             }else{           
               //cleanUpScrollContext(scrollId);
               console.log("Render Outorgas Page");
-              res.render('index', { title: 'SOE-DAEE', outorgas: JSON.stringify(outorgas).replaceAll("&#34;","\"") });
+              res.render('index', { title: 'SOE-DAEE', outorgas: JSON.stringify(escaparAspasDuplasInternas(outorgas)) });
             }
           })
           .catch(error => {
