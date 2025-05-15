@@ -10,7 +10,7 @@ require("dotenv").config();
 function escaparAspasDuplasInternas(obj) {
   if (typeof obj === 'string') {
     // Adapte esta lógica de escape conforme necessário
-    return obj.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replaceAll("'", "").trim();
+    return obj.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replaceAll("\'", "").trim();
   } else if (typeof obj === 'object' && obj !== null) {
     if (Array.isArray(obj)) {
       return obj.map(escaparAspasDuplasInternas);
@@ -26,6 +26,26 @@ function escaparAspasDuplasInternas(obj) {
   } else {
     return obj;
   }
+}
+
+function tratarErroJson(jsonString) {
+  //console.log("JSON String: ", jsonString);
+  // Expressão regular para encontrar caracteres inválidos para JSON
+  // Isso inclui caracteres de controle (U+0000-U+001F),
+  // caracteres que podem causar problemas de encoding/parsing (como alguns emojis e símbolos),
+  // e caracteres Unicode que não são bem suportados em JSON.
+  // Uma abordagem mais restrita é remover apenas os caracteres de controle,
+  // mas para uma limpeza mais agressiva, podemos usar uma faixa maior.
+  // Adapte a regex conforme a necessidade específica dos seus dados.
+  const regexCaracteresInvalidos = /[\u0000-\u001F\uD800-\uDFFF\uFEFF"\\'\\\\]/g;
+
+  if (typeof jsonString !== 'string') {
+    console.error("Erro: A entrada não é uma string.");
+    return null; // Ou lance um erro, dependendo do seu caso de uso
+  }
+
+  // Remove os caracteres inválidos da string
+  return jsonString.replace(regexCaracteresInvalidos, '');
 }
 
 router.get('/ugrhis/:cod_ugrhi', function(req,res,next){
@@ -269,15 +289,22 @@ router.get('/', function(req, res, next) {
       const indexName = 'outorgas-soe';
 
       // Set pagination parameters
-      const pageSize = 1000; // Number of documents per page
+      const pageSize = 100; // Number of documents per page
       
 
       axios.post(`${elasticsearchUrl}/${indexName}/_search?scroll=1m`,{
         size: pageSize,
+        _source: { 
+          excludes:
+          [
+            "nome_completo", "bairro_endereco", "cpf", "cnpj", "*requerente*", "nome", "nome_tecnico_pto",
+            "username_tecnico_pto", "situacao_user_tecnico_pto"
+          ]
+        },
         query: {
           bool:{
             must: must_filter
-          }
+          },
         },
       },{
           auth: {
@@ -334,6 +361,9 @@ router.get('/', function(req, res, next) {
             }else{           
               //cleanUpScrollContext(scrollId);
               console.log("Render Outorgas Page");
+
+              //outorgas = removerCampoPorCaminho(outorgas, "_source");
+
               res.render('index', { title: 'SOE-DAEE', outorgas: JSON.stringify(escaparAspasDuplasInternas(outorgas)) });
             }
           })
