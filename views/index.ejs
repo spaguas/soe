@@ -191,7 +191,7 @@
         
           <form class="container-fluid d-flex justify-content-center">
             <span class="navbar-text">
-              <a class="navbar-brand" href="./">SOE-SP Águas</a>
+              <a class="navbar-brand" href="/">SOE-SP Águas</a>
             </span>
 
             <span class="navbar-text d-none d-lg-block me-2">
@@ -260,6 +260,9 @@
                       <tr>
                         <th>Finalidade</th><td class="info-finalidade">-</td>
                       </tr>
+                      <tr>
+                        <th>Requerente</th><td class="info-requerente">-</td>
+                      </tr>
                       <!--<tr>
                         <th>Decisão do Parecer Técnico</th><td class="info-decisao">-</td>
                       </tr>-->      
@@ -284,7 +287,8 @@
                       <tr>
                         <th>Vazão (m³/h)</th><td class="info-vazao-max"></td>
                       </tr>
-                      <tr><th>Localização</th><td class="info-location"></td></tr>                     
+                      <tr><th>Localização</th><td class="info-location"></td></tr>
+                      <tr><th>Curso D'agua</th><td class="info-curso-agua"></td></tr>                         
                     </tbody>
                   </table>
                 </div>
@@ -533,7 +537,9 @@
                     <th>Cidade</th>
                     <th>Ugrhi</th>
                     <th>Diretoria</th>
-                    <th>Coordenadas</th>
+                    <th>Requerente (CNPJ/CPF)</th>
+                    <th>Nome Requerente (Nome/Razão Social)</th>
+                    <th>Coordenadas (Lat,Lon)</th>
                     <th>Tipo</th>
                     <th>Sub-Tipo</th>
                     <th>Finalidade</th>
@@ -543,6 +549,10 @@
                     <th>Volume Anual</th>
                     <th>Vazão(m³/h)</th>
                     
+                    <th>Domínio</th>
+                    <th>Curso D'Água</th>
+                    <th>CNARH</th>
+
                     <th>Jan(dias)</th>
                     <th>Jan(horas)</th>
                     <th>Jan(mins)</th>
@@ -848,6 +858,8 @@
           outorgas.forEach(element => {
             let source = element._source;
             
+            console.log("Source: ", source);
+
             let discharges = [];
 
             let months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
@@ -910,6 +922,23 @@
               $("#infoOutorga").find(".modal-body").find(".table-vazoes").empty();
 
               $(".info-municipio").html(opts._source.municipio);
+
+              if(opts._source.cnpj_requerente != null && opts._source.cnpj_requerente != undefined){
+                $(".info-requerente").html(opts._source.cnpj_requerente + " - "+opts._source.nome_requerente);
+              }
+              else{
+                $(".info-requerente").html("******");
+              }
+              
+              if(opts._source.nome_curso_agua != null && opts._source.nome_curso_agua != undefined && opts._source.nome_curso_agua != ""){
+                $(".info-curso-agua").html("Nome: "+opts._source.nome_curso_agua+" Dominio: "+opts._source.dominio+" - CNARH: "+opts._source.cnarh);
+              }
+              else{
+                $(".info-curso-agua").html("-");
+              }
+
+              $(".info-curso-agua").html(opts._source.nome_curso_agua);
+
               $(".info-diretoria").html(opts._source.diretoria_nome);
               $(".info-ugrhi").html(getUgrhi(opts._source.cod_ugrhi));
               $(".info-coordenadas").html(truncateString(""+opts._source.latitude, 12)+","+truncateString(""+opts._source.longitude,12));
@@ -939,7 +968,7 @@
               $(".info-volume-anual").html(opts._source.volume_anual.toFixed(2));
               $(".info-vazao-max").html(opts._source.vazao_max.vazao);
 
-              $(".info-location").html("<a href='https://www.google.com.br/maps/q="+opts._source.location+"'>Ver no Google Maps</a>");
+              $(".info-location").html("<a target='_blank' href='https://maps.google.com?q="+opts._source.location+"'>Ver no Google Maps</a>");
 
               if(element._source.vazoes[0].vazao == null){
                 $("#nav-discharges-tab").addClass("disabled");
@@ -1320,12 +1349,17 @@
 
         function renderRowToTable(target,data){
           let row = "";
+          console.log("Render Row to Table: ", data);
+          var requerente = (data.cnpj_requerente != null && data.cnpj_requerente != undefined) ? data.cnpj_requerente : "***";
+          var nome_requerente = (data.nome_requerente != null && data.nome_requerente != undefined) ? data.nome_requerente : "***";
           row += "<tr>";
             row += "<td>"+data.sol_req_num_cod+"</td>";
             row += "<td>"+data.uso_id+"</td>";
             row += "<td>"+data.municipio+"</td>";
             row += "<td>"+getUgrhi(data.cod_ugrhi)+"</td>";
             row += "<td>"+getDirCod(data.diretoria_nome)+"</td>";
+            row += "<td>"+requerente+"</td>";
+            row += "<td>"+nome_requerente+"</td>";
             row += "<td>"+parseFloat(data.latitude).toFixed(8)+", "+parseFloat(data.longitude).toFixed(8)+"</td>";
             row += "<td>"+data.tipo_uso+"</td>";
             row += "<td>"+data.subtipo_uso+"</td>";
@@ -1337,6 +1371,14 @@
 
             if(data.volume_m3_anual){ row += "<td>"+data.volume_m3_anual.toLocaleString()+"</td>"; }else{ row += "<td>-</td>"; }
             if(data.vazao_max){ row += "<td>"+data.vazao_max.vazao.toLocaleString()+"</td>"; }else{ row += "<td>-</td>" }
+
+            var dominio = (data.dominio != null && data.dominio != undefined) ? data.dominio : "-";
+            var nome_curso_agua = (data.nome_curso_agua != null && data.nome_curso_agua != undefined) ? data.nome_curso_agua : "-";
+            var cnarh = (data.cnarh != null && data.cnarh != undefined) ? data.cnarh : "-";
+
+            row += "<td>"+dominio+"</td>";
+            row += "<td>"+nome_curso_agua+"</td>";
+            row += "<td>"+cnarh+"</td>";
 
             for(let i = 0; i < 12; i++){
               let v = data.vazoes[i];
@@ -1409,7 +1451,7 @@
             return "BP-LN";
           }
           else{
-            return "Desconhecida - "+name;
+            return name;
           }
         }
 
@@ -1621,7 +1663,7 @@
 
           $("#tab-finality").html(el);
 
-          console.log(outorgas);          
+          //console.log(outorgas);          
         }
 
       </script>

@@ -85,7 +85,7 @@ router.get('/municipios/:cod_ibge', function(req,res,next){
       }
     }
    
-    res.render('municipios', { title: 'SOE-DAEE', municipios: JSON.stringify(features[0]) });
+    res.render('municipios', { title: 'SOE', municipios: JSON.stringify(features[0]) });
   }
   run().catch(console.log);
 })
@@ -190,7 +190,7 @@ router.get('/api/list_outorgas/', function(req,res,next){
 
       console.log('Total hits:', totalHits);
       console.log('Search results:', hits.length);
-      console.log("Outorgas: "+outorgas.length+"/"+totalHits);
+      //console.log("Outorgas: "+outorgas.length+"/"+totalHits);
       console.log('Scroll Id: '+scrollId);
 
       res.status(200).json({
@@ -297,7 +297,7 @@ router.get('/', function(req, res, next) {
         _source: { 
           excludes:
           [
-            "nome_completo", "bairro_endereco", "cpf", "cnpj", "*requerente*", "nome", "nome_tecnico_pto",
+            "nome_completo", "bairro_endereco", "cpf", "nome", "nome_tecnico_pto",
             "username_tecnico_pto", "situacao_user_tecnico_pto"
           ]
         },
@@ -364,7 +364,7 @@ router.get('/', function(req, res, next) {
 
               //outorgas = removerCampoPorCaminho(outorgas, "_source");
 
-              res.render('index', { title: 'SOE-DAEE', outorgas: JSON.stringify(escaparAspasDuplasInternas(outorgas)) });
+              res.render('index', { title: 'SOE', outorgas: JSON.stringify(escaparAspasDuplasInternas(outorgas)) });
             }
           })
           .catch(error => {
@@ -397,7 +397,7 @@ router.get('/', function(req, res, next) {
     else{
       //console.log("Selecione um municipio para continuar...");
       //res.render('home/index', { title: 'SOE-DAEE', outorgas: "" });
-      res.render('index', { title: 'SOE-DAEE', outorgas: "" });
+      res.render('index', { title: 'SOE', outorgas: "" });
     }
 
     
@@ -488,7 +488,15 @@ function parserOutorgas(outorgas){
       diretoria: outorga._source.diretoria_req,
       data_publicacao: outorga._source.data_publicacao,
       volume_total: calculateTotalVolume(outorga),
+      cnpj_requerente: (outorga._source.cnpj_requerente != undefined) ? outorga._source.cnpj_requerente : "***.***.***-**",
       status: outorga._source.decisao_pto,
+      tipo_empreendimento: outorga._source.tipo_empreendimento,
+      tipo_area: outorga._source.tipo_area,
+      tipo_finalidade: outorga._source.tipo_finalidade_usos,
+      tipo_planejamento: outorga._source.tipo_planejamento,
+      tipo_requerimento: outorga._source.tipo_requerimento,
+      data_publicacao: outorga._source.data_publicacao,
+      data_exame: outorga._source.data_exame,     
       sazonalidade: {
         jan: [getSazonalityTime(outorga, 1, "minutes"),  getSazonalityTime(outorga, 1, "hours"),  getSazonalityTime(outorga, 1, "days"),  getDischargeValue(outorga, 1)],
         fev: [getSazonalityTime(outorga, 2, "minutes"),  getSazonalityTime(outorga, 2, "hours"),  getSazonalityTime(outorga, 2, "days"),  getDischargeValue(outorga, 2)],
