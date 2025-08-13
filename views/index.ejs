@@ -924,7 +924,7 @@
               $(".info-municipio").html(opts._source.municipio);
 
               if(opts._source.cnpj_requerente != null && opts._source.cnpj_requerente != undefined){
-                $(".info-requerente").html(opts._source.cnpj_requerente + " - "+opts._source.nome_requerente);
+                $(".info-requerente").html(opts._source.cnpj_requerente + " - "+opts._source.razao_social_requerente);
               }
               else{
                 $(".info-requerente").html("******");
@@ -1351,7 +1351,7 @@
           let row = "";
           console.log("Render Row to Table: ", data);
           var requerente = (data.cnpj_requerente != null && data.cnpj_requerente != undefined) ? data.cnpj_requerente : "***";
-          var nome_requerente = (data.nome_requerente != null && data.nome_requerente != undefined) ? data.nome_requerente : "***";
+          var nome_requerente = (data.razao_social_requerente != null && data.razao_social_requerente != undefined) ? data.razao_social_requerente : "***";
           row += "<tr>";
             row += "<td>"+data.sol_req_num_cod+"</td>";
             row += "<td>"+data.uso_id+"</td>";
