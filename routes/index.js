@@ -91,123 +91,126 @@ router.get('/municipios/:cod_ibge', function(req,res,next){
 })
 
 
-router.get('/api/list_outorgas/', function(req,res,next){
-  async function run(){
-    console.log("Starting Async Search => ", req.query);
+// router.get('/api/list_outorgas/', function(req,res,next){
+//   async function run(){
+//     console.log("Starting Async Search => ", req.query);
 
-    const username = process.env.ELASTIC_USERNAME;
-    const password = process.env.ELASTIC_PASSWORD;
+//     const username = process.env.ELASTIC_USERNAME;
+//     const password = process.env.ELASTIC_PASSWORD;
 
-    const elasticsearchUrl = 'https://cth.daee.sp.gov.br/elasticsearch';
-    const indexName = 'outorgas-soe';
-    //const pageSize = (req.query['size']) ? parseInt(req.query['size']) : 1000;
-    const pageSize = 1000;
-    outorgas = [];
+//     const elasticsearchUrl = 'https://cth.daee.sp.gov.br/elasticsearch';
+//     const indexName = 'outorgas-soe';
+//     //const pageSize = (req.query['size']) ? parseInt(req.query['size']) : 1000;
+//     const pageSize = 1000;
+//     outorgas = [];
 
-    var must_filter = [];
-    let geo_filter = {};
-    let date_filter = {};
+//     var must_filter = [];
+//     let geo_filter = {};
+//     let date_filter = {};
 
-    for (var [key, value] of Object.entries(req.query)) {
-      if(value != ""){
+//     for (var [key, value] of Object.entries(req.query)) {
+//       if(value != ""){
         
-        var field_name = ""
+//         var field_name = ""
         
-        if(key.indexOf("ugrhi")>-1 || key.indexOf("data_publicacao")>-1 || key.indexOf("latitude")>-1 || key.indexOf("longitude") > -1 || key.indexOf("distance") > -1 || key.indexOf("location") > -1){
-          field_name = key;
-        }
-        else{
-          field_name = key + ".keyword";
-        }
+//         if(key.indexOf("ugrhi")>-1 || key.indexOf("data_publicacao")>-1 || key.indexOf("latitude")>-1 || key.indexOf("longitude") > -1 || key.indexOf("distance") > -1 || key.indexOf("location") > -1){
+//           field_name = key;
+//         }
+//         else{
+//           field_name = key + ".keyword";
+//         }
 
-        if(key.indexOf("data_publicacao") == -1 && key.indexOf("latitude") == -1 && key.indexOf("longitude") == -1 && key.indexOf("distance") == -1 && key.indexOf("location") == -1){
-          let obj = {};
-          obj[field_name]= value;
-          must_filter.push({match: obj});
-        }
-        else if(key.indexOf("data_publicacao") > -1){
-          let stx = field_name.split("_");
-          let obj = {};
-          obj[stx[2]] = value;
+//         if(key.indexOf("data_publicacao") == -1 && key.indexOf("latitude") == -1 && key.indexOf("longitude") == -1 && key.indexOf("distance") == -1 && key.indexOf("location") == -1){
+//           let obj = {};
+//           obj[field_name]= value;
+//           must_filter.push({match: obj});
+//         }
+//         else if(key.indexOf("data_publicacao") > -1){
+//           let stx = field_name.split("_");
+//           let obj = {};
+//           obj[stx[2]] = value;
           
-          Object.assign(date_filter, obj);
-        }
-        else{
-          //Forcing unit distance in kilometers
-          if(field_name == "distance"){
-            value = value + "km";
-          }
+//           Object.assign(date_filter, obj);
+//         }
+//         else{
+//           //Forcing unit distance in kilometers
+//           if(field_name == "distance"){
+//             value = value + "km";
+//           }
 
-          let obj = {};
-          //geo_filter[field_name] = value;
-          obj[field_name] = value;
-          Object.assign(geo_filter, obj);
-        }
-      }
-    }
+//           let obj = {};
+//           //geo_filter[field_name] = value;
+//           obj[field_name] = value;
+//           Object.assign(geo_filter, obj);
+//         }
+//       }
+//     }
     
-    if(!isEmpty(geo_filter)){
-      console.log("GeoFilter: ", geo_filter);
-      must_filter.push({geo_distance: geo_filter});
-    }
+//     if(!isEmpty(geo_filter)){
+//       console.log("GeoFilter: ", geo_filter);
+//       must_filter.push({geo_distance: geo_filter});
+//     }
 
-    if(!isEmpty(date_filter)){
-      console.log("DateFilter: ", date_filter);
-      let obj = {range: {data_publicacao: date_filter}};
-      console.log(obj);
-      must_filter.push(obj);
-    }
+//     if(!isEmpty(date_filter)){
+//       console.log("DateFilter: ", date_filter);
+//       let obj = {range: {data_publicacao: date_filter}};
+//       console.log(obj);
+//       must_filter.push(obj);
+//     }
 
-    //var requestUrl = (req.params['scroll_id'] != "" && req.params['scroll_id'] != undefined) ? `${elasticsearchUrl}/${indexName}/_search/scroll?scroll=1m&scroll_id=${req.params['scroll_id']}` : `${elasticsearchUrl}/${indexName}/_search?scroll=1m`
+//     //var requestUrl = (req.params['scroll_id'] != "" && req.params['scroll_id'] != undefined) ? `${elasticsearchUrl}/${indexName}/_search/scroll?scroll=1m&scroll_id=${req.params['scroll_id']}` : `${elasticsearchUrl}/${indexName}/_search?scroll=1m`
     
-    var requestUrl = `${elasticsearchUrl}/${indexName}/_search?scroll=1m`;
+//     var requestUrl = `${elasticsearchUrl}/${indexName}/_search?scroll=1m`;
 
-    var post_params = {size: pageSize };
-    console.log("Params: ", req.params);
-    console.log("Query: ", req.query['scroll_id']);
+//     var post_params = {size: pageSize };
+//     console.log("Params: ", req.params);
+//     console.log("Query: ", req.query['scroll_id']);
 
-    if(req.query['scroll_id'] != undefined && req.query['scroll_id'] != ''){
-      requestUrl = `${elasticsearchUrl}/_search/scroll`;
-      post_params = {scroll: '1m', scroll_id: req.query['scroll_id'] };
-    }else{
-      requestUrl = `${elasticsearchUrl}/${indexName}/_search?scroll=1m`;
-      post_params = {size: pageSize, query: { bool:{ must: must_filter } }}
-    }
+//     if(req.query['scroll_id'] != undefined && req.query['scroll_id'] != ''){
+//       requestUrl = `${elasticsearchUrl}/_search/scroll`;
+//       post_params = {scroll: '1m', scroll_id: req.query['scroll_id'] };
+//     }else{
+//       requestUrl = `${elasticsearchUrl}/${indexName}/_search?scroll=1m`;
+//       post_params = {size: pageSize, query: { bool:{ must: must_filter } }}
+//     }
     
-    console.log("Request: ", requestUrl);
-    console.log("Filter: ", must_filter)
+//     console.log("Request: ", requestUrl);
+//     console.log("Filter: ", must_filter)
 
-    axios.post(requestUrl, post_params,{
-        auth: {
-          username: username,
-          password: password,
-        },
-    }).then(function (response) {
-      hits = response.data.hits.hits;
-      totalHits = response.data.hits.total.value;
-      scrollId = response.data._scroll_id;
-      outorgas.push(...hits);
+//     axios.post(requestUrl, post_params,{
+//         auth: {
+//           username: username,
+//           password: password,
+//         },
+//     }).then(function (response) {
+//       hits = response.data.hits.hits;
+//       totalHits = response.data.hits.total.value;
+//       scrollId = response.data._scroll_id;
+//       outorgas.push(...hits);
 
-      console.log('Total hits:', totalHits);
-      console.log('Search results:', hits.length);
-      //console.log("Outorgas: "+outorgas.length+"/"+totalHits);
-      console.log('Scroll Id: '+scrollId);
+//       console.log('Total hits:', totalHits);
+//       console.log('Search results:', hits.length);
+//       console.log("Outorgas: "+outorgas.length+"/"+totalHits);
+//       console.log('Scroll Id: '+scrollId);
 
-      res.status(200).json({
-        scrollId: scrollId,
-        total: totalHits,
-        size: hits.length,
-        outorgas: parserOutorgas(outorgas)
-      })
-      //res.status(200).json({})
-    }).catch(err => {
-      console.log("Error Elastic: ", err.response);
-    })
+//       res.status(200).json({
+//         scrollId: scrollId,
+//         total: totalHits,
+//         size: hits.length,
+//         outorgas: parserOutorgas(outorgas)
+//       })
+//       //res.status(200).json({})
+//     }).catch(err => {
+//       console.log("Error Elastic: ", err.response);
+//       /*res.status(500).json({
+//         error: err
+//       })*/
+//     })
 
-  }
+//   }
 
-  run().catch(console.log);
-});
+//   run().catch(console.log);
+// });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -407,6 +410,14 @@ router.get('/', function(req, res, next) {
 
   
 });
+
+router.get('/index_new', function(req, res, next) {
+  async function run(){
+    res.render('index_new', { title: 'SOE' });
+  }
+
+  run().catch(console.log);
+})
 
 function isEmpty(obj) {
   for(var prop in obj) {
