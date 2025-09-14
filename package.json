@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www 0.0.0.0 80"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.2.1",

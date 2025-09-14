@@ -1,18 +1,20 @@
 <!doctype html>
 <html lang="pt-br">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SP-Águas • Mapa</title>
 
-  <script
-    src="https://code.jquery.com/jquery-3.6.1.min.js"
-    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
   <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
 
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
@@ -26,14 +28,44 @@
   https://cdn.jsdelivr.net/npm/leaflet-iconlayers@0.2.0/dist/iconLayers.min.css
   " rel="stylesheet">
 
-  <style>
-    html, body { height: 100%; margin: 0; }
-    #map { position: fixed; inset: 0; width: 100vw; height: 94.4vh; top:56px; }
-    .leaflet-container a { color: var(--bs-primary); }
-    .leaflet-control .btn { line-height: 1; padding: .5rem .75rem; }
-    .navbar-brand img { height: 32px; }
+  <!-- Dixie - IndexedDB -->
+  <script src="https://cdn.jsdelivr.net/npm/dexie@4.0.4/dist/dexie.min.js"></script>
 
-    .leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {
+  <!-- MarkerCluster CSS/JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #map {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 94.4vh;
+      top: 56px;
+    }
+
+    .leaflet-container a {
+      color: var(--bs-primary);
+    }
+
+    .leaflet-control .btn {
+      line-height: 1;
+      padding: .5rem .75rem;
+    }
+
+    .navbar-brand img {
+      height: 32px;
+    }
+
+    .leaflet-touch .leaflet-control-layers,
+    .leaflet-touch .leaflet-bar {
       border: none;
     }
   </style>
@@ -41,6 +73,12 @@
 <!-- Loading params to filters -->
 <script src="municipios.js"></script>
 <script src="ugrhis.js"></script>
+<script src="scripts/base_layers.js"></script>
+<script src="scripts/iconlayer_control.js"></script>
+<script src="scripts/filter_control.js"></script>
+<script src="scripts/watermark_control.js"></script>
+<script src="scripts/map_progress.js"></script>
+
 <body>
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm fixed-top">
@@ -48,21 +86,26 @@
       <a class="navbar-brand" href="#">
         <img src="/logo-spaguas-colorido.png" alt="SP-Águas" />
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
           <li class="nav-item"><a class="nav-link" href="#map">Mapa</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offFilters">Filtros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas"
+              data-bs-target="#offFilters">Filtros</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Relatórios</a></li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mais</a>
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Mais</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Configurações</a></li>
               <li><a class="dropdown-item" href="#">Ajuda</a></li>
-              <li><hr class="dropdown-divider"></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
               <li><a class="dropdown-item" href="#">Sair</a></li>
             </ul>
           </li>
@@ -73,6 +116,13 @@
       </div>
     </div>
   </nav>
+
+  <!-- Global loading bar (top) -->
+  <div id="global-progress" class="progress position-fixed top-0 start-0 w-100"
+    style="height: 3px; z-index: 2000; display:none;">
+    <div id="global-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+      style="width: 0%" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
 
   <!-- MAPA FULLSCREEN -->
   <div id="map" role="region" aria-label="Mapa interativo"></div>
@@ -85,36 +135,36 @@
     </div>
     <div class="offcanvas-body">
       <form id="filterForm" class="vstack gap-3">
-        
+
         <div class="form-floating">
-          <select id="ugrhis" class="form-select">              
+          <select id="ugrhis" class="form-select">
           </select>
           <label for="es-field">Ugrhis</label>
         </div>
 
         <div class="form-floating">
-          <select id="municipios" class="form-select">              
+          <select id="municipios" class="form-select">
           </select>
           <label for="es-field">Municípios</label>
         </div>
 
         <div class="form-floating">
           <select id="tipo_uso" class="form-select">
-              <option value="">-</option>
-              <option value="Travessia Subterrânea">Travessia Subterrânea</option>
-              <option value="Autorização para perfuração de Poço Tubular">Poço Tubular</option>
-              <option value="Lançamento Superficial">Lançamento Superficial</option>
-              <option value="Captação Subterrânea">Captação Subterrânea</option>
-              <option value="Captação Superficial">Captação Superficial</option>
-              <option value="Reservatório de Acumulação">Reservatório de Acumulação</option>
-              <option value="Obra ou Serviço de Proteção de Margem ou Leito">Obra ou Serviço</option>
-              <option value="Retificação / Revogação">Retificação / Revogação</option>
-              <option value="Canalização">Canalização</option>
-              <option value="Travessia Aérea">Travessia Aérea</option>
-              <option value="Barramento">Barramento</option>
-              <option value="Desassoreamento e Limpeza de Margem">Desassoreamento</option>
-              <option value="Travessia">Travessia</option>
-              <option value="Extração de Minério">Extração de Minério</option>
+            <option value="">-</option>
+            <option value="Travessia Subterrânea">Travessia Subterrânea</option>
+            <option value="Autorização para perfuração de Poço Tubular">Poço Tubular</option>
+            <option value="Lançamento Superficial">Lançamento Superficial</option>
+            <option value="Captação Subterrânea">Captação Subterrânea</option>
+            <option value="Captação Superficial">Captação Superficial</option>
+            <option value="Reservatório de Acumulação">Reservatório de Acumulação</option>
+            <option value="Obra ou Serviço de Proteção de Margem ou Leito">Obra ou Serviço</option>
+            <option value="Retificação / Revogação">Retificação / Revogação</option>
+            <option value="Canalização">Canalização</option>
+            <option value="Travessia Aérea">Travessia Aérea</option>
+            <option value="Barramento">Barramento</option>
+            <option value="Desassoreamento e Limpeza de Margem">Desassoreamento</option>
+            <option value="Travessia">Travessia</option>
+            <option value="Extração de Minério">Extração de Minério</option>
           </select>
           <label for="es-field">Tipo de Uso</label>
         </div>
@@ -139,333 +189,502 @@
           </select>
           <label for="es-field">Tipo de Finalidade</label>
         </div>
-        
-        <button type="submit" class="btn btn-success"><i class="bi bi-search"></i> Buscar</button>
+
+        <div class="form-floating">
+          <input type="date" class="form-control" id="data_publicacao" placeholder="Data de Publicação" />
+          <label for="data_publicacao">Data de Publicação</label>
+        </div>
+
+        <button type="button" class="btn btn-success" id="searchButton"><i class="bi bi-search"></i> Buscar</button>
       </form>
-      <hr/>
+      <hr />
       <div class="small text-secondary mb-2">Resultados</div>
       <div id="es-summary" class="small mb-2">—</div>
       <ul id="results" class="list-group small mb-3"></ul>
-      <pre id="es-output" class="bg-light border rounded p-2 small" style="max-height: 260px; overflow:auto; white-space: pre-wrap;"></pre>
+      <pre id="es-output" class="bg-light border rounded p-2 small"
+        style="max-height: 260px; overflow:auto; white-space: pre-wrap;"></pre>
     </div>
   </div>
 
   <!-- Bootstrap JS -->
-  
+
 
   <script>
     const INITIAL_VIEW = { lat: -23.5505, lng: -46.6333, zoom: 10 };
     const map = L.map('map').setView([INITIAL_VIEW.lat, INITIAL_VIEW.lng], INITIAL_VIEW.zoom);
 
-    /*const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap'
+    // Try to enable persistent storage
+    tryEnablePersistentStorage().then(info => {
+      if (info.persisted) {
+        console.log("Storage is persistent.");
+      } else {
+        console.log("Storage is not persistent.");
+      }
     });
-    baseLayer.addTo(map);*/
 
-    const access_token = "pk.eyJ1IjoiZGllZ29tb250ZWlyb3MiLCJhIjoiY21ldTh3ZWhhMDRoMDJzcHlpdWl2M2ViNCJ9.CufdrGmK_l_roZ66i4_R2g"
+    // // Check if the storage is persistent
+    // if (navigator.storage && navigator.storage.persisted) {
+    //   navigator.storage.persisted().then(persistent => {
+    //     if (!persistent) {
+    //       console.log("Storage is not persistent, consider using persistent storage.");
+    //     }
+    //   });
+    // }
 
-    baseLayers = [
-      {
-        title: 'OpenST', // use any string
-        layer: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }), // any ILayer
-        icon: './icons/openstreetmap_de.png' // 80x80 icon
-      },
-      {
-        title: 'Cartas 1:50k', // use any string
-        layer: L.tileLayer.wms('https://datageo.ambiente.sp.gov.br/geoimage/datageoimg/ows?SERVICE=WMS', {
-          layers: 'Cartas_50k_IBGE'
-        }), // any ILayer
-        icon: './icons/cartas_ibge_50k.png' // 80x80 icon
-      },
-      {
-        title: 'Mapbox Streets', // use any string
-        layer: L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlyb3MiLCJhIjoiY21ldTh3ZWhhMDRoMDJzcHlpdWl2M2ViNCJ9.CufdrGmK_l_roZ66i4_R2g", {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                tileSize: 512,
-                zoomOffset: -1
-        }), // any ILayer
-        icon: './icons/mapbox-streets.png' // 80x80 icon
-      },
-      {
-        title: 'Mapbox Satélite', // use any string
-        layer: L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlyb3MiLCJhIjoiY21ldTh3ZWhhMDRoMDJzcHlpdWl2M2ViNCJ9.CufdrGmK_l_roZ66i4_R2g", {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                tileSize: 256,
-                zoomOffset: 0
-        }), // any ILayer
-        icon: './icons/mapbox-streets.png' // 80x80 icon
-      },
-      {
-        title: 'Mapbox Dark', // use any string
-        layer: L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlyb3MiLCJhIjoiY21ldTh3ZWhhMDRoMDJzcHlpdWl2M2ViNCJ9.CufdrGmK_l_roZ66i4_R2g", {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                tileSize: 256,
-                zoomOffset: 0
-        }), // any ILayer
-        icon: './icons/mapbox-streets.png' // 80x80 icon
-      }
-  ]
+    iconLayersControl.addTo(map);
 
-  var iconLayersControl = new L.Control.IconLayers(
-    baseLayers  
-    , {
-          position: 'bottomleft',
-          maxLayersInRow: 3
-      }
-  );
-    
-  iconLayersControl.addTo(map);
+    // IndexedDB via Dexie.js
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    const db = new Dexie('outorgas_db');
 
+    db.version(1).stores({
+      // id: chave do doc (ES _id), savedAt pra TTL, e campos usados como índices
+      items: 'id, savedAt, tipo_uso, ugrhi',
+      // metadados por “coleção” (nome livre; ex.: 'outorgas_all')
+      meta: 'name'
+    });
 
-  iconLayersControl.on('activelayerchange', function(e) {
+    iconLayersControl.on('activelayerchange', function (e) {
       console.log('layer switched', e.layer);
       map.invalidateSize();
 
       let isDark = false;
       //Change watermakr logo with layer names is black
-      if(e.layer._url.indexOf('black') > -1 || e.layer._url.indexOf('dark') > -1 || e.layer._url.indexOf('satelite') > -1 || e.layer._url.indexOf('satel') > -1){
+      if (e.layer._url.indexOf('black') > -1 || e.layer._url.indexOf('dark') > -1 || e.layer._url.indexOf('satelite') > -1 || e.layer._url.indexOf('satel') > -1) {
         isDark = true;
       }
 
       updateWatermark(isDark);
-  });
+    });
+
+    populateMunicipiosSelect()
+    populateUgrhisSelect()
+    //getAllOutorgas()
+
+    const canvasRenderer = L.canvas({ padding: 0.5 });
+
+    let markersLayer = L.markerClusterGroup({
+      chunkedLoading: true,
+      chunkInterval: 200,
+      chunkProgress: updateProgressBarMarkers,
+      maxClusterRadius: 40,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: false,
+      animate: false,
+      removeOutsideVisibleBounds: true,
+      animateAddingMarkers: false,
+      spiderLegPolylineOptions: { weight: 3.5, color: '#888', opacity: 0.5 }
+
+    }).addTo(map);
+
+    //let markersLayer = L.featureGroup([], { renderer: canvasRenderer }).addTo(map);
+
+    // Botão no mapa para abrir offcanvas
+    map.addControl(new FilterControl());
+
+    // Watermark com logo no canto inferior direito
+    map.addControl(new WatermarkControl());
+
+    document.getElementById('searchButton').addEventListener('click', function () {
+      const ugrhi = document.getElementById('ugrhis').value;
+      const municipio = document.getElementById('municipios').value;
+      const tipo_uso = document.getElementById('tipo_uso').value;
+      const finalidade = document.getElementById('finalidade').value;
+      const data_publicacao = document.getElementById('data_publicacao').value;
+
+      const filter = {};
+      if (ugrhi) filter.ugrhi = ugrhi;
+      if (municipio) filter.municipio = municipio;
+      if (tipo_uso) filter.tipo_uso = tipo_uso;
+      if (finalidade) filter.tipo_finalidade_grupo = finalidade;
+      if (data_publicacao) filter.data_publicacao = data_publicacao;
+
+      getAllOutorgas({},filter);
+
+    });
 
 
-  getAllOutorgas()
+    async function tryEnablePersistentStorage() {
+      try {
+        // Só em navegadores que implementam a API
+        if (!('storage' in navigator)) {
+          console.info('[storage] StorageManager indisponível; seguindo sem persist().');
+          return { supported: false, persisted: false };
+        }
 
-  const canvasRenderer = L.canvas({ padding: 0.5});
-  let markersLayer = L.featureGroup([], { renderer: canvasRenderer }).addTo(map);
-  //let markersLayer = L.layerGroup().addTo(map);
+        // (Opcional) estimativa de quota/uso
+        let quotaInfo = null;
+        if (typeof navigator.storage.estimate === 'function') {
+          try { quotaInfo = await navigator.storage.estimate(); } catch { }
 
-  // Botão no mapa para abrir offcanvas
-  const FilterControl = L.Control.extend({
-      options: { position: 'topright' },
-      onAdd: function() {
-        const div = L.DomUtil.create('div', 'leaflet-bar');
-        const btn = L.DomUtil.create('button', 'btn btn-primary', div);
-        btn.type = 'button';
-        btn.title = 'Abrir filtros';
-        btn.innerHTML = '<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-funnel\" viewBox=\"0 0 16 16\"><path d=\"M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/></svg>';
-        L.DomEvent.disableClickPropagation(div);
-        btn.addEventListener('click', () => {
-          const off = bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offFilters'));
-          off.show();
+        }
+
+        // (Opcional) verificar se já está persistido
+        let already = false;
+        if (typeof navigator.storage.persisted === 'function') {
+          try { already = await navigator.storage.persisted(); } catch { }
+        }
+
+        // Tentar persistir (pode exigir gesto do usuário em alguns browsers)
+        let persisted = already;
+        if (!already && typeof navigator.storage.persist === 'function') {
+          try { persisted = await navigator.storage.persist(); } catch { }
+        }
+
+        console.info('[storage] persistência:', { supported: true, persisted, quotaInfo });
+        return { supported: true, persisted, quotaInfo };
+      } catch (e) {
+        console.warn('[storage] falha ao negociar persistência:', e);
+        return { supported: false, persisted: false };
+      }
+    }
+
+    function updateProgressBarMarkers(processed, total, elapsed) {
+      //console.log(`Markers: ${processed} / ${total} (em ${elapsed}ms)`);
+      const summary = document.getElementById('es-summary');
+      if (summary) summary.textContent = `Renderizando marcadores: ${processed} / ${total}`;
+      if (processed === total) {
+        setTimeout(() => {
+          if (summary) summary.textContent = `Marcadores no mapa: ${markersLayer.getLayers().length}`;
+        }, 500);
+      }
+      // Reset progress bar or any other UI elements if needed
+      else {
+        if (summary) summary.textContent = `Renderizando marcadores: ${processed} / ${total}`;
+      }
+    }
+
+    // Helpers TTL
+    async function getMeta(name) {
+      return (await db.meta.get(name)) || null;
+    }
+    async function setMeta(name, obj) {
+      await db.meta.put({ name, ...obj, savedAt: Date.now() });
+    }
+    function isFresh(savedAt, maxAge = ONE_DAY) {
+      return savedAt && (Date.now() - savedAt) < maxAge;
+    }
+
+    // Converte hits do ES no formato compacto
+    function toCompactRecords(hits) {
+      const out = [];
+      for (const h of (hits || [])) {
+        const id = h._id || h.id;
+        if (!id) continue;
+        const s = h._source || {};
+        const lat = s.latitude, lon = s.longitude;
+        if (lat == null || lon == null) continue;
+
+        // guarde só o necessário
+        out.push({
+          id,
+          lat: +lat,            // garantimos number
+          lon: +lon,
+          name: s.name || s.portaria || id,
+          portaria: s.portaria || null,
+          cod_ibge: s.cod_ibge ?? null,
+          tipo_uso: s.tipo_uso ?? null,
+          ugrhi: s.ugrhi ?? null,
+          sol_req_num_cod: s.sol_req_num_cod ?? null,
+          tipo_finalidade_grupo: s.tipo_finalidade_grupo ?? null,
+          finalidade: s.finalidade_simplificada ?? null,
+          data_publicacao: s.data_publicacao ?? null,
+          data_exame: s.data_exame ?? null,
+          diretoria: s.diretoria_nome ?? null,
+          tipo_requerimento: s.tipo_requerimento ?? null,
+          volume_m3_anual: s.volume_m3_anual != null ? +s.volume_m3_anual : null,
+          vazao_normalizada_m3s: s.vazao_normalizada_m3s != null ? +s.vazao_normalizada_m3s : null,
+          status_uso: s.status_uso ?? null,
+          status_requerimento: s.status_req ?? null,
+          decisao_pto: s.decisao_pto ?? null,
+          idx_requerente: s.cnpj_requerente || s.cpf_requerente || null,
+          nome_requerente: s.nome_requerente || null,
+          savedAt: Date.now()
         });
-        return div;
       }
-  });
-  
-  map.addControl(new FilterControl());
+      return out;
+    }
 
-  // Watermark com logo no canto inferior direito
-  const WatermarkControl = L.Control.extend({
-  options: { position: 'bottomright' },
-  onAdd: function () {
-      const div = L.DomUtil.create('div','watermark-logo');
-      div.style.background = 'transparent';
-      div.style.padding = '25px';
+    // Grava incrementando, sem duplicar
+    async function saveIncremental(hits, collectionName = 'outorgas_all') {
+      const recs = toCompactRecords(hits);
+      if (!recs.length) return { added: 0 };
 
-      const img = L.DomUtil.create('img', '', div);
-      img.src = './logo-spaguas-colorido.png'; // caminho do seu logo PNG
-      img.style.width = '150px';    // ajuste o tamanho aqui
-      img.style.opacity = '0.9';
-      img.style.pointerEvents = 'none'; // não bloqueia cliques no mapa
+      // put() sobrescreve se já existir; não duplica
+      await db.items.bulkPut(recs);
+      await setMeta(collectionName, { count: await db.items.count() });
+      return { added: recs.length };
+    }
 
-      return div;
-  }
-  });
-  map.addControl(new WatermarkControl());
+    async function loadAllFromCache(filter) {
+      //return db.items.toArray();
+      if (filter && Object.keys(filter).length) {
+        // Aplica filtros simples
+        let collection = db.items;
 
+        //console.log("Collection: ", collection);
 
-  function populateUgrhisSelect(){
-    $("#ugrhis").empty();
-    $("#ugrhis").append("<option value=''>-</option>");
-    $.each(ugrhis.ugrhis, function(k,v){
-      let obj = "<option value='"+v.codigo+"'>"+v.nome+"</option>";
-      //console.log(obj);
-      if(v.codigo != 99 && v.codigo != 9999){
-        $("#ugrhis").append(obj);
+        if (filter.ugrhi) {
+          collection = collection.where('ugrhi').equals(filter.ugrhi);
+        }
+        if (filter.tipo_uso) {
+          collection = collection.where('tipo_uso').equals(filter.tipo_uso);
+        }
+
+        if (filter.municipio) {
+          collection = collection.where('cod_ibge').equals(filter.municipio);
+        }
+        if (filter.data_publicacao) {
+          collection = collection.where('data_publicacao').equals(filter.data_publicacao);
+        }
+        // Adicione mais filtros conforme necessário
+
+        return await collection.toArray();
+      } else {
+        return await db.items.toArray();
       }
-    });
-  }
-
-  function populateMunicipiosSelect(){
-    $("#municipios").empty();
-
-    $("#municipios").append("<option value=''>-</option>");
-    $.each(municipios.municipios, function(k,v){
-      
-      let obj = "<option value='"+v.codigo_ibge +"'>"+v.nome+"</option>";
-      //console.log(obj);
-      $("#municipios").append(obj);
-    });
-  }
-
-  // Função para trocar a watermark conforme o mapa base
-  function updateWatermark(isDark) {
-    const imgs = document.querySelectorAll('.watermark-logo img');
-    imgs.forEach(img => {
-    if (img.src.includes('logo-spaguas')) {
-      img.src = isDark ? 'logo-spaguas-branco.png' : 'logo-spaguas-colorido.png';
     }
-    });
-  }
 
-  function buildQuery({ field, value, size, sort }) {
-    const must = [];
-    if (field && value) must.push({ match: { [field]: value } });
-    const query = must.length ? { bool: { must } } : { match_all: {} };
-    const body = { query, size };
-    if (sort) {
-      const [sField, sDir] = String(sort).split(':');
-      if (sField) body.sort = [{ [sField]: { order: (sDir||'asc').toLowerCase() } }];
+    async function renderFromCacheToMap(filter) {
+      const recs = await loadAllFromCache(filter);
+
+      console.log("Renderizando do cache:", recs.length, "registros");
+      console.log("Filtro:", filter);
+
+      if (!recs.length) return 0;
+
+      let added = 0;
+
+      try { markersLayer.clearLayers(); } catch { }
+
+      const batch = 1000; // processa em lotes para evitar travar a UI
+      for (let i = 0; i < 10000/*recs.length*/; i += batch) {
+        const chunk = recs.slice(i, i + batch);
+        const addedNow = addMarkersFromHits(chunk.map(r => ({ _id: r.id, _source: { latitude: r.lat, longitude: r.lon, name: r.name, tipo_uso: r.tipo_uso, sol_req_num_cod: r.sol_req_num_cod, tipo_finalidade_grupo: r.tipo_finalidade_grupo, data_publicacao: r.data_publicacao } })));
+        added += addedNow;
+        console.log(`Renderizado do cache: ${i + chunk.length} / ${recs.length} registros (${addedNow} marcadores adicionados)`);
+        await new Promise(res => setTimeout(res, 10)); // pausa breve para UI
+      }
+
+      document.getElementById('es-summary').textContent =
+        `Total de outorgas (cache): ${recs.length} • Marcadores no mapa: ${added}`;
+      console.log(`Renderizado do cache: ${recs.length} registros, ${added} marcadores adicionados`);
+      return added;
     }
-    return body;
-  }
 
-  async function esSearch(body) {
-    const endpoint = 'https://cth.daee.sp.gov.br/elasticsearch';
-    const index = 'outorgas';
-    const url = `${endpoint}/${index}/_search`;
-    const headers = { 'Content-Type': 'application/json' };
-    const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
-    if (!res.ok) throw new Error(`ES ${res.status} ${res.statusText}`);
-    return res.json();
-  }
+    function populateUgrhisSelect() {
+      $("#ugrhis").empty();
+      $("#ugrhis").append("<option value=''>-</option>");
+      $.each(ugrhis.ugrhis, function (k, v) {
+        let obj = "<option value='" + v.codigo + "'>" + v.nome + "</option>";
+        //console.log(obj);
+        if (v.codigo != 99 && v.codigo != 9999) {
+          $("#ugrhis").append(obj);
+        }
+      });
+    }
 
-  function clearMarkers() { markersLayer.clearLayers(); }
+    function populateMunicipiosSelect() {
+      $("#municipios").empty();
 
-  function styleMarkerByType(type) {
+      $("#municipios").append("<option value=''>-</option>");
+      $.each(municipios.municipios, function (k, v) {
+
+        let obj = "<option value='" + v.codigo_ibge + "'>" + v.nome + "</option>";
+        //console.log(obj);
+        $("#municipios").append(obj);
+      });
+    }
+
+    // Função para trocar a watermark conforme o mapa base
+    function updateWatermark(isDark) {
+      const imgs = document.querySelectorAll('.watermark-logo img');
+      imgs.forEach(img => {
+        if (img.src.includes('logo-spaguas')) {
+          img.src = isDark ? 'logo-spaguas-branco.png' : 'logo-spaguas-colorido.png';
+        }
+      });
+    }
+
+    function clearMarkers() { markersLayer.clearLayers(); }
+
+    function styleMarkerByType(type) {
       switch ((type || '').toLowerCase()) {
-          case 'captação superficial': return '#1f77b4'; // azul
-          case 'captação subterrânea': return '#ff7f0e'; // laranja
-          case 'lançamento superficial': return '#2ca02c'; // verde
-          case 'reservatório de acumulação': return '#d62728'; // vermelho
-          case 'barramento': return '#9467bd'; // roxo
-          case 'retificação / revogação': return '#8c564b'; // marrom
-          case 'canalização': return '#e377c2'; // rosa
-          case 'travessia aérea': return '#7f7f7f'; // cinza
-          case 'travessia subterrânea': return '#bcbd22'; // amarelo
-          case 'travessia': return '#cc99aa';
-          case 'desassoreamento e limpeza de margem': return '#cc2222';
-          case 'desassoreamento': return '#cc2222';
-          case 'poço tubular': return '#ddaa22';
-          case 'obra/serviço': return '#aabb99';
-          default: return '#cccccc'; // vermelho
+        case 'captação superficial': return '#1f77b4'; // azul
+        case 'captação subterrânea': return '#ff7f0e'; // laranja
+        case 'lançamento superficial': return '#2ca02c'; // verde
+        case 'reservatório de acumulação': return '#d62728'; // vermelho
+        case 'barramento': return '#9467bd'; // roxo
+        case 'retificação / revogação': return '#8c564b'; // marrom
+        case 'canalização': return '#e377c2'; // rosa
+        case 'travessia aérea': return '#7f7f7f'; // cinza
+        case 'travessia subterrânea': return '#bcbd22'; // amarelo
+        case 'travessia': return '#cc99aa';
+        case 'desassoreamento e limpeza de margem': return '#cc2222';
+        case 'desassoreamento': return '#cc2222';
+        case 'poço tubular': return '#ddaa22';
+        case 'obra/serviço': return '#aabb99';
+        default: return '#cccccc'; // vermelho
       }
-  }
+    }
 
-  function addMarkersFromHits(hits, popupField = null) {
+    function getIconOptsFromUI() {
+      // lê seus campos do offcanvas (ou defauls)
+      const lib = document.getElementById('icon-lib')?.value || 'fa';
+      const cls = (document.getElementById('icon-class')?.value || 'fa-solid fa-location-dot').trim();
+      const iconColor = document.getElementById('icon-color')?.value || '#ffffff';
+      const iconSize = parseInt(document.getElementById('icon-size')?.value, 10) || 18;
+      const fillColor = document.getElementById('circle-fill')?.value || '#0d6efd';
+      const strokeColor = document.getElementById('circle-stroke')?.value || '#083ea6';
+      const strokeWidth = parseInt(document.getElementById('circle-stroke-width')?.value, 10) || 2;
+      const padding = parseInt(document.getElementById('circle-padding')?.value, 10) || 6;
+      return { lib, cls, iconColor, iconSize, fillColor, strokeColor, strokeWidth, padding };
+    }
+
+
+    function addMarkersFromHits(hits, popupField = null) {
       let added = 0;
       for (const h of hits) {
-          const src = h._source || {};
-          let lat = src.latitude, lon = src.longitude;
-          if (lat != null && lon != null) {
-              const cm = L.circleMarker([lat, lon], {
-                  renderer: canvasRenderer,
-                  radius: 5,
-                  stroke: true,
-                  fillOpacity: 1,
-                  fillColor: styleMarkerByType(src.tipo_uso),
-                  weight: 1,
-                  color: '#000000'
-              }).addTo(markersLayer);
+        const src = h._source || {};
+        let lat = src.latitude, lon = src.longitude;
+        if (lat != null && lon != null) {
+          const cm = L.circleMarker([lat, lon], {
+            renderer: canvasRenderer,
+            radius: 5,
+            stroke: true,
+            fillOpacity: 1,
+            fillColor: styleMarkerByType(src.tipo_uso),
+            weight: 1,
+            color: '#000000'
+          }).addTo(markersLayer);
 
-              const title = src.name || h._id;
-              const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : '';
-              cm.bindPopup(`<b>${title}</b>${extra}`);
-              added++;
-          }
+          const title = src.name || h._id;
+          const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : '';
+          cm.bindPopup(`<b>${title}</b>${extra}`);
+          added++;
+        }
       }
       return added;
     }
 
-    document.getElementById('filterForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      clearMarkers();
-      document.getElementById('es-summary').textContent = 'Buscando...';
-      document.getElementById('results').innerHTML = '';
-      document.getElementById('es-output').textContent = '';
+    function renderFromCache(payload) {
+      const mapObj = payload?.items || {};
+      console.log("Renderizando do cache:", Object.keys(mapObj).length, "registros");
+      /*const hits = Object.values(mapObj).map(r => ({ _id: r._id, _source: r._source }));
+      const added = addMarkersFromHits(hits);
+      const summary = document.getElementById('es-summary');
+      if (summary) summary.textContent = `Total de outorgas (cache): ${hits.length}`;
+      console.log(`Renderizado do cache: ${hits.length} registros`);
+      return added;*/
+    }
 
-      const field = document.getElementById('es-field').value;
-      const value = document.getElementById('es-value').value.trim();
-      const size = parseInt(document.getElementById('es-size').value, 10) || 100;
-      const sort = document.getElementById('es-sort').value.trim();
-
-      const body = buildQuery({ field, value, size, sort });
+    async function getAllOutorgas({ forceRefresh = false } = {}, filter = {}) {
+      //Try load from cache first
       try {
-        const data = await esSearch(body);
-        const hits = data?.hits?.hits ?? [];
-        const total = typeof data?.hits?.total === 'object' ? data.hits.total.value : (data?.hits?.total ?? hits.length);
-        const added = addMarkersFromHits(hits);
 
-        document.getElementById('es-summary').textContent = `Encontrados ${total} documentos • Marcadores no mapa: ${added}`;
-        document.getElementById('es-output').textContent = JSON.stringify(hits.map(h=>({ _id: h._id, _source: h._source })), null, 2);
+        const meta = await getMeta('outorgas_all');
+        const fresh = meta && isFresh(meta.savedAt, ONE_DAY);
+        const hasCache = (await db.items.count()) > 0;
 
-        const list = document.getElementById('results');
-        hits.forEach(h => {
-          const src = h._source || {};
-          const li = document.createElement('li');
-          li.className = 'list-group-item';
-          li.textContent = `${h._id} - ${src[field] || ''}`;
-          list.appendChild(li);
-        });
+        if (hasCache && fresh && !forceRefresh) {
+          await renderFromCacheToMap(filter); // Pass filter to the function
+          return;
+        }
+
+        const url = '/api/outorgas/all?fields=id,sol_req_num_cod,latitude,longitude,tipo_uso,tipo_finalidade_grupo,data_publicacao,portaria,cod_ibge,cod_ugrhi,status_uso,status_req,decisao_pto,cnpj_requerente,cpf_requerente,nome_requerente,diretoria_nome,tipo_requerimento,volume_m3_anual,vazao_normalizada_m3s,data_exame';
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const data = await res.json();
+
+        await saveIncremental(data?.hits?.hits || []);
+        //await renderFromCacheToMap(); // ou desenhe só o lote atual, como preferir
+
+        let scrollId = data._scroll_id;
+        const fetchNext = async () => {
+          if (!scrollId) return;
+          const nextRes = await fetch(`/api/outorgas/scroll_list?scroll_id=${encodeURIComponent(scrollId)}`);
+          if (!nextRes.ok) throw new Error(`HTTP ${nextRes.status}`);
+          const nextData = await nextRes.json();
+          const chunk = nextData?.hits?.hits || [];
+          if (chunk.length) {
+            await saveIncremental(chunk);    // grava incremental
+            // dica: para UX, você pode também “streamar” para o mapa:
+            //addMarkersFromHits(toCompactRecords(chunk).map(r => ({ _id: r.id, _source: { latitude:r.lat, longitude:r.lon, name:r.name, ...} })));
+            addMarkersFromHits(toCompactRecords(chunk).map(r => ({ _id: r.id, _source: 
+                { 
+                  latitude: r.lat, longitude: r.lon,
+                  name: r.name, tipo_uso: r.tipo_uso,
+                  sol_req_num_cod: r.sol_req_num_cod,
+                  tipo_finalidade_grupo: r.tipo_finalidade_grupo,
+                  tipo_uso: r.tipo_uso,
+                  cod_ibge: r.cod_ibge,
+                  ugrhi: r.ugrhi,
+                  data_publicacao: r.data_publicacao 
+                }
+            })));
+            scrollId = nextData._scroll_id;
+            await fetchNext();
+          } else {
+            scrollId = null;
+          }
+        };
+
+        fetchNext();
+
+        document.getElementById('es-summary').textContent = `Outorgas atualizadas • ${new Date().toLocaleString()}`;
+
+
       } catch (err) {
-        document.getElementById('es-summary').textContent = 'Erro na busca';
-        document.getElementById('es-output').textContent = String(err.message || err);
+        console.error("Erro ao carregar cache do localStorage:", err);
+        document.getElementById('es-summary').textContent = 'Erro ao carregar cache';
+        return;
       }
-    });
 
-    function getAllOutorgas(){
-        fetch('/api/outorgas/all?fields=id,sol_req_num_cod,latitude,longitude,tipo_uso,tipo_finalidade_grupo, data_publicacao, portaria').then(res => res.json()).then(data => {
-            let loaded = data.hits.hits.length;
-            console.log("Outorgas data:", loaded,"/",data.hits.total.value);
+      /*fetch('/api/outorgas/all?fields=id,sol_req_num_cod,latitude,longitude,tipo_uso,tipo_finalidade_grupo, data_publicacao, portaria').then(res => res.json()).then(data => {
+          let loaded = data.hits.hits.length;
+          console.log("Outorgas data:", loaded,"/",data.hits.total.value);
 
-            console.log("Data:", data);
+          console.log("Data:", data);
 
-            addMarkersFromHits(data.hits.hits);
-        
-            //Get others outorgas with scroll if available
-            let scrollId = data._scroll_id;
-            console.log("Initial scroll ID:", scrollId);
-            const fetchNext = () => {
-                if (!scrollId) return;
-                
-                console.log("Fetching scroll ", scrollId);
+          addMarkersFromHits(data.hits.hits);
+      
+          //Get others outorgas with scroll if available
+          let scrollId = data._scroll_id;
+          console.log("Initial scroll ID:", scrollId);
+          const fetchNext = () => {
+              if (!scrollId) return;
+              
+              console.log("Fetching scroll ", scrollId);
 
-                fetch('/api/outorgas/scroll_list?scroll_id='+scrollId, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                }).then(res => res.json()).then(nextData => {
-                    if (nextData.hits && nextData.hits.hits.length > 0) {
-                        loaded += nextData.hits.hits.length;
-                        console.log("Next data:", loaded, "/", nextData.hits.total.value);
-                        addMarkersFromHits(nextData.hits.hits);
-                        scrollId = nextData._scroll_id;
-                        fetchNext();
-                    } else {
-                        console.log("No more data to fetch.");
-                        scrollId = null;
-                    }
-                }).catch(err => {
-                    console.error("Error fetching scroll data:", err);
-                });
-            };
-            //fetchNext();
 
-            document.getElementById('es-summary').textContent = `Total de outorgas: ${data.hits.total.value}`;
-        }).catch(err => {
-            document.getElementById('es-summary').textContent = 'Erro ao carregar outorgas';
-            document.getElementById('es-output').textContent = String(err.message || err);
-        });
+              fetch('/api/outorgas/scroll_list?scroll_id='+scrollId, {
+                  method: 'GET',
+                  headers: { 'Content-Type': 'application/json' }
+              }).then(res => res.json()).then(nextData => {
+                  if (nextData.hits && nextData.hits.hits.length > 0) {
+                      loaded += nextData.hits.hits.length;
+                      console.log("Next data:", loaded, "/", nextData.hits.total.value);
+                      addMarkersFromHits(nextData.hits.hits);
+                      scrollId = nextData._scroll_id;
+                      fetchNext();
+                  } else {
+                      console.log("No more data to fetch.");
+                      scrollId = null;
+                  }
+              }).catch(err => {
+                  console.error("Error fetching scroll data:", err);
+              });
+          };
+          //fetchNext();
+
+          document.getElementById('es-summary').textContent = `Total de outorgas: ${data.hits.total.value}`;
+      }).catch(err => {
+          document.getElementById('es-summary').textContent = 'Erro ao carregar outorgas';
+          document.getElementById('es-output').textContent = String(err.message || err);
+      });*/
     }
   </script>
 </body>
+
 </html>

@@ -1,0 +1,52 @@
+{
+    "$id": "1",
+    "NumeroConvenio": 3128557,
+    "NumeroCarteira": 17,
+    "NumeroVariacaoCarteira": 35,
+    "CodigoModalidade": 1,
+    "DataEmissao": "27.05.2025",
+    "DataVencimento": "28.11.2025",
+    "ValorOriginal": 3743,
+    "ValorAbatimento": null,
+    "QuantidadeDiasProtesto": null,
+    "QuantidadeDiasNegativacao": null,
+    "OrgaoNegativador": null,
+    "IndicadorAceiteTituloVencido": "S",
+    "NumeroDiasLimiteRecebimento": "59",
+    "CodigoAceite": "A",
+    "CodigoTipoTitulo": "2",
+    "DescricaoTipoTitulo": null,
+    "IndicadorPermissaoRecebimentoParcial": "N",
+    "NumeroTituloBeneficiario": "59591",
+    "CampoUtilizacaoBeneficiario": null,
+    "NumeroTituloCliente": "00031285570342607498",
+    "MensagemBloquetoOcorrencia": "COBRAN\u00C7A PELO USO DOS RECURSOS H\u00CDDRICOS 2025- CBH-LN   AP\u00D3S O VENCIMENTO COBRAR MULTA DE 2% E JUROS DE 1% AO M                                                  ",
+    "IndicadorPix": "S",
+    "textoEnderecoEmail": null,
+    "Pagador": {
+        "$id": "2",
+        "TipoInscricao": 2,
+        "NumeroInscricao": 74910037000193,
+        "Nome": "WATER FONT TRANSPORTES LTDA",
+        "Endereco": "R. BARRA LONGA, 136",
+        "Cep": 5330040,
+        "Cidade": "S\u00C3O PAULO",
+        "Bairro": "JAGUAR\u00C9",
+        "Uf": "SP",
+        "telefone": null
+    },
+    "Multa": {
+        "$id": "3",
+        "tipo": 1,
+        "data": "29.11.2025",
+        "porcentagem": 0,
+        "valor": 74.86
+    },
+    "Juros": {
+        "$id": "4",
+        "tipo": 1,
+        "porcentagem": 0,
+        "valor": 1.25
+    },
+    "BeneficiarioFinal": null
+}

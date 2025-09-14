@@ -419,6 +419,14 @@ router.get('/index_new', function(req, res, next) {
   run().catch(console.log);
 })
 
+router.get('/index_new2', function(req, res, next) {
+  async function run(){
+    res.render('index_new2', { title: 'SOE' });
+  }
+
+  run().catch(console.log);
+});
+
 function isEmpty(obj) {
   for(var prop in obj) {
     if(Object.prototype.hasOwnProperty.call(obj, prop)) {
