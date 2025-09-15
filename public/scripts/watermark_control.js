@@ -1,16 +1,31 @@
 // Watermark com logo no canto inferior direito
+
 const WatermarkControl = L.Control.extend({
 options: { position: 'bottomright' },
 onAdd: function () {
     const div = L.DomUtil.create('div','watermark-logo');
-    div.style.background = 'transparent';
-    div.style.padding = '25px';
-
     const img = L.DomUtil.create('img', '', div);
-    img.src = './logo-spaguas-colorido.png'; // caminho do seu logo PNG
-    img.style.width = '150px';    // ajuste o tamanho aqui
-    img.style.opacity = '0.9';
-    img.style.pointerEvents = 'none'; // não bloqueia cliques no mapa
+
+    if(!isMobile()){    
+        console.log("Not mobile");
+        div.style.background = 'transparent';
+        div.style.padding = '25px';
+        img.src = './logo-spaguas-colorido.png'; // caminho do seu logo PNG
+        img.style.width = '150px';    // ajuste o tamanho aqui
+        img.style.opacity = '0.9';
+        img.style.pointerEvents = 'none'; // não bloqueia cliques no mapa
+    }
+    else{
+        console.log("Is mobile");
+        div.style.background = 'transparent';
+        div.style.padding = '2px';
+
+        const img = L.DomUtil.create('img', '', div);        
+        img.src = './logo-spaguas-colorido.png'; // caminho do seu logo PNG
+        img.style.width = '100px';    // ajuste o tamanho aqui
+        img.style.opacity = '0.9';
+        img.style.pointerEvents = 'none'; // não bloqueia cliques no mapa
+    }
 
     return div;
 }

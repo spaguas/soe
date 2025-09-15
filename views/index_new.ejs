@@ -12,9 +12,11 @@
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
     crossorigin="anonymous"></script>
+
 
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
@@ -36,6 +38,9 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
+  <script src="libs/beautifyIcons/leaflet-beautify-marker-icon.js"></script>
+  <link href="libs/beautifyIcons/leaflet-beautify-marker-icon.css" rel="stylesheet" type="text/css" />
+
   <style>
     html,
     body {
@@ -47,8 +52,15 @@
       position: fixed;
       inset: 0;
       width: 100vw;
-      height: 94.4vh;
+      height: 92.5vh;
       top: 56px;
+    }
+
+    @media only screen and (max-device-width: 600px) {
+      #map {
+        height: 93.6%;
+        top: 56px;
+      }      
     }
 
     .leaflet-container a {
@@ -71,6 +83,7 @@
   </style>
 </head>
 <!-- Loading params to filters -->
+<script src="diretorias.js"></script>
 <script src="municipios.js"></script>
 <script src="ugrhis.js"></script>
 <script src="scripts/base_layers.js"></script>
@@ -78,6 +91,7 @@
 <script src="scripts/filter_control.js"></script>
 <script src="scripts/watermark_control.js"></script>
 <script src="scripts/map_progress.js"></script>
+<script src="scripts/radius_search_control.js"></script>
 
 <body>
   <!-- NAVBAR -->
@@ -94,8 +108,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
           <li class="nav-item"><a class="nav-link" href="#map">Mapa</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas"
-              data-bs-target="#offFilters">Filtros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offFilters">Filtros</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Relatórios</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -110,22 +123,53 @@
             </ul>
           </li>
         </ul>
-        <!--<div class="d-flex">
-          <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offFilters">Abrir Filtros</button>
-        </div>-->
       </div>
     </div>
   </nav>
 
   <!-- Global loading bar (top) -->
-  <div id="global-progress" class="progress position-fixed top-0 start-0 w-100"
-    style="height: 3px; z-index: 2000; display:none;">
-    <div id="global-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-      style="width: 0%" aria-valuemin="0" aria-valuemax="100"></div>
+  <!--<div id="global-progress" class="progress position-fixed w-100 start-10"
+    style="height: 25px; z-index: 2000; display:none;">
+    <div id="global-progress-bar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar"
+      style="width: 0%" aria-valuemin="0" aria-valuemax="100">25%</div>
+  </div>-->
+  <div id="global-progress" class="progress position-fixed w-100 start-10" style="height: 5px; z-index: 2000; display:none;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+    <div id="global-progress-bar" class="progress-bar text-bg-success" style="width: 0%;"></div>
   </div>
 
   <!-- MAPA FULLSCREEN -->
   <div id="map" role="region" aria-label="Mapa interativo"></div>
+
+  <!-- OFFCANVAS: Filtro por Raio(km)-->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offRadiusSearch" aria-labelledby="offRadiusSearchLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offRadiusSearchLabel">Busca por Raio (km)</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form id="radiusSearchForm" class="vstack gap-3">
+        <div class="form-floating">
+          <input type="number" class="form-control" id="radius_km" placeholder="Raio em km" min="0.1" max="50" value="10" />
+          <label for="radius_km">Raio (km):</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="center_lat" placeholder="Latitude do centro" />
+          <label for="center_lat">Latitude do centro:</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="center_lng" placeholder="Longitude do centro" />
+          <label for="center_lng">Longitude do centro:</label>
+        </div>
+
+        <div class="d-grid gap-6 d-md-flex justify-content-md-end">
+          <button type="button" class="btn btn-success me-md-1" id="radiusSearchButton"><i class="bi bi-search"></i> Buscar</button>
+          <button type="reset" class="btn btn-secondary" id="radiusClearButton"><i class="bi bi-trash"></i> Limpar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- OFFCANVAS: Controles e Filtros -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offFilters" aria-labelledby="offFiltersLabel">
@@ -135,6 +179,11 @@
     </div>
     <div class="offcanvas-body">
       <form id="filterForm" class="vstack gap-3">
+        <div class="form-floating">
+          <select id="diretorias" class="form-select">
+          </select>
+          <label for="es-field">Gerências</label>
+        </div>
 
         <div class="form-floating">
           <select id="ugrhis" class="form-select">
@@ -147,6 +196,8 @@
           </select>
           <label for="es-field">Municípios</label>
         </div>
+
+        
 
         <div class="form-floating">
           <select id="tipo_uso" class="form-select">
@@ -192,17 +243,19 @@
 
         <div class="form-floating">
           <input type="date" class="form-control" id="data_publicacao" placeholder="Data de Publicação" />
-          <label for="data_publicacao">Data de Publicação</label>
+          <label for="data_publicacao">Data de Publicação após:</label>
         </div>
 
-        <button type="button" class="btn btn-success" id="searchButton"><i class="bi bi-search"></i> Buscar</button>
+        <div class="d-grid gap-6 d-md-flex justify-content-md-end">
+          <button type="button" class="btn btn-success me-md-1" id="searchButton"><i class="bi bi-search"></i> Buscar</button>
+          <button type="reset" class="btn btn-secondary" id="clearButton"><i class="bi bi-trash"></i> Limpar</button>
+        </div>
+        
       </form>
       <hr />
       <div class="small text-secondary mb-2">Resultados</div>
       <div id="es-summary" class="small mb-2">—</div>
       <ul id="results" class="list-group small mb-3"></ul>
-      <pre id="es-output" class="bg-light border rounded p-2 small"
-        style="max-height: 260px; overflow:auto; white-space: pre-wrap;"></pre>
     </div>
   </div>
 
@@ -213,6 +266,19 @@
     const INITIAL_VIEW = { lat: -23.5505, lng: -46.6333, zoom: 10 };
     const map = L.map('map').setView([INITIAL_VIEW.lat, INITIAL_VIEW.lng], INITIAL_VIEW.zoom);
 
+    function isMobile() {
+      return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+    }
+
+    //Criando panes para controlar ordem das camadas
+    map.createPane('markersPane');
+    map.createPane('layersPane');
+
+    map.getPane('layersPane').style.zIndex = 200; // abaixo das camadas base
+    map.getPane('layersPane').style.pointerEvents = 'none';
+
+    const fields = ["latitude", "longitude", "portaria", "cod_ibge", "tipo_uso", "municipio", "sol_req_num_cod", "tipo_finalidade_grupo", "data_publicacao", "data_exame", "diretoria_nome", "tipo_requerimento", "volume_m3_anual", "vazao_normalizada_m3s", "status_uso", "status_req", "status_data_exame", "status_sols", "decisao_pto", "cnpj_requerente", "cpf_requerente", "nome_requerente", "tem_sazonalidade", "razao_social_requerente", "cod_ugrhi", "nome_ugrhi", "tipo_finalidade_usos", "total_hours*", "vaz_*", "vol_max_*"].join(",");
+
     // Try to enable persistent storage
     tryEnablePersistentStorage().then(info => {
       if (info.persisted) {
@@ -222,15 +288,7 @@
       }
     });
 
-    // // Check if the storage is persistent
-    // if (navigator.storage && navigator.storage.persisted) {
-    //   navigator.storage.persisted().then(persistent => {
-    //     if (!persistent) {
-    //       console.log("Storage is not persistent, consider using persistent storage.");
-    //     }
-    //   });
-    // }
-
+    // Base layers control
     iconLayersControl.addTo(map);
 
     // IndexedDB via Dexie.js
@@ -239,7 +297,7 @@
 
     db.version(1).stores({
       // id: chave do doc (ES _id), savedAt pra TTL, e campos usados como índices
-      items: 'id, savedAt, tipo_uso, ugrhi',
+      items: 'id, savedAt, tipo_uso, ugrhi_codigo, cod_ibge, diretoria, tipo_finalidade_grupo, data_publicacao',
       // metadados por “coleção” (nome livre; ex.: 'outorgas_all')
       meta: 'name'
     });
@@ -259,24 +317,35 @@
 
     populateMunicipiosSelect()
     populateUgrhisSelect()
+    populateDiretoriasSelect()
     //getAllOutorgas()
+
+    // Layers for grouping
+    let ugrhiLayer = L.layerGroup([]);
+    let municipioLayer = L.layerGroup([]);
+    let geo_distance_groups = L.layerGroup([]);
 
     const canvasRenderer = L.canvas({ padding: 0.5 });
 
     let markersLayer = L.markerClusterGroup({
+      pane: 'markersPane',
       chunkedLoading: true,
       chunkInterval: 200,
       chunkProgress: updateProgressBarMarkers,
       maxClusterRadius: 40,
       spiderfyOnMaxZoom: true,
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: false,
+      showCoverageOnHover: true,
+      zoomToBoundsOnClick: true,
       animate: false,
       removeOutsideVisibleBounds: true,
       animateAddingMarkers: false,
-      spiderLegPolylineOptions: { weight: 3.5, color: '#888', opacity: 0.5 }
+      spiderLegPolylineOptions: { weight: 1.5, color: '#888', opacity: 0.25 }
 
     }).addTo(map);
+
+    municipioLayer.addTo(map);
+    ugrhiLayer.addTo(map);
+    geo_distance_groups.addTo(map);
 
     //let markersLayer = L.featureGroup([], { renderer: canvasRenderer }).addTo(map);
 
@@ -286,12 +355,68 @@
     // Watermark com logo no canto inferior direito
     map.addControl(new WatermarkControl());
 
+    const radiusCtrl = new RadiusSearchControl();
+    map.addControl(radiusCtrl);
+
+    map.on('click', function (e) {
+      console.log("Map clicked at", e.latlng);
+    });
+
+    map.on('overlayadd', function() {
+        markersLayer.bringToFront();
+    });
+
+    db.on('blocked', () => console.warn('Upgrade bloqueado por outra aba.'));
+    db.on('versionchange', () => db.close());
+
+    document.getElementById('radiusSearchButton').addEventListener('click', function () {
+      const radius_km = parseFloat(document.getElementById('radius_km').value);
+      const center_lat = parseFloat(document.getElementById('center_lat').value);
+      const center_lng = parseFloat(document.getElementById('center_lng').value);
+
+      if (isNaN(radius_km) || isNaN(center_lat) || isNaN(center_lng)) {
+        alert("Por favor, preencha todos os campos corretamente.");
+        return;
+      }
+
+      const radius_m = radius_km * 1000; // converter km para metros
+      const center = [center_lat, center_lng];
+
+      // Limpar camadas anteriores
+      municipioLayer.clearLayers();
+      ugrhiLayer.clearLayers();
+      geo_distance_groups.clearLayers();
+
+      // Adicionar círculo ao mapa
+      const circle = L.circle(center, {
+        color: 'blue',
+        fillColor: '#blue',
+        fillOpacity: 0.1,
+        radius: radius_m
+      }).addTo(geo_distance_groups);
+
+      let marker = L.marker(center,{           
+        icon: L.BeautifyIcon.icon({
+          iconShape: 'circle-dot',
+          borderWidth: 5,
+          borderColor: 'blue'
+        })
+      }).addTo(geo_distance_groups);
+
+      map.fitBounds(circle.getBounds());
+
+      // Filtrar outorgas dentro do raio
+      getAllOutorgas({ forceRefresh: false }, { geo_distance: { center, radius_km } });
+    });
+
     document.getElementById('searchButton').addEventListener('click', function () {
       const ugrhi = document.getElementById('ugrhis').value;
       const municipio = document.getElementById('municipios').value;
       const tipo_uso = document.getElementById('tipo_uso').value;
       const finalidade = document.getElementById('finalidade').value;
       const data_publicacao = document.getElementById('data_publicacao').value;
+      const tipo_finalidade_grupo = document.getElementById('finalidade').value;
+      const diretoria = document.getElementById('diretorias').value;
 
       const filter = {};
       if (ugrhi) filter.ugrhi = ugrhi;
@@ -299,11 +424,72 @@
       if (tipo_uso) filter.tipo_uso = tipo_uso;
       if (finalidade) filter.tipo_finalidade_grupo = finalidade;
       if (data_publicacao) filter.data_publicacao = data_publicacao;
+      if (tipo_finalidade_grupo) filter.tipo_finalidade_grupo = tipo_finalidade_grupo;
+      if (diretoria) filter.diretoria = diretoria;
 
-      getAllOutorgas({},filter);
+      municipioLayer.clearLayers();
+      ugrhiLayer.clearLayers();
 
+      getAllOutorgas({ forceRefresh: false }, filter);
     });
 
+
+    function loadUgrhiLayer() {
+      let url = "./ugrhis/" + $("#ugrhis").val();
+
+      if ($("#ugrhis").val() != "") {
+        $.get(url).then(response => {
+          ugrhiLayer.clearLayers()
+
+          let res = JSON.parse(response.replaceAll("&#34;", "\""));
+          console.log("Response Ugrhi: ", res);
+
+          let ll = L.geoJSON(res, {
+            pane: 'layersPane',
+            style: function (feature) {
+              return { color: '#2222dd', opacity: 0.5, weight: 2, stroke: true, fillOpacity: 0.05};
+            }
+          });
+
+          ugrhiLayer.addLayer(ll);
+          map.fitBounds(ugrhiLayer.getLayers()[0].getBounds())
+        }).fail(error => {
+          ugrhiLayer.clearLayers();
+          console.error(error);
+        });
+      }
+    }
+
+    function loadMunicipioLayer() {
+      //let url = "https://datageo.ambiente.sp.gov.br/geoserver/datageo/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=datageo:LimiteMunicipal&maxFeatures=700&outputFormat=application%2Fjson";
+      let url = "./municipios/" + $("#municipios").val();
+
+      let filter_cql = {};
+
+      if ($("#municipios").val() != "") {
+        $.get(url).then(response => {
+          //console.log("Get Cities: ", response);
+          municipioLayer.clearLayers();
+
+          let res = JSON.parse(response.replaceAll("&#34;", "\""));
+          let ll = L.geoJSON(res, {
+            pane: 'layersPane',
+            style: function (feature) {
+              return {
+                backgroundColor: 'red'
+              }
+            }
+          });
+          municipioLayer.addLayer(ll);
+
+          map.fitBounds(municipioLayer.getLayers()[0].getBounds());
+
+        }).fail(error => {
+          municipioLayer.clearLayers();
+          console.error(error);
+        })
+      }
+    }
 
     async function tryEnablePersistentStorage() {
       try {
@@ -340,19 +526,32 @@
       }
     }
 
-    function updateProgressBarMarkers(processed, total, elapsed) {
-      //console.log(`Markers: ${processed} / ${total} (em ${elapsed}ms)`);
-      const summary = document.getElementById('es-summary');
-      if (summary) summary.textContent = `Renderizando marcadores: ${processed} / ${total}`;
-      if (processed === total) {
+    function setProgressBar(containerId, barId, percentage) {
+      const container = document.getElementById(containerId);
+      const bar = document.getElementById(barId);
+      if (!container || !bar) return;
+
+      if (percentage >= 100) {
+        bar.style.width = '100%';
         setTimeout(() => {
-          if (summary) summary.textContent = `Marcadores no mapa: ${markersLayer.getLayers().length}`;
-        }, 500);
+          bar.style.width = '0%';
+          container.style.display = 'none';
+        }, 500); // espera meio segundo antes de esconder*/
+      } else {
+        container.style.display = 'block';
+        bar.style.display = 'block';
+        bar.style.width = `${percentage}%`;
+        bar.textContent = `${percentage}%`;
       }
-      // Reset progress bar or any other UI elements if needed
-      else {
-        if (summary) summary.textContent = `Renderizando marcadores: ${processed} / ${total}`;
-      }
+    }
+
+    function updateProgressBarMarkers(processed, total, elapsed) {
+      // Atualiza barra de progresso de marcadores
+      /*let per = Math.round((processed / total) * 100);
+      //setProgressBar('global-progress', 'global-progress-bar', per);
+      setTimeout(() => {
+           //setProgressBar("global-progress", "global-progress-bar", per);
+      }, 50);*/
     }
 
     // Helpers TTL
@@ -376,6 +575,8 @@
         const lat = s.latitude, lon = s.longitude;
         if (lat == null || lon == null) continue;
 
+        //console.log("Processando registro:", h);
+
         // guarde só o necessário
         out.push({
           id,
@@ -385,10 +586,12 @@
           portaria: s.portaria || null,
           cod_ibge: s.cod_ibge ?? null,
           tipo_uso: s.tipo_uso ?? null,
-          ugrhi: s.ugrhi ?? null,
+          ugrhi_codigo: s.cod_ugrhi || s.ugrhi || null,
+          ugrhi: { codigo: s.ugrhi || s.cod_ugrhi || null, nome: s.nome_ugrhi || null },
+          municipio: { nome: s.municipio || null, cod_ibge: s.cod_ibge ?? null },
           sol_req_num_cod: s.sol_req_num_cod ?? null,
           tipo_finalidade_grupo: s.tipo_finalidade_grupo ?? null,
-          finalidade: s.finalidade_simplificada ?? null,
+          finalidade: s.tipo_finalidade_usos ?? null,
           data_publicacao: s.data_publicacao ?? null,
           data_exame: s.data_exame ?? null,
           diretoria: s.diretoria_nome ?? null,
@@ -397,9 +600,25 @@
           vazao_normalizada_m3s: s.vazao_normalizada_m3s != null ? +s.vazao_normalizada_m3s : null,
           status_uso: s.status_uso ?? null,
           status_requerimento: s.status_req ?? null,
+          status_data_exame: s.status_data_exame ?? null,
+          status_sols: s.status_sols ?? null,
           decisao_pto: s.decisao_pto ?? null,
-          idx_requerente: s.cnpj_requerente || s.cpf_requerente || null,
-          nome_requerente: s.nome_requerente || null,
+          requerente: { id: s.cnpj_requerente || s.cpf_requerente || null, nome: s.nome_requerente || s.razao_social_requerente || null },
+          tem_sazonalidade: s.tem_sazonalidade === true,
+          vazoes: {
+            jan: { horas: s.total_hours_in_day_jan, vazao_m3h: s.vaz_jan, vol_max: s.vol_max_jan },
+            fev: { horas: s.total_hours_in_day_fev, vazao_m3h: s.vaz_fev, vol_max: s.vol_max_fev },
+            mar: { horas: s.total_hours_in_day_mar, vazao_m3h: s.vaz_mar, vol_max: s.vol_max_mar },
+            abr: { horas: s.total_hours_in_day_abr, vazao_m3h: s.vaz_abr, vol_max: s.vol_max_abr },
+            mai: { horas: s.total_hours_in_day_mai, vazao_m3h: s.vaz_mai, vol_max: s.vol_max_mai },
+            jun: { horas: s.total_hours_in_day_jun, vazao_m3h: s.vaz_jun, vol_max: s.vol_max_jun },
+            jul: { horas: s.total_hours_in_day_jul, vazao_m3h: s.vaz_jul, vol_max: s.vol_max_jul },
+            ago: { horas: s.total_hours_in_day_ago, vazao_m3h: s.vaz_ago, vol_max: s.vol_max_ago },
+            set: { horas: s.total_hours_in_day_set, vazao_m3h: s.vaz_set, vol_max: s.vol_max_set },
+            out: { horas: s.total_hours_in_day_out, vazao_m3h: s.vaz_out, vol_max: s.vol_max_out },
+            nov: { horas: s.total_hours_in_day_nov, vazao_m3h: s.vaz_nov, vol_max: s.vol_max_nov },
+            dez: { horas: s.total_hours_in_day_dez, vazao_m3h: s.vaz_dez, vol_max: s.vol_max_dez }
+          },
           savedAt: Date.now()
         });
       }
@@ -418,29 +637,149 @@
     }
 
     async function loadAllFromCache(filter) {
+      
       //return db.items.toArray();
-      if (filter && Object.keys(filter).length) {
+      keys = Object.keys(filter);
+
+      if (filter && keys.length) {
         // Aplica filtros simples
         let collection = db.items;
 
         //console.log("Collection: ", collection);
+        console.log("Keys: ", keys);
 
-        if (filter.ugrhi) {
-          collection = collection.where('ugrhi').equals(filter.ugrhi);
-        }
-        if (filter.tipo_uso) {
-          collection = collection.where('tipo_uso').equals(filter.tipo_uso);
+        //aplica apenas o primeiro filtro (por enquanto)
+        if(keys.length == 1){
+          console.log("Carregando do cache com filtro:", filter);
+
+          if(keys[0] == 'ugrhi'){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi))
+          } else if(keys[0] == 'tipo_uso'){
+            collection = collection.where('tipo_uso').equals(filter.tipo_uso);
+          } else if(keys[0] == 'tipo_finalidade_grupo'){
+            collection = collection.where('tipo_finalidade_grupo').equals(filter.tipo_finalidade_grupo);
+          } else if(keys[0] == 'municipio'){
+            collection = collection.where('cod_ibge').equals(filter.municipio);
+          } else if(keys[0] == 'data_publicacao'){
+            collection = collection.where('data_publicacao').aboveOrEqual(filter.data_publicacao);
+          } else if(keys[0] == 'diretoria'){
+            collection = collection.where('diretoria').equals(filter.diretoria);
+          } else if(keys[0] == 'geo_distance'){
+            //filtro por distância geográfica
+            const center = filter.geo_distance.center;
+            const radius_km = filter.geo_distance.radius_km;
+            const radius_m = radius_km * 1000;
+
+            collection = collection.filter(item => {
+              if(item.lat == null || item.lon == null) return false;
+              const d = map.distance([item.lat, item.lon], center);
+              return d <= radius_m;
+            });
+          } 
+        }else if(keys.length == 2){
+          console.log("Filtro composto: ", filter);
+          if(["ugrhi","municipio"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.cod_ibge == filter.municipio);
+          }
+          if(["ugrhi","tipo_uso"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.tipo_uso == filter.tipo_uso);
+          }
+          if(["ugrhi","tipo_finalidade_grupo"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo);
+          }
+          if(["ugrhi","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["ugrhi","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.diretoria == filter.diretoria);
+          }
+          if(["municipio","tipo_uso"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.tipo_uso == filter.tipo_uso);
+          }
+          if(["municipio","tipo_finalidade_grupo"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo);
+          }
+          if(["municipio","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["municipio","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.diretoria == filter.diretoria);
+          }
+          if(["tipo_uso","tipo_finalidade_grupo"].every(key => keys.includes(key))){
+            collection = collection.where('tipo_uso').equals(filter.tipo_uso).and(item => item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo);
+          }
+          if(["tipo_uso","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('tipo_uso').equals(filter.tipo_uso).and(item => item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["tipo_uso","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('tipo_uso').equals(filter.tipo_uso).and(item => item.diretoria == filter.diretoria);
+          }
+          if(["tipo_finalidade_grupo","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('tipo_finalidade_grupo').equals(filter.tipo_finalidade_grupo).and(item => item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["tipo_finalidade_grupo","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('tipo_finalidade_grupo').equals(filter.tipo_finalidade_grupo).and(item => item.diretoria == filter.diretoria);
+          }
+          if(["data_publicacao","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('data_publicacao').aboveOrEqual(filter.data_publicacao).and(item => item.diretoria == filter.diretoria);
+          }          
+        } else if(keys.length == 3){
+          if(["ugrhi","municipio","tipo_uso"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.cod_ibge == filter.municipio && item.tipo_uso == filter.tipo_uso);
+          }
+          if(["ugrhi","municipio","tipo_finalidade_grupo"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.cod_ibge == filter.municipio && item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo);
+          }
+          if(["ugrhi","municipio","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.cod_ibge == filter.municipio && item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["ugrhi","municipio","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.cod_ibge == filter.municipio && item.diretoria == filter.diretoria);
+          }
+
+          if(["ugrhi","tipo_uso","tipo_finalidade_grupo"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.tipo_uso == filter.tipo_uso && item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo);
+          }
+          if(["ugrhi","tipo_uso","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.tipo_uso == filter.tipo_uso && item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["ugrhi","tipo_uso","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.tipo_uso == filter.tipo_uso && item.diretoria == filter.diretoria);
+          }
+          if(["ugrhi","tipo_finalidade_grupo","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo && item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["ugrhi","tipo_finalidade_grupo","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo && item.diretoria == filter.diretoria);
+          }
+          if(["ugrhi","data_publicacao","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.data_publicacao >= filter.data_publicacao && item.diretoria == filter.diretoria);
+          }
+
+          if(["municipio","tipo_uso","tipo_finalidade_grupo"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.tipo_uso == filter.tipo_uso && item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo);
+          }
+          if(["municipio","tipo_uso","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.tipo_uso == filter.tipo_uso && item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["municipio","tipo_uso","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.tipo_uso == filter.tipo_uso && item.diretoria == filter.diretoria);
+          }
+          if(["municipio","tipo_finalidade_grupo","data_publicacao"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo && item.data_publicacao >= filter.data_publicacao);
+          }
+          if(["municipio","tipo_finalidade_grupo","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.tipo_finalidade_grupo == filter.tipo_finalidade_grupo && item.diretoria == filter.diretoria);
+          }
+          if(["municipio","data_publicacao","diretoria"].every(key => keys.includes(key))){
+            collection = collection.where('cod_ibge').equals(filter.municipio).and(item => item.data_publicacao >= filter.data_publicacao && item.diretoria == filter.diretoria);
+          } 
         }
 
-        if (filter.municipio) {
-          collection = collection.where('cod_ibge').equals(filter.municipio);
-        }
-        if (filter.data_publicacao) {
-          collection = collection.where('data_publicacao').equals(filter.data_publicacao);
-        }
-        // Adicione mais filtros conforme necessário
+        results = await collection.toArray();
+        console.log("Collection after filter: ", results.length);
 
-        return await collection.toArray();
+        return results;
       } else {
         return await db.items.toArray();
       }
@@ -448,6 +787,8 @@
 
     async function renderFromCacheToMap(filter) {
       const recs = await loadAllFromCache(filter);
+
+      let summary = document.getElementById('es-summary');
 
       console.log("Renderizando do cache:", recs.length, "registros");
       console.log("Filtro:", filter);
@@ -458,19 +799,58 @@
 
       try { markersLayer.clearLayers(); } catch { }
 
-      const batch = 1000; // processa em lotes para evitar travar a UI
-      for (let i = 0; i < 10000/*recs.length*/; i += batch) {
+      const batch = 100; // processa em lotes para evitar travar a UI
+      for (let i = 0; i < recs.length; i += batch) {
         const chunk = recs.slice(i, i + batch);
-        const addedNow = addMarkersFromHits(chunk.map(r => ({ _id: r.id, _source: { latitude: r.lat, longitude: r.lon, name: r.name, tipo_uso: r.tipo_uso, sol_req_num_cod: r.sol_req_num_cod, tipo_finalidade_grupo: r.tipo_finalidade_grupo, data_publicacao: r.data_publicacao } })));
+        //console.log("Chunk:", chunk);
+
+        const addedNow = addMarkersFromHits(chunk.map(r => ({
+          _id: r.id, _source: {
+            latitude: r.lat, longitude: r.lon,
+            name: r.name,
+            tipo_uso: r.tipo_uso,
+            sol_req_num_cod: r.sol_req_num_cod,
+            ugrhi: r.ugrhi,
+            municipio: r.municipio,
+            diretoria: r.diretoria,
+            cod_ibge: r.cod_ibge,
+            tipo_finalidade_grupo: r.tipo_finalidade_grupo,
+            data_publicacao: r.data_publicacao,
+            status_uso: r.status_uso
+          }
+        })));
+
         added += addedNow;
-        console.log(`Renderizado do cache: ${i + chunk.length} / ${recs.length} registros (${addedNow} marcadores adicionados)`);
-        await new Promise(res => setTimeout(res, 10)); // pausa breve para UI
+        //console.log(`Renderizado do cache: ${i + chunk.length} / ${recs.length} registros (${addedNow} marcadores adicionados)`);
+        if(summary){
+          let per = Math.round(((i + chunk.length) / recs.length) * 100);
+          summary.textContent = `Carregando : ${per.toFixed(2)}% - Total ${recs.length}`;
+          setProgressBar("global-progress", "global-progress-bar", per);
+        }
+        await new Promise(res => setTimeout(res, 1)); // pausa breve para UI
+      }
+
+      // Fit Bounds após carregar
+      if (markersLayer.getLayers().length) {
+        loadMunicipioLayer();
+        loadUgrhiLayer();
+        map.fitBounds(markersLayer.getBounds(), { maxZoom: 12, padding: [50, 50] });
       }
 
       document.getElementById('es-summary').textContent =
-        `Total de outorgas (cache): ${recs.length} • Marcadores no mapa: ${added}`;
+        `Outorgas (cache): ${recs.length} • Carregados (mapa): ${added}`;
       console.log(`Renderizado do cache: ${recs.length} registros, ${added} marcadores adicionados`);
       return added;
+    }
+
+    function populateDiretoriasSelect() {
+      $("#diretorias").empty();
+      $("#diretorias").append("<option value=''>-</option>");
+      $.each(diretorias, function (k, v) {
+        let obj = "<option value='" + v.nome + "'>" + v.nome + "</option>";
+        //console.log(obj);
+        $("#diretorias").append(obj);
+      });
     }
 
     function populateUgrhisSelect() {
@@ -545,38 +925,48 @@
 
     function addMarkersFromHits(hits, popupField = null) {
       let added = 0;
+      summary = document.getElementById('es-summary');
+
       for (const h of hits) {
         const src = h._source || {};
         let lat = src.latitude, lon = src.longitude;
         if (lat != null && lon != null) {
           const cm = L.circleMarker([lat, lon], {
             renderer: canvasRenderer,
-            radius: 5,
+            radius: 8,
             stroke: true,
             fillOpacity: 1,
             fillColor: styleMarkerByType(src.tipo_uso),
-            weight: 1,
+            weight: 2,
             color: '#000000'
           }).addTo(markersLayer);
 
           const title = src.name || h._id;
-          const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : '';
-          cm.bindPopup(`<b>${title}</b>${extra}`);
-          added++;
+          //const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : '';
+          //console.log("src:", src);
+          const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : `
+            <br><small>Tipo de Uso: ${src.tipo_uso || '-'}</small>
+            <br><small>Finalidade: ${src.tipo_finalidade_grupo || '-'}</small>
+            <br><small>Municipio: ${src.municipio.nome || '-'}</small>
+            <br><small>Ugrhi: ${src.ugrhi.nome || '-'}</small>
+            <br><small>Data Publicação: ${src.data_publicacao || '-'}</small>
+            <br><small style='color: ${getColorByStatusUso(src.status_uso)}'><b>Status</b>: ${src.status_uso || '-'}</small>
+          `;
+          cm.bindPopup(`<b>ID: ${title}</b>${extra}`);
+          added++;        
         }
       }
       return added;
     }
 
-    function renderFromCache(payload) {
-      const mapObj = payload?.items || {};
-      console.log("Renderizando do cache:", Object.keys(mapObj).length, "registros");
-      /*const hits = Object.values(mapObj).map(r => ({ _id: r._id, _source: r._source }));
-      const added = addMarkersFromHits(hits);
-      const summary = document.getElementById('es-summary');
-      if (summary) summary.textContent = `Total de outorgas (cache): ${hits.length}`;
-      console.log(`Renderizado do cache: ${hits.length} registros`);
-      return added;*/
+    function getColorByStatusUso(status) {
+      if (!status) return '#000000';
+      
+      if(status.toLowerCase().includes(' deferid')){ return '#28a745'; } // verde
+      if(status.toLowerCase().includes(' indeferida')){ return '#dc3545'; } // vermelho
+      if(status.toLowerCase().includes(' revogad')){ return '#D2691E'; } // cinza
+      if(status.toLowerCase().includes('excluído')){ return '#ffc107'; } // amarelo
+      if(status.toLowerCase().includes('cadastrado')){ return '#fd7e14'; } // laranja
     }
 
     async function getAllOutorgas({ forceRefresh = false } = {}, filter = {}) {
@@ -588,11 +978,12 @@
         const hasCache = (await db.items.count()) > 0;
 
         if (hasCache && fresh && !forceRefresh) {
+          //console.log("Usando cache local (filtros:", filter, ")");
           await renderFromCacheToMap(filter); // Pass filter to the function
           return;
         }
 
-        const url = '/api/outorgas/all?fields=id,sol_req_num_cod,latitude,longitude,tipo_uso,tipo_finalidade_grupo,data_publicacao,portaria,cod_ibge,cod_ugrhi,status_uso,status_req,decisao_pto,cnpj_requerente,cpf_requerente,nome_requerente,diretoria_nome,tipo_requerimento,volume_m3_anual,vazao_normalizada_m3s,data_exame';
+        const url = '/api/outorgas/all?fields=' + fields;
         const res = await fetch(url);
         if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
         const data = await res.json();
@@ -611,19 +1002,31 @@
             await saveIncremental(chunk);    // grava incremental
             // dica: para UX, você pode também “streamar” para o mapa:
             //addMarkersFromHits(toCompactRecords(chunk).map(r => ({ _id: r.id, _source: { latitude:r.lat, longitude:r.lon, name:r.name, ...} })));
-            addMarkersFromHits(toCompactRecords(chunk).map(r => ({ _id: r.id, _source: 
-                { 
-                  latitude: r.lat, longitude: r.lon,
-                  name: r.name, tipo_uso: r.tipo_uso,
-                  sol_req_num_cod: r.sol_req_num_cod,
-                  tipo_finalidade_grupo: r.tipo_finalidade_grupo,
-                  tipo_uso: r.tipo_uso,
-                  cod_ibge: r.cod_ibge,
-                  ugrhi: r.ugrhi,
-                  data_publicacao: r.data_publicacao 
-                }
+            addMarkersFromHits(toCompactRecords(chunk).map(r => ({
+              _id: r.id, _source:
+              {
+                latitude: r.lat, longitude: r.lon,
+                name: r.name, tipo_uso: r.tipo_uso,
+                sol_req_num_cod: r.sol_req_num_cod,
+                tipo_finalidade_grupo: r.tipo_finalidade_grupo,
+                tipo_uso: r.tipo_uso,
+                cod_ibge: r.cod_ibge,
+                ugrhi: r.ugrhi,
+                municipio: r.municipio,
+                diretoria: r.diretoria,
+                data_publicacao: r.data_publicacao,
+                status_uso: r.status_uso
+              }
             })));
             scrollId = nextData._scroll_id;
+
+            if(summary){
+              let per = Math.round(((i + chunk.length) / recs.length) * 100);
+              summary.textContent = `Carregando : ${per.toFixed(2)}% - Total ${recs.length}`;
+              setProgressBar("global-progress", "global-progress-bar", per);
+            }
+            await new Promise(res => setTimeout(res, 1)); // pausa breve para UI
+
             await fetchNext();
           } else {
             scrollId = null;
@@ -637,52 +1040,16 @@
 
       } catch (err) {
         console.error("Erro ao carregar cache do localStorage:", err);
-        document.getElementById('es-summary').textContent = 'Erro ao carregar cache';
+        document.getElementById('es-summary').textContent = 'Erro ao carregar cache!';
         return;
       }
 
-      /*fetch('/api/outorgas/all?fields=id,sol_req_num_cod,latitude,longitude,tipo_uso,tipo_finalidade_grupo, data_publicacao, portaria').then(res => res.json()).then(data => {
-          let loaded = data.hits.hits.length;
-          console.log("Outorgas data:", loaded,"/",data.hits.total.value);
-
-          console.log("Data:", data);
-
-          addMarkersFromHits(data.hits.hits);
-      
-          //Get others outorgas with scroll if available
-          let scrollId = data._scroll_id;
-          console.log("Initial scroll ID:", scrollId);
-          const fetchNext = () => {
-              if (!scrollId) return;
-              
-              console.log("Fetching scroll ", scrollId);
-
-
-              fetch('/api/outorgas/scroll_list?scroll_id='+scrollId, {
-                  method: 'GET',
-                  headers: { 'Content-Type': 'application/json' }
-              }).then(res => res.json()).then(nextData => {
-                  if (nextData.hits && nextData.hits.hits.length > 0) {
-                      loaded += nextData.hits.hits.length;
-                      console.log("Next data:", loaded, "/", nextData.hits.total.value);
-                      addMarkersFromHits(nextData.hits.hits);
-                      scrollId = nextData._scroll_id;
-                      fetchNext();
-                  } else {
-                      console.log("No more data to fetch.");
-                      scrollId = null;
-                  }
-              }).catch(err => {
-                  console.error("Error fetching scroll data:", err);
-              });
-          };
-          //fetchNext();
-
-          document.getElementById('es-summary').textContent = `Total de outorgas: ${data.hits.total.value}`;
-      }).catch(err => {
-          document.getElementById('es-summary').textContent = 'Erro ao carregar outorgas';
-          document.getElementById('es-output').textContent = String(err.message || err);
-      });*/
+      //Fit bounds after loading
+      if (markersLayer.getLayers().length) {
+        loadMunicipioLayer();
+        loadUgrhiLayer();
+        map.fitBounds(markersLayer.getBounds(), { maxZoom: 12, padding: [50, 50] });
+      }
     }
   </script>
 </body>

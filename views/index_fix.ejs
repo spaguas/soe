@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SP-Águas • Mapa</title>
+
+  <script
+    src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+    crossorigin="anonymous"></script>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- IconLayers -->
+  <script src="
+  https://cdn.jsdelivr.net/npm/leaflet-iconlayers@0.2.0/dist/iconLayers.min.js
+  "></script>
+  <link href="
+  https://cdn.jsdelivr.net/npm/leaflet-iconlayers@0.2.0/dist/iconLayers.min.css
+  " rel="stylesheet">
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    #map { position: fixed; inset: 0; width: 100vw; height: 94.4vh; top:56px; }
+    .leaflet-container a { color: var(--bs-primary); }
+    .leaflet-control .btn { line-height: 1; padding: .5rem .75rem; }
+    .navbar-brand img { height: 32px; }
+
+    .leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {
+      border: none;
+    }
+  </style>
+</head>
+<!-- Loading params to filters -->
+<script src="municipios.js"></script>
+<script src="ugrhis.js"></script>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/logo-spaguas-colorido.png" alt="SP-Águas" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="#map">Mapa</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offFilters">Filtros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Relatórios</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mais</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Configurações</a></li>
+              <li><a class="dropdown-item" href="#">Ajuda</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Sair</a></li>
+            </ul>
+          </li>
+        </ul>
+        <!--<div class="d-flex">
+          <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offFilters">Abrir Filtros</button>
+        </div>-->
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAPA FULLSCREEN -->
+  <div id="map" role="region" aria-label="Mapa interativo"></div>
+
+  <!-- OFFCANVAS: Controles e Filtros -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offFilters" aria-labelledby="offFiltersLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offFiltersLabel">Filtros</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form id="filterForm" class="vstack gap-3">
+        
+        <div class="form-floating">
+          <select id="ugrhis" class="form-select">              
+          </select>
+          <label for="es-field">Ugrhis</label>
+        </div>
+
+        <div class="form-floating">
+          <select id="municipios" class="form-select">              
+          </select>
+          <label for="es-field">Municípios</label>
+        </div>
+
+        <div class="form-floating">
+          <select id="tipo_uso" class="form-select">
+              <option value="">-</option>
+              <option value="Travessia Subterrânea">Travessia Subterrânea</option>
+              <option value="Autorização para perfuração de Poço Tubular">Poço Tubular</option>
+              <option value="Lançamento Superficial">Lançamento Superficial</option>
+              <option value="Captação Subterrânea">Captação Subterrânea</option>
+              <option value="Captação Superficial">Captação Superficial</option>
+              <option value="Reservatório de Acumulação">Reservatório de Acumulação</option>
+              <option value="Obra ou Serviço de Proteção de Margem ou Leito">Obra ou Serviço</option>
+              <option value="Retificação / Revogação">Retificação / Revogação</option>
+              <option value="Canalização">Canalização</option>
+              <option value="Travessia Aérea">Travessia Aérea</option>
+              <option value="Barramento">Barramento</option>
+              <option value="Desassoreamento e Limpeza de Margem">Desassoreamento</option>
+              <option value="Travessia">Travessia</option>
+              <option value="Extração de Minério">Extração de Minério</option>
+          </select>
+          <label for="es-field">Tipo de Uso</label>
+        </div>
+
+        <div class="form-floating">
+          <select name="tipo_finalidade_grupo" id="finalidade" class="form-select">
+            <option value="">-</option>
+            <option value="Urbano">Urbano</option>
+            <option value="Irrigação">Irrigação</option>
+            <option value="Industrial">Industrial</option>
+            <option value="Doméstico">Doméstico</option>
+            <option value="Aquicultura">Aquicultura</option>
+            <option value="Outros">Outros</option>
+            <option value="Comércio e Serviços">Comércio e Serviços</option>
+            <option value="Recreação e Paisagismo">Recreação e Paisagismo</option>
+            <option value="Regularização de Nível">Regularização de Nível</option>
+            <option value="Regularização de Vazões">Regularização de Vazões</option>
+            <option value="Mineração">Mineração</option>
+            <option value="Rural">Rural</option>
+            <option value="Controle de Cheias">Controle de Cheias</option>
+            <option value="Geração de Energia">Geração de Energia</option>
+          </select>
+          <label for="es-field">Tipo de Finalidade</label>
+        </div>
+        
+        <button type="submit" class="btn btn-success"><i class="bi bi-search"></i> Buscar</button>
+      </form>
+      <hr/>
+      <div class="small text-secondary mb-2">Resultados</div>
+      <div id="es-summary" class="small mb-2">—</div>
+      <ul id="results" class="list-group small mb-3"></ul>
+      <pre id="es-output" class="bg-light border rounded p-2 small" style="max-height: 260px; overflow:auto; white-space: pre-wrap;"></pre>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  
+
+  <script>
+    const INITIAL_VIEW = { lat: -23.5505, lng: -46.6333, zoom: 10 };
+    const map = L.map('map').setView([INITIAL_VIEW.lat, INITIAL_VIEW.lng], INITIAL_VIEW.zoom);
+
+    /*const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    });
+    baseLayer.addTo(map);*/
+
+    const access_token = "pk.eyJ1IjoiZGllZ29tb250ZWlyb3MiLCJhIjoiY21ldTh3ZWhhMDRoMDJzcHlpdWl2M2ViNCJ9.CufdrGmK_l_roZ66i4_R2g"
+
+    baseLayers = [
+      {
+        title: 'OpenST', // use any string
+        layer: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }), // any ILayer
+        icon: './icons/openstreetmap_de.png' // 80x80 icon
+      },
+      {
+        title: 'Cartas 1:50k', // use any string
+        layer: L.tileLayer.wms('https://datageo.ambiente.sp.gov.br/geoimage/datageoimg/ows?SERVICE=WMS', {
+          layers: 'Cartas_50k_IBGE'
+        }), // any ILayer
+        icon: './icons/cartas_ibge_50k.png' // 80x80 icon
+      },
+      {
+        title: 'Mapbox Streets', // use any string
+        layer: L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlyb3MiLCJhIjoiY21ldTh3ZWhhMDRoMDJzcHlpdWl2M2ViNCJ9.CufdrGmK_l_roZ66i4_R2g", {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                tileSize: 512,
+                zoomOffset: -1
+        }), // any ILayer
+        icon: './icons/mapbox-streets.png' // 80x80 icon
+      },
+      {
+        title: 'Mapbox Satélite', // use any string
+        layer: L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlyb3MiLCJhIjoiY21ldTh3ZWhhMDRoMDJzcHlpdWl2M2ViNCJ9.CufdrGmK_l_roZ66i4_R2g", {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                tileSize: 256,
+                zoomOffset: 0
+        }), // any ILayer
+        icon: './icons/mapbox-streets.png' // 80x80 icon
+      },
+      {
+        title: 'Mapbox Dark', // use any string
+        layer: L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGllZ29tb250ZWlyb3MiLCJhIjoiY21ldTh3ZWhhMDRoMDJzcHlpdWl2M2ViNCJ9.CufdrGmK_l_roZ66i4_R2g", {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                tileSize: 256,
+                zoomOffset: 0
+        }), // any ILayer
+        icon: './icons/mapbox-streets.png' // 80x80 icon
+      }
+  ]
+
+  var iconLayersControl = new L.Control.IconLayers(
+    baseLayers  
+    , {
+          position: 'bottomleft',
+          maxLayersInRow: 3
+      }
+  );
+    
+  iconLayersControl.addTo(map);
+
+
+  iconLayersControl.on('activelayerchange', function(e) {
+      console.log('layer switched', e.layer);
+      map.invalidateSize();
+
+      let isDark = false;
+      //Change watermakr logo with layer names is black
+      if(e.layer._url.indexOf('black') > -1 || e.layer._url.indexOf('dark') > -1 || e.layer._url.indexOf('satelite') > -1 || e.layer._url.indexOf('satel') > -1){
+        isDark = true;
+      }
+
+      updateWatermark(isDark);
+  });
+
+
+  getAllOutorgas()
+
+  const canvasRenderer = L.canvas({ padding: 0.5});
+  let markersLayer = L.featureGroup([], { renderer: canvasRenderer }).addTo(map);
+  //let markersLayer = L.layerGroup().addTo(map);
+
+  // Botão no mapa para abrir offcanvas
+  const FilterControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd: function() {
+        const div = L.DomUtil.create('div', 'leaflet-bar');
+        const btn = L.DomUtil.create('button', 'btn btn-primary', div);
+        btn.type = 'button';
+        btn.title = 'Abrir filtros';
+        btn.innerHTML = '<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-funnel\" viewBox=\"0 0 16 16\"><path d=\"M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/></svg>';
+        L.DomEvent.disableClickPropagation(div);
+        btn.addEventListener('click', () => {
+          const off = bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('offFilters'));
+          off.show();
+        });
+        return div;
+      }
+  });
+  
+  map.addControl(new FilterControl());
+
+  // Watermark com logo no canto inferior direito
+  const WatermarkControl = L.Control.extend({
+  options: { position: 'bottomright' },
+  onAdd: function () {
+      const div = L.DomUtil.create('div','watermark-logo');
+      div.style.background = 'transparent';
+      div.style.padding = '25px';
+
+      const img = L.DomUtil.create('img', '', div);
+      img.src = './logo-spaguas-colorido.png'; // caminho do seu logo PNG
+      img.style.width = '150px';    // ajuste o tamanho aqui
+      img.style.opacity = '0.9';
+      img.style.pointerEvents = 'none'; // não bloqueia cliques no mapa
+
+      return div;
+  }
+  });
+  map.addControl(new WatermarkControl());
+
+
+  function populateUgrhisSelect(){
+    $("#ugrhis").empty();
+    $("#ugrhis").append("<option value=''>-</option>");
+    $.each(ugrhis.ugrhis, function(k,v){
+      let obj = "<option value='"+v.codigo+"'>"+v.nome+"</option>";
+      //console.log(obj);
+      if(v.codigo != 99 && v.codigo != 9999){
+        $("#ugrhis").append(obj);
+      }
+    });
+  }
+
+  function populateMunicipiosSelect(){
+    $("#municipios").empty();
+
+    $("#municipios").append("<option value=''>-</option>");
+    $.each(municipios.municipios, function(k,v){
+      
+      let obj = "<option value='"+v.codigo_ibge +"'>"+v.nome+"</option>";
+      //console.log(obj);
+      $("#municipios").append(obj);
+    });
+  }
+
+  // Função para trocar a watermark conforme o mapa base
+  function updateWatermark(isDark) {
+    const imgs = document.querySelectorAll('.watermark-logo img');
+    imgs.forEach(img => {
+    if (img.src.includes('logo-spaguas')) {
+      img.src = isDark ? 'logo-spaguas-branco.png' : 'logo-spaguas-colorido.png';
+    }
+    });
+  }
+
+  function buildQuery({ field, value, size, sort }) {
+    const must = [];
+    if (field && value) must.push({ match: { [field]: value } });
+    const query = must.length ? { bool: { must } } : { match_all: {} };
+    const body = { query, size };
+    if (sort) {
+      const [sField, sDir] = String(sort).split(':');
+      if (sField) body.sort = [{ [sField]: { order: (sDir||'asc').toLowerCase() } }];
+    }
+    return body;
+  }
+
+  async function esSearch(body) {
+    const endpoint = 'https://cth.daee.sp.gov.br/elasticsearch';
+    const index = 'outorgas';
+    const url = `${endpoint}/${index}/_search`;
+    const headers = { 'Content-Type': 'application/json' };
+    const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+    if (!res.ok) throw new Error(`ES ${res.status} ${res.statusText}`);
+    return res.json();
+  }
+
+  function clearMarkers() { markersLayer.clearLayers(); }
+
+  function styleMarkerByType(type) {
+      switch ((type || '').toLowerCase()) {
+          case 'captação superficial': return '#1f77b4'; // azul
+          case 'captação subterrânea': return '#ff7f0e'; // laranja
+          case 'lançamento superficial': return '#2ca02c'; // verde
+          case 'reservatório de acumulação': return '#d62728'; // vermelho
+          case 'barramento': return '#9467bd'; // roxo
+          case 'retificação / revogação': return '#8c564b'; // marrom
+          case 'canalização': return '#e377c2'; // rosa
+          case 'travessia aérea': return '#7f7f7f'; // cinza
+          case 'travessia subterrânea': return '#bcbd22'; // amarelo
+          case 'travessia': return '#cc99aa';
+          case 'desassoreamento e limpeza de margem': return '#cc2222';
+          case 'desassoreamento': return '#cc2222';
+          case 'poço tubular': return '#ddaa22';
+          case 'obra/serviço': return '#aabb99';
+          default: return '#cccccc'; // vermelho
+      }
+  }
+
+  function addMarkersFromHits(hits, popupField = null) {
+      let added = 0;
+      for (const h of hits) {
+          const src = h._source || {};
+          let lat = src.latitude, lon = src.longitude;
+          if (lat != null && lon != null) {
+              const cm = L.circleMarker([lat, lon], {
+                  renderer: canvasRenderer,
+                  radius: 5,
+                  stroke: true,
+                  fillOpacity: 1,
+                  fillColor: styleMarkerByType(src.tipo_uso),
+                  weight: 1,
+                  color: '#000000'
+              }).addTo(markersLayer);
+
+              const title = src.name || h._id;
+              const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : '';
+              cm.bindPopup(`<b>${title}</b>${extra}`);
+              added++;
+          }
+      }
+      return added;
+    }
+
+    document.getElementById('filterForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMarkers();
+      document.getElementById('es-summary').textContent = 'Buscando...';
+      document.getElementById('results').innerHTML = '';
+      document.getElementById('es-output').textContent = '';
+
+      const field = document.getElementById('es-field').value;
+      const value = document.getElementById('es-value').value.trim();
+      const size = parseInt(document.getElementById('es-size').value, 10) || 100;
+      const sort = document.getElementById('es-sort').value.trim();
+
+      const body = buildQuery({ field, value, size, sort });
+      try {
+        const data = await esSearch(body);
+        const hits = data?.hits?.hits ?? [];
+        const total = typeof data?.hits?.total === 'object' ? data.hits.total.value : (data?.hits?.total ?? hits.length);
+        const added = addMarkersFromHits(hits);
+
+        document.getElementById('es-summary').textContent = `Encontrados ${total} documentos • Marcadores no mapa: ${added}`;
+        document.getElementById('es-output').textContent = JSON.stringify(hits.map(h=>({ _id: h._id, _source: h._source })), null, 2);
+
+        const list = document.getElementById('results');
+        hits.forEach(h => {
+          const src = h._source || {};
+          const li = document.createElement('li');
+          li.className = 'list-group-item';
+          li.textContent = `${h._id} - ${src[field] || ''}`;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        document.getElementById('es-summary').textContent = 'Erro na busca';
+        document.getElementById('es-output').textContent = String(err.message || err);
+      }
+    });
+
+    function getAllOutorgas(){
+        fetch('/api/outorgas/all?fields=id,sol_req_num_cod,latitude,longitude,tipo_uso,tipo_finalidade_grupo, data_publicacao, portaria').then(res => res.json()).then(data => {
+            let loaded = data.hits.hits.length;
+            console.log("Outorgas data:", loaded,"/",data.hits.total.value);
+
+            console.log("Data:", data);
+
+            addMarkersFromHits(data.hits.hits);
+        
+            //Get others outorgas with scroll if available
+            let scrollId = data._scroll_id;
+            console.log("Initial scroll ID:", scrollId);
+            const fetchNext = () => {
+                if (!scrollId) return;
+                
+                console.log("Fetching scroll ", scrollId);
+
+                fetch('/api/outorgas/scroll_list?scroll_id='+scrollId, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(res => res.json()).then(nextData => {
+                    if (nextData.hits && nextData.hits.hits.length > 0) {
+                        loaded += nextData.hits.hits.length;
+                        console.log("Next data:", loaded, "/", nextData.hits.total.value);
+                        addMarkersFromHits(nextData.hits.hits);
+                        scrollId = nextData._scroll_id;
+                        fetchNext();
+                    } else {
+                        console.log("No more data to fetch.");
+                        scrollId = null;
+                    }
+                }).catch(err => {
+                    console.error("Error fetching scroll data:", err);
+                });
+            };
+            //fetchNext();
+
+            document.getElementById('es-summary').textContent = `Total de outorgas: ${data.hits.total.value}`;
+        }).catch(err => {
+            document.getElementById('es-summary').textContent = 'Erro ao carregar outorgas';
+            document.getElementById('es-output').textContent = String(err.message || err);
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-let municipios = {
+const municipios = {
     "municipios": [
       {
         "id": 645,
