@@ -41,6 +41,12 @@
   <script src="libs/beautifyIcons/leaflet-beautify-marker-icon.js"></script>
   <link href="libs/beautifyIcons/leaflet-beautify-marker-icon.css" rel="stylesheet" type="text/css" />
 
+  <!-- Datatables -->
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />
+  <link rel="stylehseet" type="text/css" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" />
+  <script type="text/javascript" src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.js"></script>
+
   <style>
     html,
     body {
@@ -92,6 +98,7 @@
 <script src="scripts/watermark_control.js"></script>
 <script src="scripts/map_progress.js"></script>
 <script src="scripts/radius_search_control.js"></script>
+<script src="scripts/table_control.js"></script>
 
 <body>
   <!-- NAVBAR -->
@@ -139,6 +146,110 @@
 
   <!-- MAPA FULLSCREEN -->
   <div id="map" role="region" aria-label="Mapa interativo"></div>
+
+  <div class="modal modal-fade" id="modalTable" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Lista de Outorgas Carregadas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table id="outorgasTable" class="table table-bordered table-sm" style="width:100%; font-size: 0.65rem;">
+            <thead>
+              <tr>
+                <th rowspan="2">Id</th>
+                <th rowspan="2">Uso</th>
+                <th rowspan="2">Cidade</th>
+                <th rowspan="2">Ugrhi</th>
+                <th rowspan="2">Diretoria</th>
+                <th rowspan="2">Requerente</th>
+                <th rowspan="2">Coordenadas</th>
+                <th rowspan="2">Tipo de Uso</th>
+                <th rowspan="2">Finalidade</th>
+                <th rowspan="2">Portaria</th>
+                <th rowspan="2">Data de Publicação</th>
+                <th rowspan="2">Volume Anual (m³)</th>
+                <th rowspan="2">Vazão (m³/s)</th>
+                <th rowspan="2">Sazonal?</th>
+                <th rowspan="2">Status</th>
+                <th colspan="3">Janeiro</th>
+                <th colspan="3">Fevereiro</th>
+                <th colspan="3">Março</th>
+                <th colspan="3">Abril</th>
+                <th colspan="3">Maio</th>
+                <th colspan="3">Junho</th>
+                <th colspan="3">Julho</th>
+                <th colspan="3">Agosto</th>
+                <th colspan="3">Setembro</th>
+                <th colspan="3">Outubro</th>
+                <th colspan="3">Novembro</th>
+                <th colspan="3">Dezembro</th>
+
+              </tr>
+              <tr>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+                
+                <th>Horas</th>
+                <th>Vol.Máx (m³/d)</th>
+                <th>Vazão(m³/h)</th>
+              </tr>
+            </thead>
+            <tbody id="outorgasTableBody">
+              <!-- Data will be populated here -->
+            </tbody>
+          </table>  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- OFFCANVAS: Filtro por Raio(km)-->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offRadiusSearch" aria-labelledby="offRadiusSearchLabel">
@@ -277,7 +388,7 @@
     map.getPane('layersPane').style.zIndex = 200; // abaixo das camadas base
     map.getPane('layersPane').style.pointerEvents = 'none';
 
-    const fields = ["latitude", "longitude", "portaria", "cod_ibge", "tipo_uso", "municipio", "sol_req_num_cod", "tipo_finalidade_grupo", "data_publicacao", "data_exame", "diretoria_nome", "tipo_requerimento", "volume_m3_anual", "vazao_normalizada_m3s", "status_uso", "status_req", "status_data_exame", "status_sols", "decisao_pto", "cnpj_requerente", "cpf_requerente", "nome_requerente", "tem_sazonalidade", "razao_social_requerente", "cod_ugrhi", "nome_ugrhi", "tipo_finalidade_usos", "total_hours*", "vaz_*", "vol_max_*"].join(",");
+    const fields = ["latitude", "longitude", "portaria", "cod_ibge", "tipo_uso", "municipio", "sol_req_num_cod", "tipo_finalidade_grupo", "data_publicacao", "data_exame", "diretoria_nome", "tipo_requerimento", "volume_m3_anual", "vazao_normalizada_m3s", "status_uso", "status_req", "status_data_exame", "status_sols", "decisao_pto", "cnpj_requerente", "cpf_requerente", "nome_requerente", "tem_sazonalidade", "razao_social_requerente", "cod_ugrhi", "nome_ugrhi", "tipo_finalidade_usos", "total_hours*", "vaz_*", "vol_max_*, validade_meses_pto"].join(",");
 
     // Try to enable persistent storage
     tryEnablePersistentStorage().then(info => {
@@ -357,6 +468,8 @@
 
     const radiusCtrl = new RadiusSearchControl();
     map.addControl(radiusCtrl);
+
+    map.addControl(new tableControl());
 
     map.on('click', function (e) {
       console.log("Map clicked at", e.latlng);
@@ -785,8 +898,80 @@
       }
     }
 
+    function renderRowsTable(recs, clearBefore = true) {
+      let tableBody = document.getElementById('outorgasTableBody');
+      if (clearBefore) tableBody.innerHTML = '';
+
+      for (const r of recs) {
+        console.log("Renderizando linha da tabela:", r);
+        const tr = document.createElement('tr');
+
+        if(r.tem_sazonalidade){
+          tr.classList.add('table-danger');
+        }
+        
+        tr.innerHTML = `
+          <td>${r.sol_req_num_cod || ''}</td>
+          <td>${r.tipo_uso || ''}</td>
+          <td>${r.municipio?.nome || ''}</td>
+          <td>${r.ugrhi?.nome || ''}</td>
+          <td>${r.diretoria || ''}</td>
+          <td>${r.requerente?.id || ''}</td>
+          <td>${r.requerente?.nome || ''}</td>
+          <td>${r.tipo_uso || ''}</td>
+          <td>${r.tipo_finalidade_grupo || ''}</td>
+          <td>${r.numero_portaria || ''}</td>
+          <td>${r.data_publicacao || ''}</td>
+          <td>${r.volume_m3_anual != null ? r.volume_m3_anual.toLocaleString('pt-BR') : ''}</td>
+          <td>${r.vazao_normalizada_m3s != null ? r.vazao_normalizada_m3s.toLocaleString('pt-BR') : ''}</td>
+          <td>${r.tem_sazonalidade ? 'Sim' : 'Não'}</td>
+          <td>${r.status_uso || '-'}</td>
+          <td>${r.vazoes.jan?.horas || '-'}</td>
+          <td>${r.vazoes.jan?.vol_max || '-'}</td>
+          <td>${r.vazoes.jan?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.fev?.horas || '-'}</td>
+          <td>${r.vazoes.fev?.vol_max || '-'}</td>
+          <td>${r.vazoes.fev?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.mar?.horas || '-'}</td>
+          <td>${r.vazoes.mar?.vol_max || '-'}</td>
+          <td>${r.vazoes.mar?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.abr?.horas || '-'}</td>
+          <td>${r.vazoes.abr?.vol_max || '-'}</td>
+          <td>${r.vazoes.abr?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.mai?.horas || '-'}</td>
+          <td>${r.vazoes.mai?.vol_max || '-'}</td>
+          <td>${r.vazoes.mai?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.jun?.horas || '-'}</td>
+          <td>${r.vazoes.jun?.vol_max || '-'}</td>
+          <td>${r.vazoes.jun?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.jul?.horas || '-'}</td>
+          <td>${r.vazoes.jul?.vol_max || '-'}</td>
+          <td>${r.vazoes.jul?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.ago?.horas || '-'}</td>
+          <td>${r.vazoes.ago?.vol_max || '-'}</td>
+          <td>${r.vazoes.ago?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.set?.horas || '-'}</td>
+          <td>${r.vazoes.set?.vol_max || '-'}</td>
+          <td>${r.vazoes.set?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.out?.horas || '-'}</td>
+          <td>${r.vazoes.out?.vol_max || '-'}</td>
+          <td>${r.vazoes.out?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.nov?.horas || '-'}</td>
+          <td>${r.vazoes.nov?.vol_max || '-'}</td>
+          <td>${r.vazoes.nov?.vazao_m3h || '-'}</td>
+          <td>${r.vazoes.dez?.horas || '-'}</td>
+          <td>${r.vazoes.dez?.vol_max || '-'}</td>
+          <td>${r.vazoes.dez?.vazao_m3h || '-'}</td>
+        `;
+        tableBody.appendChild(tr);
+      }
+    }
+
     async function renderFromCacheToMap(filter) {
       const recs = await loadAllFromCache(filter);
+      
+      let tableBody = document.getElementById('outorgasTableBody');
+      if (tableBody) tableBody.innerHTML = '';
 
       let summary = document.getElementById('es-summary');
 
@@ -820,6 +1005,8 @@
           }
         })));
 
+        renderRowsTable(chunk, false); // false = não limpa antes
+
         added += addedNow;
         //console.log(`Renderizado do cache: ${i + chunk.length} / ${recs.length} registros (${addedNow} marcadores adicionados)`);
         if(summary){
@@ -835,6 +1022,18 @@
         loadMunicipioLayer();
         loadUgrhiLayer();
         map.fitBounds(markersLayer.getBounds(), { maxZoom: 12, padding: [50, 50] });
+
+        /*let table = new DataTable('#outorgasTable', {
+          layout: {
+              topStart: 'info',
+              bottom: 'paging',
+              bottomStart: null,
+              bottomEnd: null
+          },
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json'
+          }
+        });*/
       }
 
       document.getElementById('es-summary').textContent =

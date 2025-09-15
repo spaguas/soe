@@ -9,7 +9,7 @@ onAdd: function () {
     if(!isMobile()){    
         console.log("Not mobile");
         div.style.background = 'transparent';
-        div.style.padding = '25px';
+        div.style.padding = '5px';
         img.src = './logo-spaguas-colorido.png'; // caminho do seu logo PNG
         img.style.width = '150px';    // ajuste o tamanho aqui
         img.style.opacity = '0.9';
