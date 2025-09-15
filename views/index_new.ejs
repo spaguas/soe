@@ -923,7 +923,7 @@
           <td>${r.numero_portaria || ''}</td>
           <td>${r.data_publicacao || ''}</td>
           <td>${r.volume_m3_anual != null ? r.volume_m3_anual.toLocaleString('pt-BR') : ''}</td>
-          <td>${r.vazao_normalizada_m3s != null ? r.vazao_normalizada_m3s.toLocaleString('pt-BR') : ''}</td>
+          <td>${r.vazao_normalizada_m3s != null ? r.vazao_normalizada_m3s : ''}</td>
           <td>${r.tem_sazonalidade ? 'Sim' : 'Não'}</td>
           <td>${r.status_uso || '-'}</td>
           <td>${r.vazoes.jan?.horas || '-'}</td>
@@ -1191,11 +1191,13 @@
         //await renderFromCacheToMap(); // ou desenhe só o lote atual, como preferir
 
         let scrollId = data._scroll_id;
+        let added = 0;
         const fetchNext = async () => {
           if (!scrollId) return;
           const nextRes = await fetch(`/api/outorgas/scroll_list?scroll_id=${encodeURIComponent(scrollId)}`);
           if (!nextRes.ok) throw new Error(`HTTP ${nextRes.status}`);
           const nextData = await nextRes.json();
+          //console.log("Próximo lote:", nextData);
           const chunk = nextData?.hits?.hits || [];
           if (chunk.length) {
             await saveIncremental(chunk);    // grava incremental
@@ -1218,10 +1220,13 @@
               }
             })));
             scrollId = nextData._scroll_id;
+            added += chunk.length;
+
 
             if(summary){
-              let per = Math.round(((i + chunk.length) / recs.length) * 100);
-              summary.textContent = `Carregando : ${per.toFixed(2)}% - Total ${recs.length}`;
+              let per = Math.round(((added / nextData.hits.total.value) * 100));
+              
+              summary.textContent = `Carregando : ${per.toFixed(2)}% - Total ${nextData.hits.total.value}`;
               setProgressBar("global-progress", "global-progress-bar", per);
             }
             await new Promise(res => setTimeout(res, 1)); // pausa breve para UI
