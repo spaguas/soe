@@ -42,10 +42,14 @@
   <link href="libs/beautifyIcons/leaflet-beautify-marker-icon.css" rel="stylesheet" type="text/css" />
 
   <!-- Datatables -->
-  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />
+  <!--<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />-->
   <link rel="stylehseet" type="text/css" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" />
+
   <script type="text/javascript" src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.js"></script>
+
+  <!-- Highcharts -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
 
   <style>
     html,
@@ -99,6 +103,7 @@
 <script src="scripts/map_progress.js"></script>
 <script src="scripts/radius_search_control.js"></script>
 <script src="scripts/table_control.js"></script>
+<script src="scripts/chart_control.js"></script>
 
 <body>
   <!-- NAVBAR -->
@@ -146,6 +151,24 @@
 
   <!-- MAPA FULLSCREEN -->
   <div id="map" role="region" aria-label="Mapa interativo"></div>
+
+  <div class="modal modal-fade" id="modalInfo" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalhes da Outorga</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalInfoBody">
+          <!-- Content will be populated here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <a href="#" target="_blank" id="modalInfoLink" class="btn btn-primary">Ver Portaria</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="modal modal-fade" id="modalTable" tabindex="-1">
     <div class="modal-dialog modal-fullscreen">
@@ -903,7 +926,7 @@
       if (clearBefore) tableBody.innerHTML = '';
 
       for (const r of recs) {
-        console.log("Renderizando linha da tabela:", r);
+        //console.log("Renderizando linha da tabela:", r);
         const tr = document.createElement('tr');
 
         if(r.tem_sazonalidade){
@@ -991,17 +1014,23 @@
 
         const addedNow = addMarkersFromHits(chunk.map(r => ({
           _id: r.id, _source: {
+            
             latitude: r.lat, longitude: r.lon,
-            name: r.name,
-            tipo_uso: r.tipo_uso,
+            name: r.name, tipo_uso: r.tipo_uso,
             sol_req_num_cod: r.sol_req_num_cod,
+            tipo_finalidade_grupo: r.tipo_finalidade_grupo,
+            tipo_uso: r.tipo_uso,
+            cod_ibge: r.cod_ibge,
             ugrhi: r.ugrhi,
             municipio: r.municipio,
             diretoria: r.diretoria,
-            cod_ibge: r.cod_ibge,
-            tipo_finalidade_grupo: r.tipo_finalidade_grupo,
             data_publicacao: r.data_publicacao,
-            status_uso: r.status_uso
+            status_uso: r.status_uso,
+            vazao_normalizada_m3s: r.vazao_normalizada_m3s,
+            tem_sazonalidade: r.tem_sazonalidade,
+            volume_m3_anual: r.volume_m3_anual,
+            requerente: r.requerente,
+            vazoes: r.vazoes
           }
         })));
 
@@ -1023,7 +1052,12 @@
         loadUgrhiLayer();
         map.fitBounds(markersLayer.getBounds(), { maxZoom: 12, padding: [50, 50] });
 
-        /*let table = new DataTable('#outorgasTable', {
+        // Atualiza tabela (DataTables)
+        if ($.fn.DataTable.isDataTable('#outorgasTable')) {
+          $('#outorgasTable').DataTable().destroy();
+        }
+
+        let table = new DataTable('#outorgasTable', {
           layout: {
               topStart: 'info',
               bottom: 'paging',
@@ -1033,7 +1067,7 @@
           language: {
             url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json'
           }
-        });*/
+        });
       }
 
       document.getElementById('es-summary').textContent =
@@ -1143,7 +1177,7 @@
           const title = src.name || h._id;
           //const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : '';
           //console.log("src:", src);
-          const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : `
+          /*const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : `
             <br><small>Tipo de Uso: ${src.tipo_uso || '-'}</small>
             <br><small>Finalidade: ${src.tipo_finalidade_grupo || '-'}</small>
             <br><small>Municipio: ${src.municipio.nome || '-'}</small>
@@ -1151,11 +1185,77 @@
             <br><small>Data Publicação: ${src.data_publicacao || '-'}</small>
             <br><small style='color: ${getColorByStatusUso(src.status_uso)}'><b>Status</b>: ${src.status_uso || '-'}</small>
           `;
-          cm.bindPopup(`<b>ID: ${title}</b>${extra}`);
+          cm.bindPopup(`<b>ID: ${title}</b>${extra}`);*/
+          cm.on('click', function(e){
+            renderModalInfo(e, src);
+          });
+
           added++;        
         }
       }
       return added;
+    }
+
+
+    function renderModalInfo(e, src) {
+      const md = new bootstrap.Modal('#modalInfo', {
+        keyboard: false
+      });
+
+      md.show();
+      
+      $("#modalInfo").find(".modal-title").html("Requerimento: "+src.name);
+
+      console.log("Modal src:", src);
+
+      let html = `
+        
+        <ul class="nav nav-underline" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Informações</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="discharges-tab" data-bs-toggle="tab" data-bs-target="#discharges-tab-pane" type="button" role="tab" aria-controls="discharges-tab-pane" aria-selected="false">Vazões</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Contact</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
+          </li>
+        </ul>
+        <br/>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+            <ul class="list-group">
+              <li class="list-group-item"><b>Requerimento:</b> ${src.name || '-'}</li>
+              <li class="list-group-item"><b>Tipo de Uso:</b> ${src.tipo_uso || '-'}</li>
+              <li class="list-group-item"><b>Finalidade:</b> ${src.tipo_finalidade_grupo || '-'}</li>
+              <li class="list-group-item"><b>Município:</b> ${src.municipio?.nome || '-'}</li>
+              <li class="list-group-item"><b>Ugrhi:</b> ${src.ugrhi?.nome || '-'}</li>
+              <li class="list-group-item"><b>Diretoria:</b> ${src.diretoria || '-'}</li>
+              <li class="list-group-item"><b>Data Publicação:</b> ${src.data_publicacao || '-'}</li>          
+              <li class="list-group-item"><b>Vazão Normalizada (m³/s):</b> ${src.vazao_normalizada_m3s != null ? src.vazao_normalizada_m3s : '-'}</li>
+              <li class="list-group-item"><b>Vazão por Hora (m³/h):</b> ${src.vazao_normalizada_m3s != null ? (src.vazao_normalizada_m3s * 3600) : '-'}</li>
+              <li class="list-group-item"><b>Volume Anual (m³):</b> ${src.volume_m3_anual != null ? src.volume_m3_anual : '-'}</li>
+              <li class="list-group-item"><b>Tem Sazonalidade:</b> ${src.tem_sazonalidade ? 'Sim' : 'Não'}</li>
+              <li class="list-group-item"><b>Status de Uso:</b> <span style="color: ${getColorByStatusUso(src.status_uso)}">${src.status_uso || '-'}</span></li>
+              <li class="list-group-item"><b>Requerente:</b> ${src.requerente?.nome || '-'} (${src.requerente?.id || '-'})</li>
+              <li class="list-group-item"><b>Coordenadas:</b> ${src.latitude}, ${src.longitude}</li>    
+            </ul>  
+          </div>
+          <div class="tab-pane fade" id="discharges-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+            <div id="chart_discharges"></div>
+          </div>
+          <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">...</div>
+          <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
+        </div>
+      `;
+      // Bind the generated HTML to the modal
+      $("#modalInfo").find(".modal-body").html(html);
+
+      //Render Discharge Chart
+      renderDischargeChart('chart_discharges', src);
     }
 
     function getColorByStatusUso(status) {
@@ -1216,7 +1316,10 @@
                 municipio: r.municipio,
                 diretoria: r.diretoria,
                 data_publicacao: r.data_publicacao,
-                status_uso: r.status_uso
+                status_uso: r.status_uso,
+                vazao_normalizada_m3s: r.vazao_normalizada_m3s,
+                tem_sazonalidade: r.tem_sazonalidade,
+                volume_m3_anual: r.volume_m3_anual
               }
             })));
             scrollId = nextData._scroll_id;
