@@ -455,7 +455,8 @@
     populateMunicipiosSelect()
     populateUgrhisSelect()
     populateDiretoriasSelect()
-    //getAllOutorgas()
+    
+    getAllOutorgas({ forceRefresh: false }, { ugrhi: 6, municipio: '3550308' });
 
     // Layers for grouping
     let ugrhiLayer = L.layerGroup([]);
@@ -1218,7 +1219,7 @@
             <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Informações</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="discharges-tab" data-bs-toggle="tab" data-bs-target="#discharges-tab-pane" type="button" role="tab" aria-controls="discharges-tab-pane" aria-selected="false">Vazões</button>
+            <button class="nav-link" id="discharges-tab" data-bs-toggle="tab" data-bs-target="#discharges-tab-pane" type="button" role="tab" aria-controls="discharges-tab-pane" aria-selected="false">Volumes</button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Contact</button>
