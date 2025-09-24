@@ -12,7 +12,7 @@ const RadiusSearchControl = L.Control.extend({
     options: { position: 'topright' },
     onAdd: function () {
         const div = L.DomUtil.create('div', 'leaflet-bar');
-        const btn = L.DomUtil.create('button', 'btn btn-secondary', div);
+        const btn = L.DomUtil.create('button', 'btn btn-success', div);
         btn.type = 'button';
         btn.title = 'Buscar por raio(km)';
         btn.innerHTML = '<span><i class="bi bi-bullseye"></i></span>';

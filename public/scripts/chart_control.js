@@ -3,17 +3,19 @@ function renderDischargeChart(container, data){
 
     const monthlyVolumes = monthOrder.map((monthKey) => {
         const monthData = data?.vazoes?.[monthKey] || {};
+
+        console.log("Month Data: ", monthData);
         const rawVolMax = monthData.vol_max;
         const volMaxNumber = Number(rawVolMax);
         const hasVolMax = rawVolMax !== null && rawVolMax !== undefined && rawVolMax !== '' && !Number.isNaN(volMaxNumber);
 
-        if (volMaxNumber > 0) {
+        /*if (volMaxNumber > 0) {
             return volMaxNumber;
-        }
+        }*/
 
-        if (data?.tem_sazonalidade === true && hasVolMax) {
+        /*if (data?.tem_sazonalidade === true && hasVolMax) {
             return 0;
-        }
+        }*/
 
         const hours = Number(monthData.horas);
         const flow = Number(monthData.vazao_m3h);

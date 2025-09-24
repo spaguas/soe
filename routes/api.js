@@ -56,6 +56,115 @@ router.get('/outorgas/all', async function(req, res, next) {
     });
 });
 
+router.get('/outorgas/filter', async function(req, res, next) {
+    try {
+        const {
+            fields,
+            ugrhi,
+            municipio,
+            tipo_uso,
+            tipo_finalidade_grupo,
+            data_publicacao,
+            diretoria,
+            status_uso,
+            status_req,
+            sol_req_num,
+            tem_sazonalidade,
+            lat,
+            lon,
+            distance_km
+        } = req.query;
+
+        const filters = [];
+
+        if (ugrhi) {
+            const ugrhiCode = parseInt(ugrhi, 10);
+            if (!Number.isNaN(ugrhiCode)) {
+                filters.push({ term: { cod_ugrhi: ugrhiCode } });
+            }
+        }
+
+        if (municipio) {
+            filters.push({ term: { cod_ibge: municipio } });
+        }
+
+        if (tipo_uso) {
+            filters.push({ term: { 'tipo_uso.keyword': tipo_uso } });
+        }
+
+        if (tipo_finalidade_grupo) {
+            filters.push({ term: { 'tipo_finalidade_grupo.keyword': tipo_finalidade_grupo } });
+        }
+
+        if (diretoria) {
+            filters.push({ term: { 'diretoria_nome.keyword': diretoria } });
+        }
+
+        if (data_publicacao) {
+            filters.push({ range: { data_publicacao: { gte: data_publicacao } } });
+        }
+
+        const statusUsoValue = typeof status_uso === 'string' ? status_uso.trim() : '';
+        if (statusUsoValue) {
+            filters.push({ term: { 'status_uso.keyword': statusUsoValue } });
+        }
+
+        const statusReqValue = typeof status_req === 'string' ? status_req.trim() : '';
+        if (statusReqValue) {
+            filters.push({ term: { 'status_req.keyword': statusReqValue } });
+        }
+
+        const solReqValue = typeof sol_req_num === 'string' ? sol_req_num.trim() : '';
+        if (solReqValue) {
+            filters.push({ term: { 'sol_req_num_cod.keyword': solReqValue } });
+        }
+
+        if (tem_sazonalidade === 'true' || tem_sazonalidade === 'false') {
+            filters.push({ term: { tem_sazonalidade: tem_sazonalidade === 'true' } });
+        }
+
+        if (lat && lon && distance_km) {
+            const distanceValue = parseFloat(distance_km);
+            const latValue = parseFloat(lat);
+            const lonValue = parseFloat(lon);
+            if (!Number.isNaN(distanceValue) && !Number.isNaN(latValue) && !Number.isNaN(lonValue)) {
+                filters.push({
+                    geo_distance: {
+                        distance: `${distanceValue}km`,
+                        location: {
+                            lat: latValue,
+                            lon: lonValue
+                        }
+                    }
+                });
+            }
+        }
+
+        if (!filters.length) {
+            return res.status(400).json({ error: 'Nenhum filtro informado' });
+        }
+
+        const body = {
+            size: 1000,
+            query: {
+                bool: {
+                    filter: filters
+                }
+            }
+        };
+
+        if (fields) {
+            body._source = fields.split(',');
+        }
+
+        const response = await esClient.searchWithScroll(index_name, body, '1m');
+        res.json(response);
+    } catch (error) {
+        console.error('Error performing filtered search', error);
+        res.status(500).json({ error: 'Error filtering outorgas', message: error.message });
+    }
+});
+
 router.get('/outorgas/scroll_list', async function(req, res, next) {
     const scrollId = req.params.scroll_id || req.query.scroll_id;
     console.log(`Scroll ID: `, scrollId);

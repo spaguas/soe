@@ -48,8 +48,9 @@
   <!--<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />-->
   <link rel="stylehseet" type="text/css" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css" />
 
-  <script type="text/javascript" src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <!-- Highcharts -->
   <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -155,6 +156,28 @@
   <!-- MAPA FULLSCREEN -->
   <div id="map" role="region" aria-label="Mapa interativo"></div>
 
+  <div class="modal fade" id="modalCacheNotice" tabindex="-1" aria-labelledby="modalCacheNoticeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCacheNoticeLabel">Aviso sobre carregamento em cache</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Para agilizar a navegação, as informações de outorgas são carregadas em cache no seu navegador. Isso reduz o tempo de carregamento do mapa e melhora a experiência de uso.</p>
+          <p>Os dados armazenados localmente são renovados automaticamente, sempre com as informações consolidadas do dia anterior (D-1).</p>
+          <p>Você pode carregar toda a base de outorgas (aprox. centenas de milhares de registros) para trabalhar offline ou optar por carregar somente os dados filtrados sob demanda.</p>
+          <p>Escolha abaixo como deseja prosseguir. Você poderá alterar a opção a qualquer momento.</p>
+        </div>
+        <div class="modal-footer">
+          
+          <button type="button" class="btn btn-outline-secondary" id="modalCacheAcceptBtn">Carregar tudo! <i class="bi bi-exclamation-triangle-fill"></i></button>
+          <button type="button" class="btn btn-success" id="modalCacheDeclineBtn">Carregar sob demanda <i class="bi bi-save-fill"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal modal-fade" id="modalInfo" tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -167,7 +190,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <a href="#" target="_blank" id="modalInfoLink" class="btn btn-primary">Ver Portaria</a>
+          <!--<a href="#" target="_blank" id="modalInfoLink" class="btn btn-primary">Ver Portaria</a>-->
         </div>
       </div>
     </div>
@@ -199,6 +222,7 @@
                 <th rowspan="2">Vazão (m³/s)</th>
                 <th rowspan="2">Sazonal?</th>
                 <th rowspan="2">Status</th>
+                <th rowspan="2">Status Req.</th>
                 <th colspan="3">Janeiro</th>
                 <th colspan="3">Fevereiro</th>
                 <th colspan="3">Março</th>
@@ -270,8 +294,17 @@
           </table>  
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <div class="btn-group dropup">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              Download <i class="bi bi-cloud-download-fill"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" id="tableDownloadMenu">
+              <li><button type="button" class="dropdown-item" data-export-format="csv">CSV (.csv)</button></li>
+              <li><button type="button" class="dropdown-item" data-export-format="xlsx">Excel (.xlsx)</button></li>
+              <li><button type="button" class="dropdown-item" data-export-format="json">JSON (.json)</button></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -317,6 +350,11 @@
     <div class="offcanvas-body">
       <form id="filterForm" class="vstack gap-3">
         <div class="form-floating">
+          <input type="text" class="form-control" id="sol_req_num" placeholder="Código do Requerimento/Solicitação" autocomplete="off" />
+          <label for="sol_req_num">Código do Requerimento/Solicitação</label>
+        </div>
+
+        <div class="form-floating">
           <select id="diretorias" class="form-select">
           </select>
           <label for="es-field">Gerências</label>
@@ -332,9 +370,7 @@
           <select id="municipios" class="form-select">
           </select>
           <label for="es-field">Municípios</label>
-        </div>
-
-        
+        </div>        
 
         <div class="form-floating">
           <select id="tipo_uso" class="form-select">
@@ -379,6 +415,21 @@
         </div>
 
         <div class="form-floating">
+          <select id="status_uso" class="form-select"></select>
+          <label for="status_uso">Status de Uso</label>
+        </div>
+
+        <div class="form-floating">
+          <select id="status_req" class="form-select"></select>
+          <label for="status_req">Status do Requerimento</label>
+        </div>
+
+        <div class="form-floating">
+          <select id="tem_sazonalidade" class="form-select"></select>
+          <label for="tem_sazonalidade">Sazonal?</label>
+        </div>
+
+        <div class="form-floating">
           <input type="date" class="form-control" id="data_publicacao" placeholder="Data de Publicação" />
           <label for="data_publicacao">Data de Publicação após:</label>
         </div>
@@ -400,6 +451,98 @@
 
 
   <script>
+    const CACHE_NOTICE_STORAGE_KEY = 'soe-cache-notice-day';
+    const CACHE_MODE_STORAGE_KEY = 'soe-cache-mode';
+
+    function safeGetItem(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (err) {
+        console.warn('[cache-pref] Falha ao ler localStorage:', err);
+        return null;
+      }
+    }
+
+    function safeSetItem(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (err) {
+        console.warn('[cache-pref] Falha ao gravar localStorage:', err);
+      }
+    }
+
+    function getStoredCacheMode() {
+      const mode = safeGetItem(CACHE_MODE_STORAGE_KEY);
+      return mode === 'full' || mode === 'filtered' ? mode : null;
+    }
+
+    function setStoredCacheMode(mode) {
+      if (mode !== 'full' && mode !== 'filtered') return;
+      safeSetItem(CACHE_MODE_STORAGE_KEY, mode);
+    }
+
+    function getLastPromptDay() {
+      return safeGetItem(CACHE_NOTICE_STORAGE_KEY);
+    }
+
+    function setLastPromptDay(value) {
+      safeSetItem(CACHE_NOTICE_STORAGE_KEY, value);
+    }
+
+    let cacheMode = getStoredCacheMode() || 'filtered';
+    let awaitingCacheConsent = false;
+
+    function openCacheModeModal() {
+      const modalEl = document.getElementById('modalCacheNotice');
+      if (!modalEl) return null;
+      const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl, {
+        backdrop: 'static',
+        keyboard: true
+      });
+      modalInstance.show();
+      return modalInstance;
+    }
+
+    function showCacheNoticeIfNeeded() {
+      const modalEl = document.getElementById('modalCacheNotice');
+      if (!modalEl) return;
+
+      const now = new Date();
+      const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const lastPrompt = getLastPromptDay();
+      const shouldPrompt = !getStoredCacheMode() || lastPrompt !== todayKey;
+
+      const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl, {
+        backdrop: 'static',
+        keyboard: true
+      });
+
+      const acceptBtn = modalEl.querySelector('#modalCacheAcceptBtn');
+      const declineBtn = modalEl.querySelector('#modalCacheDeclineBtn');
+
+      const bindIfNeeded = (btn, handler) => {
+        if (!btn) return;
+        if (btn.dataset.bound === 'true') return;
+        btn.addEventListener('click', handler);
+        btn.dataset.bound = 'true';
+      };
+
+      bindIfNeeded(acceptBtn, () => {
+        handleCacheModeChoice('full', modalInstance).catch(err => console.error('[cache-mode] erro ao aplicar modo full', err));
+      });
+      bindIfNeeded(declineBtn, () => {
+        handleCacheModeChoice('filtered', modalInstance).catch(err => console.error('[cache-mode] erro ao aplicar modo sob demanda', err));
+      });
+
+      awaitingCacheConsent = shouldPrompt;
+
+      if (shouldPrompt) {
+        modalInstance.show();
+      } else {
+        awaitingCacheConsent = false;
+      }
+    }
+
     const INITIAL_VIEW = { lat: -23.5505, lng: -46.6333, zoom: 10 };
     const map = L.map('map').setView([INITIAL_VIEW.lat, INITIAL_VIEW.lng], INITIAL_VIEW.zoom);
 
@@ -415,6 +558,149 @@
     map.getPane('layersPane').style.pointerEvents = 'none';
 
     const fields = ["latitude", "longitude", "portaria", "cod_ibge", "tipo_uso", "municipio", "sol_req_num_cod", "tipo_finalidade_grupo", "data_publicacao", "data_exame", "diretoria_nome", "tipo_requerimento", "volume_m3_anual", "vazao_normalizada_m3s", "status_uso", "status_req", "status_data_exame", "status_sols", "decisao_pto", "cnpj_requerente", "cpf_requerente", "nome_requerente", "tem_sazonalidade", "razao_social_requerente", "cod_ugrhi", "nome_ugrhi", "tipo_finalidade_usos", "total_hours*", "vaz_*", "vol_max_*, validade_meses_pto"].join(",");
+    const MAX_MAP_MARKERS = 300000;
+    let markerOverflow = false;
+    const scheduleIdle = (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function')
+      ? (cb) => window.requestAnimationFrame(cb)
+      : (cb) => setTimeout(cb, 0);
+    const MONTH_LABELS = [
+      ['jan', 'Jan'],
+      ['fev', 'Fev'],
+      ['mar', 'Mar'],
+      ['abr', 'Abr'],
+      ['mai', 'Mai'],
+      ['jun', 'Jun'],
+      ['jul', 'Jul'],
+      ['ago', 'Ago'],
+      ['set', 'Set'],
+      ['out', 'Out'],
+      ['nov', 'Nov'],
+      ['dez', 'Dez']
+    ];
+    const FLOW_TABLE_MONTHS = [
+      { key: 'jan', label: 'Janeiro', days: 31 },
+      { key: 'fev', label: 'Fevereiro', days: 28 },
+      { key: 'mar', label: 'Março', days: 31 },
+      { key: 'abr', label: 'Abril', days: 30 },
+      { key: 'mai', label: 'Maio', days: 31 },
+      { key: 'jun', label: 'Junho', days: 30 },
+      { key: 'jul', label: 'Julho', days: 31 },
+      { key: 'ago', label: 'Agosto', days: 31 },
+      { key: 'set', label: 'Setembro', days: 30 },
+      { key: 'out', label: 'Outubro', days: 31 },
+      { key: 'nov', label: 'Novembro', days: 30 },
+      { key: 'dez', label: 'Dezembro', days: 31 }
+    ];
+    let currentTableRecords = [];
+    const TABLE_EXPORT_COLUMNS = [
+      { label: 'Requerimento', accessor: (r) => r.sol_req_num_cod ?? '' },
+      { label: 'Tipo de Uso', accessor: (r) => r.tipo_uso ?? '' },
+      { label: 'Município', accessor: (r) => r.municipio?.nome ?? '' },
+      { label: 'UGRHI', accessor: (r) => r.ugrhi?.nome ?? '' },
+      { label: 'Diretoria', accessor: (r) => r.diretoria ?? '' },
+      { label: 'Requerente (ID)', accessor: (r) => r.requerente?.id ?? '' },
+      { label: 'Requerente (Nome)', accessor: (r) => r.requerente?.nome ?? '' },
+      { label: 'Tipo de Uso (Tabela)', accessor: (r) => r.tipo_uso ?? '' },
+      { label: 'Finalidade', accessor: (r) => r.tipo_finalidade_grupo ?? '' },
+      { label: 'Portaria', accessor: (r) => r.portaria ?? r.numero_portaria ?? '' },
+      { label: 'Data Publicação', accessor: (r) => r.data_publicacao ?? '' },
+      { label: 'Volume Anual (m³)', accessor: (r) => (Number.isFinite(r.volume_m3_anual) ? r.volume_m3_anual : (r.volume_m3_anual ?? '')) },
+      { label: 'Vazão (m³/s)', accessor: (r) => (Number.isFinite(r.vazao_normalizada_m3s) ? r.vazao_normalizada_m3s : (r.vazao_normalizada_m3s ?? '')) },
+      { label: 'Sazonal?', accessor: (r) => (r.tem_sazonalidade ? 'Sim' : 'Não') },
+      { label: 'Status', accessor: (r) => r.status_uso ?? '' },
+      { label: 'Status Requerimento', accessor: (r) => r.status_requerimento ?? '' }
+    ];
+    for (const [key, label] of MONTH_LABELS) {
+      TABLE_EXPORT_COLUMNS.push({ label: `${label} - Horas`, accessor: (r) => r.vazoes?.[key]?.horas ?? '' });
+      TABLE_EXPORT_COLUMNS.push({ label: `${label} - Volume Máx (m³/dia)`, accessor: (r) => r.vazoes?.[key]?.vol_max ?? '' });
+      TABLE_EXPORT_COLUMNS.push({ label: `${label} - Vazão (m³/h)`, accessor: (r) => r.vazoes?.[key]?.vazao_m3h ?? '' });
+    }
+
+    const STATUS_USO_OPTIONS = [
+      { value: '', label: '-' },
+      { value: 'Dispensa deferida', label: 'Dispensa Deferida' },
+      { value: 'Dispensa indeferida', label: 'Dispensa Indeferida' },
+      { value: 'Ato revogado', label: 'Ato Revogado' },
+      { value: 'Direito de Uso deferido', label: 'Direito de Uso Deferido' },
+      { value: 'Direito de Uso indeferido', label: 'Direito de Uso Indeferido' },
+      { value: 'Renovação deferida', label: 'Renovação Deferida' },
+      { value: 'Renovação indeferida', label: 'Renovação Indeferida' },
+      { value: 'DVI deferida', label: 'DVI Deferida' },
+      { value: 'DVI indeferida', label: 'DVI Indeferida' },
+      { value: 'Requerimento cadastrado', label: 'Requerimento Cadastrado' },
+      { value: 'Retificação deferida', label: 'Retificação Deferida' },
+      { value: 'Retificação indeferida', label: 'Retificação Indeferida' },
+      { value: 'Portaria renovagada', label: 'Portaria Revogada' },
+      { value: 'Cadastro DNPM deferido', label: 'Cadastro DNPM Deferido' },
+      { value: 'Cadastro DNPM indeferido', label: 'Cadastro DNPM Indeferido' },
+      { value: 'Desativado', label: 'Desativado' },
+      { value: 'Excluído', label: 'Excluído'},
+      { value: 'Cancelado pelo requerente', label: 'Cancelado pelo Requerente' } 
+    ];
+
+    const STATUS_REQ_OPTIONS = [
+      { value: '', label: '-' },
+      { value: 'Processado', label: 'Processado' },
+      { value: 'Arquivado', label: 'Arquivado' },
+      { value: 'Em processamento', label: 'Em processamento' },
+      { value: 'Cancelado', label: 'Cancelado' },
+      { value: 'No protocolo', label: 'No protocolo' },
+      { value: 'Não atribuídos', label: 'Não atribuídos' },
+      { value: 'Deserto', label: 'Deserto' },
+      { value: 'Preenchimento completo', label: 'Preenchimento Completo' },
+      { value: 'Aguardando análise técnica', label: 'Aguardando Análise Técnica' }
+    ];
+
+    const SAZONAL_OPTIONS = [
+      { value: '', label: '-' },
+      { value: 'true', label: 'Sim' },
+      { value: 'false', label: 'Não' }
+    ];
+
+    const SOL_REQ_INPUT_ID = 'sol_req_num';
+    const DEPENDENT_FILTER_IDS = [
+      'diretorias',
+      'ugrhis',
+      'municipios',
+      'tipo_uso',
+      'finalidade',
+      'data_publicacao',
+      'status_uso',
+      'status_req',
+      'tem_sazonalidade'
+    ];
+
+    function setDependentFiltersDisabled(disabled) {
+      for (const id of DEPENDENT_FILTER_IDS) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.disabled = !!disabled;
+        }
+      }
+    }
+
+    function handleSolReqInput() {
+      const solReqInput = document.getElementById(SOL_REQ_INPUT_ID);
+      if (!solReqInput) return;
+      const hasValue = solReqInput.value && solReqInput.value.trim().length > 0;
+      setDependentFiltersDisabled(hasValue);
+    }
+
+    function populateSelectOptions(selectId, options) {
+      const selectEl = document.getElementById(selectId);
+      if (!selectEl) return;
+      selectEl.innerHTML = '';
+      for (const option of options) {
+        const optEl = document.createElement('option');
+        optEl.value = option.value;
+        optEl.textContent = option.label;
+        selectEl.appendChild(optEl);
+      }
+    }
+
+    populateSelectOptions('status_uso', STATUS_USO_OPTIONS);
+    populateSelectOptions('status_req', STATUS_REQ_OPTIONS);
+    populateSelectOptions('tem_sazonalidade', SAZONAL_OPTIONS);
 
     // Try to enable persistent storage
     tryEnablePersistentStorage().then(info => {
@@ -439,6 +725,183 @@
       meta: 'name'
     });
 
+    db.version(2).stores({
+      items: 'id, savedAt, tipo_uso, ugrhi_codigo, cod_ibge, diretoria, tipo_finalidade_grupo, data_publicacao',
+      meta: 'name',
+      filtered: '++pk, filterKey, id, savedAt'
+    });
+
+    db.version(3).stores({
+      items: 'id, savedAt, tipo_uso, ugrhi_codigo, cod_ibge, diretoria, tipo_finalidade_grupo, data_publicacao, sol_req_num_cod',
+      meta: 'name',
+      filtered: '++pk, filterKey, id, savedAt'
+    });
+
+    function buildFilterKey(filter = {}) {
+      const sortable = {};
+      const entries = Object.entries(filter || {});
+      entries.sort(([a], [b]) => a.localeCompare(b));
+      for (const [key, value] of entries) {
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          sortable[key] = buildFilterKey(value);
+        } else if (typeof value === 'string') {
+          sortable[key] = value.trim();
+        } else {
+          sortable[key] = value;
+        }
+      }
+      try {
+        return JSON.stringify(sortable);
+      } catch (err) {
+        console.warn('[cache-mode] falha ao serializar filtro', err);
+        return '';
+      }
+    }
+
+    function buildFilterQueryParams(filter = {}) {
+      const params = new URLSearchParams();
+      if (!filter || typeof filter !== 'object') return params;
+
+      if (filter.ugrhi) params.set('ugrhi', filter.ugrhi);
+      if (filter.municipio) params.set('municipio', filter.municipio);
+      if (filter.tipo_uso) params.set('tipo_uso', filter.tipo_uso);
+      if (filter.tipo_finalidade_grupo) params.set('tipo_finalidade_grupo', filter.tipo_finalidade_grupo);
+      if (filter.diretoria) params.set('diretoria', filter.diretoria);
+      if (filter.data_publicacao) params.set('data_publicacao', filter.data_publicacao);
+      if (filter.status_uso) params.set('status_uso', String(filter.status_uso).trim());
+      if (filter.status_req) params.set('status_req', String(filter.status_req).trim());
+      if (filter.sol_req_num_cod) params.set('sol_req_num', String(filter.sol_req_num_cod).trim());
+      if (typeof filter.tem_sazonalidade === 'boolean') {
+        params.set('tem_sazonalidade', filter.tem_sazonalidade ? 'true' : 'false');
+      }
+
+      const geo = filter.geo_distance;
+      if (geo && Array.isArray(geo.center) && geo.center.length === 2 && geo.radius_km) {
+        const [lat, lon] = geo.center;
+        const latNum = parseFloat(lat);
+        const lonNum = parseFloat(lon);
+        const radiusNum = parseFloat(geo.radius_km);
+        if (!Number.isNaN(latNum) && !Number.isNaN(lonNum) && !Number.isNaN(radiusNum)) {
+          params.set('lat', latNum);
+          params.set('lon', lonNum);
+          params.set('distance_km', radiusNum);
+        }
+      }
+
+      return params;
+    }
+
+    function updateSummary(message, { showChangeAction = true } = {}) {
+      const summaryEl = document.getElementById('es-summary');
+      if (!summaryEl) return;
+
+      let html = message || '';
+      if (showChangeAction) {
+        html +=
+          ' <button type="button" class="btn btn-link btn-sm p-0 ms-2 cache-mode-toggle" aria-label="Alterar preferência de cache">Alterar preferência</button>';
+      }
+
+      summaryEl.innerHTML = html;
+
+      if (showChangeAction) {
+        const btn = summaryEl.querySelector('.cache-mode-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => openCacheModeModal());
+        }
+      }
+    }
+
+    function announceCacheMode() {
+      if (cacheMode === 'full') {
+        updateSummary('Modo de cache: toda a base será carregada automaticamente.');
+      } else {
+        updateSummary('Modo de cache: dados sob demanda. Aplique um filtro para carregar registros.');
+      }
+    }
+
+    async function clearIndexedCache() {
+      try {
+        await db.items.clear();
+      } catch (err) {
+        console.warn('[cache-mode] falha ao limpar itens do cache', err);
+      }
+      try {
+        await db.meta.delete('outorgas_all');
+      } catch (err) {
+        // meta pode não existir, seguir
+      }
+      await clearAllFilteredCaches();
+    }
+
+    function getExistingDataTable() {
+      const jq = window.$ || window.jQuery;
+      if (jq?.fn?.DataTable?.isDataTable('#outorgasTable')) {
+        return jq('#outorgasTable').DataTable();
+      }
+      return null;
+    }
+
+    function destroyDataTable() {
+      const instance = getExistingDataTable();
+      if (instance) {
+        instance.destroy();
+      }
+    }
+
+    async function clearMapAndTable() {
+      try {
+        if (markersLayer && typeof markersLayer.clearLayers === 'function') {
+          markersLayer.clearLayers();
+        }
+      } catch (err) {
+        console.warn('[cache-mode] falha ao limpar marcadores', err);
+      }
+      const tableBody = document.getElementById('outorgasTableBody');
+      if (tableBody) tableBody.innerHTML = '';
+      destroyDataTable();
+      markerOverflow = false;
+      currentTableRecords = [];
+    }
+
+    async function handleCacheModeChoice(mode, modalInstance) {
+      const now = new Date();
+      const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      setStoredCacheMode(mode);
+      setLastPromptDay(todayKey);
+      cacheMode = mode;
+      awaitingCacheConsent = false;
+
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+
+      if (mode === 'full') {
+        await clearIndexedCache();
+      }
+      await clearMapAndTable();
+
+      if (mode === 'full') {
+        updateSummary('Preparando carregamento completo da base...');
+        await getAllOutorgas({ forceRefresh: true }, {});
+      } else {
+        announceCacheMode();
+      }
+    }
+
+    async function initializeCacheWorkflow() {
+      if (cacheMode === 'full') {
+        if (awaitingCacheConsent) {
+          updateSummary('Carregamento completo aguardando confirmação.');
+          return;
+        }
+        updateSummary('Preparando carregamento completo da base...');
+        await getAllOutorgas({ forceRefresh: false }, {});
+      } else {
+        announceCacheMode();
+      }
+    }
+
     iconLayersControl.on('activelayerchange', function (e) {
       console.log('layer switched', e.layer);
       map.invalidateSize();
@@ -455,8 +918,6 @@
     populateMunicipiosSelect()
     populateUgrhisSelect()
     populateDiretoriasSelect()
-    
-    getAllOutorgas({ forceRefresh: false }, { ugrhi: 6, municipio: '3550308' });
 
     // Layers for grouping
     let ugrhiLayer = L.layerGroup([]);
@@ -538,7 +999,7 @@
       let marker = L.marker(center,{           
         icon: L.BeautifyIcon.icon({
           iconShape: 'circle-dot',
-          borderWidth: 5,
+          borderWidth: 4,
           borderColor: 'blue'
         })
       }).addTo(geo_distance_groups);
@@ -557,21 +1018,50 @@
       const data_publicacao = document.getElementById('data_publicacao').value;
       const tipo_finalidade_grupo = document.getElementById('finalidade').value;
       const diretoria = document.getElementById('diretorias').value;
+      const status_uso = document.getElementById('status_uso').value;
+      const status_req = document.getElementById('status_req').value;
+      const sazonalValue = document.getElementById('tem_sazonalidade').value;
+      const solReqValue = document.getElementById(SOL_REQ_INPUT_ID)?.value?.trim() || '';
 
       const filter = {};
-      if (ugrhi) filter.ugrhi = ugrhi;
-      if (municipio) filter.municipio = municipio;
-      if (tipo_uso) filter.tipo_uso = tipo_uso;
-      if (finalidade) filter.tipo_finalidade_grupo = finalidade;
-      if (data_publicacao) filter.data_publicacao = data_publicacao;
-      if (tipo_finalidade_grupo) filter.tipo_finalidade_grupo = tipo_finalidade_grupo;
-      if (diretoria) filter.diretoria = diretoria;
+      if (solReqValue) {
+        filter.sol_req_num_cod = solReqValue;
+      } else {
+        if (ugrhi) filter.ugrhi = ugrhi;
+        if (municipio) filter.municipio = municipio;
+        if (tipo_uso) filter.tipo_uso = tipo_uso;
+        if (finalidade) filter.tipo_finalidade_grupo = finalidade;
+        if (data_publicacao) filter.data_publicacao = data_publicacao;
+        if (tipo_finalidade_grupo) filter.tipo_finalidade_grupo = tipo_finalidade_grupo;
+        if (diretoria) filter.diretoria = diretoria;
+        if (status_uso) filter.status_uso = status_uso.trim();
+        if (status_req) filter.status_req = status_req.trim();
+        if (sazonalValue !== '') filter.tem_sazonalidade = sazonalValue === 'true';
+      }
 
       municipioLayer.clearLayers();
       ugrhiLayer.clearLayers();
 
       getAllOutorgas({ forceRefresh: false }, filter);
     });
+
+    const solReqInputEl = document.getElementById(SOL_REQ_INPUT_ID);
+    if (solReqInputEl) {
+      solReqInputEl.addEventListener('input', handleSolReqInput);
+      handleSolReqInput();
+    }
+
+    const filterFormEl = document.getElementById('filterForm');
+    if (filterFormEl) {
+      filterFormEl.addEventListener('reset', () => {
+        setTimeout(() => {
+          setDependentFiltersDisabled(false);
+          const inputEl = document.getElementById(SOL_REQ_INPUT_ID);
+          if (inputEl) inputEl.value = '';
+          handleSolReqInput();
+        }, 0);
+      });
+    }
 
 
     function loadUgrhiLayer() {
@@ -676,7 +1166,7 @@
         setTimeout(() => {
           bar.style.width = '0%';
           container.style.display = 'none';
-        }, 500); // espera meio segundo antes de esconder*/
+        }, 100); // espera meio segundo antes de esconder*/
       } else {
         container.style.display = 'block';
         bar.style.display = 'block';
@@ -703,6 +1193,77 @@
     }
     function isFresh(savedAt, maxAge = ONE_DAY) {
       return savedAt && (Date.now() - savedAt) < maxAge;
+    }
+
+    async function clearAllFilteredCaches() {
+      if (!db?.filtered) return;
+      try {
+        await db.filtered.clear();
+      } catch (err) {
+        console.warn('[cache-mode] falha ao limpar cache filtrado', err);
+      }
+      try {
+        const metas = await db.meta.where('name').startsWith('filtered:').toArray();
+        for (const meta of metas) {
+          await db.meta.delete(meta.name);
+        }
+      } catch (err) {
+        console.warn('[cache-mode] falha ao limpar metadados filtrados', err);
+      }
+    }
+
+    async function clearFilteredCache(filterKey) {
+      if (!db?.filtered || !filterKey) return;
+      try {
+        await db.filtered.where('filterKey').equals(filterKey).delete();
+      } catch (err) {
+        console.warn('[cache-mode] falha ao remover cache filtrado', err);
+      }
+      try {
+        await db.meta.delete(`filtered:${filterKey}`);
+      } catch (err) {
+        // meta pode não existir
+      }
+    }
+
+    async function replaceFilteredCache(filterKey, records = []) {
+      if (!db?.filtered || !filterKey) return;
+      try {
+        const payload = records.map(rec => ({ ...rec, filterKey }));
+        await db.transaction('rw', db.filtered, db.meta, async () => {
+          await db.filtered.where('filterKey').equals(filterKey).delete();
+          if (payload.length) {
+            await db.filtered.bulkPut(payload);
+          }
+          await setMeta(`filtered:${filterKey}`, { mode: 'filtered', filterKey, count: records.length });
+        });
+      } catch (err) {
+        console.warn('[cache-mode] falha ao atualizar cache filtrado', err);
+      }
+    }
+
+    async function loadFilteredCache(filterKey) {
+      if (!db?.filtered || !filterKey) return [];
+      try {
+        return await db.filtered.where('filterKey').equals(filterKey).toArray();
+      } catch (err) {
+        console.warn('[cache-mode] falha ao carregar cache filtrado', err);
+        return [];
+      }
+    }
+
+    async function hasFreshFilteredCache(filterKey, maxAge = ONE_DAY) {
+      if (!db?.filtered || !filterKey) return false;
+      try {
+        const meta = await getMeta(`filtered:${filterKey}`);
+        if (!meta || !isFresh(meta.savedAt, maxAge)) return false;
+        if (typeof meta.count === 'number' && meta.count === 0) return true;
+        const count = await db.filtered.where('filterKey').equals(filterKey).count();
+        return count > 0;
+      } catch (err) {
+        console.warn('[cache-mode] falha ao validar cache filtrado', err);
+        return false;
+      }
     }
 
     // Converte hits do ES no formato compacto
@@ -766,34 +1327,76 @@
     }
 
     // Grava incrementando, sem duplicar
-    async function saveIncremental(hits, collectionName = 'outorgas_all') {
+    async function saveIncremental(hits, collectionName = 'outorgas_all', metaExtra = {}, { persist = true } = {}) {
       const recs = toCompactRecords(hits);
-      if (!recs.length) return { added: 0 };
+      if (!recs.length) return { added: 0, records: [] };
 
-      // put() sobrescreve se já existir; não duplica
-      await db.items.bulkPut(recs);
-      await setMeta(collectionName, { count: await db.items.count() });
-      return { added: recs.length };
+      if (persist) {
+        // put() sobrescreve se já existir; não duplica
+        await db.items.bulkPut(recs);
+        const metaPayload = { count: await db.items.count(), ...metaExtra };
+        await setMeta(collectionName, metaPayload);
+      }
+      return { added: recs.length, records: recs };
+    }
+
+    function applyAdditionalFilters(collection, filter = {}) {
+      if (!collection || !filter || typeof filter !== 'object') {
+        return collection;
+      }
+
+      let filteredCollection = collection;
+
+      const statusUsoFilter = (typeof filter.status_uso === 'string' && filter.status_uso.trim())
+        ? filter.status_uso.trim().toLowerCase()
+        : null;
+      if (statusUsoFilter) {
+        filteredCollection = filteredCollection.filter(item => (item.status_uso || '').toLowerCase() === statusUsoFilter);
+      }
+
+      const statusReqFilter = (typeof filter.status_req === 'string' && filter.status_req.trim())
+        ? filter.status_req.trim().toLowerCase()
+        : null;
+      if (statusReqFilter) {
+        filteredCollection = filteredCollection.filter(item => (item.status_requerimento || '').toLowerCase() === statusReqFilter);
+      }
+
+      const solReqFilter = (typeof filter.sol_req_num_cod === 'string' && filter.sol_req_num_cod.trim())
+        ? filter.sol_req_num_cod.trim().toLowerCase()
+        : null;
+      if (solReqFilter) {
+        filteredCollection = filteredCollection.filter(item => (item.sol_req_num_cod || '').toLowerCase() === solReqFilter);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(filter, 'tem_sazonalidade') && typeof filter.tem_sazonalidade === 'boolean') {
+        filteredCollection = filteredCollection.filter(item => item.tem_sazonalidade === filter.tem_sazonalidade);
+      }
+
+      return filteredCollection;
     }
 
     async function loadAllFromCache(filter) {
-      
       //return db.items.toArray();
-      keys = Object.keys(filter);
+      filter = (filter && typeof filter === 'object') ? filter : {};
+      const additionalKeys = ['status_uso', 'status_req', 'tem_sazonalidade'];
+      const allKeys = Object.keys(filter);
+      const keys = allKeys.filter(key => !additionalKeys.includes(key));
+      const hasAdditionalFilters = allKeys.some(key => additionalKeys.includes(key));
+      let results = [];
 
-      if (filter && keys.length) {
+      if (filter && (keys.length || hasAdditionalFilters)) {
         // Aplica filtros simples
         let collection = db.items;
 
         //console.log("Collection: ", collection);
-        console.log("Keys: ", keys);
+        console.log("Keys: ", allKeys);
 
         //aplica apenas o primeiro filtro (por enquanto)
         if(keys.length == 1){
           console.log("Carregando do cache com filtro:", filter);
 
           if(keys[0] == 'ugrhi'){
-            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi))
+            collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi));
           } else if(keys[0] == 'tipo_uso'){
             collection = collection.where('tipo_uso').equals(filter.tipo_uso);
           } else if(keys[0] == 'tipo_finalidade_grupo'){
@@ -804,6 +1407,8 @@
             collection = collection.where('data_publicacao').aboveOrEqual(filter.data_publicacao);
           } else if(keys[0] == 'diretoria'){
             collection = collection.where('diretoria').equals(filter.diretoria);
+          } else if(keys[0] == 'sol_req_num_cod') {
+            collection = collection.where('sol_req_num_cod').equals(filter.sol_req_num_cod);
           } else if(keys[0] == 'geo_distance'){
             //filtro por distância geográfica
             const center = filter.geo_distance.center;
@@ -815,8 +1420,8 @@
               const d = map.distance([item.lat, item.lon], center);
               return d <= radius_m;
             });
-          } 
-        }else if(keys.length == 2){
+          }
+        } else if(keys.length == 2){
           console.log("Filtro composto: ", filter);
           if(["ugrhi","municipio"].every(key => keys.includes(key))){
             collection = collection.where('ugrhi_codigo').equals(parseInt(filter.ugrhi)).and(item => item.cod_ibge == filter.municipio);
@@ -916,6 +1521,7 @@
           } 
         }
 
+        collection = applyAdditionalFilters(collection, filter);
         results = await collection.toArray();
         console.log("Collection after filter: ", results.length);
 
@@ -927,7 +1533,16 @@
 
     function renderRowsTable(recs, clearBefore = true) {
       let tableBody = document.getElementById('outorgasTableBody');
-      if (clearBefore) tableBody.innerHTML = '';
+      if (!tableBody) return;
+
+      if (clearBefore) {
+        tableBody.innerHTML = '';
+        currentTableRecords = [];
+      }
+
+      if (Array.isArray(recs) && recs.length) {
+        currentTableRecords.push(...recs);
+      }
 
       for (const r of recs) {
         //console.log("Renderizando linha da tabela:", r);
@@ -947,12 +1562,13 @@
           <td>${r.requerente?.nome || ''}</td>
           <td>${r.tipo_uso || ''}</td>
           <td>${r.tipo_finalidade_grupo || ''}</td>
-          <td>${r.numero_portaria || ''}</td>
+          <td>${r.portaria || r.numero_portaria || ''}</td>
           <td>${r.data_publicacao || ''}</td>
           <td>${r.volume_m3_anual != null ? r.volume_m3_anual.toLocaleString('pt-BR') : ''}</td>
           <td>${r.vazao_normalizada_m3s != null ? r.vazao_normalizada_m3s : ''}</td>
           <td>${r.tem_sazonalidade ? 'Sim' : 'Não'}</td>
           <td>${r.status_uso || '-'}</td>
+          <td>${r.status_requerimento || '-'}</td>
           <td>${r.vazoes.jan?.horas || '-'}</td>
           <td>${r.vazoes.jan?.vol_max || '-'}</td>
           <td>${r.vazoes.jan?.vazao_m3h || '-'}</td>
@@ -994,60 +1610,85 @@
       }
     }
 
-    async function renderFromCacheToMap(filter) {
-      const recs = await loadAllFromCache(filter);
-      
+    function refreshDataTable() {
+      if (typeof DataTable === 'undefined') return;
+
+      destroyDataTable();
+
+      const tableBody = document.getElementById('outorgasTableBody');
+      const rowCount = tableBody ? tableBody.rows.length : 0;
+      if (!rowCount) return;
+
+      try {
+        new DataTable('#outorgasTable', {
+          layout: {
+            topStart: 'info',
+            bottom: 'paging',
+            bottomStart: null,
+            bottomEnd: null
+          },
+          pageLength: 25,
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json'
+          }
+        });
+      } catch (err) {
+        console.warn('[datatable] Falha ao inicializar tabela:', err);
+      }
+    }
+
+    async function renderFilteredCache(filter, filterKey) {
+      const records = filterKey ? await loadFilteredCache(filterKey) : [];
+      return renderFromCacheToMap(filter, { records, source: 'filtered' });
+    }
+
+    async function renderFromCacheToMap(filter, { records, source = 'full' } = {}) {
+      const recs = Array.isArray(records) ? records : await loadAllFromCache(filter);
+      let per = 0;
+
       let tableBody = document.getElementById('outorgasTableBody');
+      destroyDataTable();
       if (tableBody) tableBody.innerHTML = '';
 
       let summary = document.getElementById('es-summary');
 
-      console.log("Renderizando do cache:", recs.length, "registros");
+      markerOverflow = false;
+
+      console.log(`Renderizando do cache (${source}):`, recs.length, 'registros');
       console.log("Filtro:", filter);
 
-      if (!recs.length) return 0;
-
-      let added = 0;
-
       try { markersLayer.clearLayers(); } catch { }
+
+      if (!recs.length) {
+        const emptyLabel = source === 'filtered'
+          ? 'Filtro em cache: nenhum registro disponível.'
+          : 'Cache disponível: nenhum registro corresponde ao filtro.';
+        updateSummary(emptyLabel);
+        setProgressBar("global-progress", "global-progress-bar", 100);
+        refreshDataTable();
+        return 0;
+      }
+      let added = 0;
+      currentTableRecords = [];
 
       const batch = 100; // processa em lotes para evitar travar a UI
       for (let i = 0; i < recs.length; i += batch) {
         const chunk = recs.slice(i, i + batch);
         //console.log("Chunk:", chunk);
 
-        const addedNow = addMarkersFromHits(chunk.map(r => ({
-          _id: r.id, _source: {
-            
-            latitude: r.lat, longitude: r.lon,
-            name: r.name, tipo_uso: r.tipo_uso,
-            sol_req_num_cod: r.sol_req_num_cod,
-            tipo_finalidade_grupo: r.tipo_finalidade_grupo,
-            tipo_uso: r.tipo_uso,
-            cod_ibge: r.cod_ibge,
-            ugrhi: r.ugrhi,
-            municipio: r.municipio,
-            diretoria: r.diretoria,
-            data_publicacao: r.data_publicacao,
-            status_uso: r.status_uso,
-            vazao_normalizada_m3s: r.vazao_normalizada_m3s,
-            tem_sazonalidade: r.tem_sazonalidade,
-            volume_m3_anual: r.volume_m3_anual,
-            requerente: r.requerente,
-            vazoes: r.vazoes
-          }
-        })));
+        const addedNow = addMarkersFromRecords(chunk);
 
         renderRowsTable(chunk, false); // false = não limpa antes
 
         added += addedNow;
         //console.log(`Renderizado do cache: ${i + chunk.length} / ${recs.length} registros (${addedNow} marcadores adicionados)`);
         if(summary){
-          let per = Math.round(((i + chunk.length) / recs.length) * 100);
-          summary.textContent = `Carregando : ${per.toFixed(2)}% - Total ${recs.length}`;
+          per = Math.round(((i + chunk.length) / recs.length) * 100);
+          const progressLabel = source === 'filtered' ? 'Filtro em cache' : 'Cache completo';
+          updateSummary(`${progressLabel}: ${per.toFixed(2)}% - Total ${recs.length.toLocaleString('pt-BR')}`);
           setProgressBar("global-progress", "global-progress-bar", per);
         }
-        await new Promise(res => setTimeout(res, 1)); // pausa breve para UI
+        await new Promise(resolve => scheduleIdle(resolve));
       }
 
       // Fit Bounds após carregar
@@ -1056,28 +1697,203 @@
         loadUgrhiLayer();
         map.fitBounds(markersLayer.getBounds(), { maxZoom: 12, padding: [50, 50] });
 
-        // Atualiza tabela (DataTables)
-        if ($.fn.DataTable.isDataTable('#outorgasTable')) {
-          $('#outorgasTable').DataTable().destroy();
-        }
+        setProgressBar("global-progress", "global-progress-bar", per);
+        refreshDataTable();
+      }
 
-        let table = new DataTable('#outorgasTable', {
-          layout: {
-              topStart: 'info',
-              bottom: 'paging',
-              bottomStart: null,
-              bottomEnd: null
-          },
-          language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json'
-          }
+      const cacheSummaryLabel = source === 'filtered'
+        ? `Filtro em cache`
+        : `Outorgas do cache`;
+      let cacheSummary = `${cacheSummaryLabel}: ${recs.length.toLocaleString('pt-BR')} - Marcadores carregados: ${added.toLocaleString('pt-BR')}`;
+      if (markerOverflow) {
+        cacheSummary += ` (limite de ${MAX_MAP_MARKERS.toLocaleString('pt-BR')} marcadores atingido)`;
+      }
+      updateSummary(cacheSummary);
+      console.log(`Renderizado do cache: ${recs.length} registros, ${added} marcadores adicionados`);
+      return added;
+    }
+
+    function formatNumber(value, { decimals = 2 } = {}) {
+      if (!Number.isFinite(value)) return '-';
+      return value.toLocaleString('pt-BR', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      });
+    }
+
+    function sanitizeExportValue(value) {
+      if (value == null || value === '-') return '';
+      if (typeof value === 'number') {
+        return Number.isFinite(value) ? value : '';
+      }
+      if (value instanceof Date) {
+        return value.toISOString();
+      }
+      return String(value);
+    }
+
+    function safeAccessColumn(column, record) {
+      try {
+        return column.accessor(record);
+      } catch (err) {
+        console.warn('[table-export] falha ao ler coluna', column.label, err);
+        return '';
+      }
+    }
+
+    function buildTableExportMatrix() {
+      const headers = TABLE_EXPORT_COLUMNS.map(column => column.label);
+      const rows = currentTableRecords.map(record => TABLE_EXPORT_COLUMNS.map(column => sanitizeExportValue(safeAccessColumn(column, record))));
+      return { headers, rows };
+    }
+
+    function convertMatrixToCSV(headers, rows, delimiter = ';') {
+      const escapeCell = (value) => {
+        const cell = value == null ? '' : String(value);
+        if (cell.includes('"') || cell.includes(delimiter) || /[\r\n]/.test(cell)) {
+          return '"' + cell.replace(/"/g, '""') + '"';
+        }
+        return cell;
+      };
+      const lines = [];
+      lines.push(headers.map(escapeCell).join(delimiter));
+      for (const row of rows) {
+        lines.push(row.map(escapeCell).join(delimiter));
+      }
+      return lines.join('\r\n');
+    }
+
+    function buildTableExportFilenameBase() {
+      const now = new Date();
+      const date = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+      const time = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+      return `outorgas_${date}_${time}`;
+    }
+
+    function triggerFileDownload(blob, filename) {
+      if (!(blob instanceof Blob)) return;
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+
+    function handleTableDownload(format) {
+      if (!Array.isArray(currentTableRecords) || !currentTableRecords.length) {
+        window.alert('Nenhum dado disponível para download.');
+        return;
+      }
+
+      const { headers, rows } = buildTableExportMatrix();
+      if (!rows.length) {
+        window.alert('Nenhum dado disponível para download.');
+        return;
+      }
+
+      const filenameBase = buildTableExportFilenameBase();
+
+      if (format === 'csv') {
+        const csvContent = convertMatrixToCSV(headers, rows);
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        triggerFileDownload(blob, `${filenameBase}.csv`);
+        return;
+      }
+
+      if (format === 'json') {
+        const objects = rows.map(row => {
+          const obj = {};
+          headers.forEach((header, index) => {
+            obj[header] = row[index];
+          });
+          return obj;
+        });
+        const blob = new Blob([JSON.stringify(objects, null, 2)], { type: 'application/json' });
+        triggerFileDownload(blob, `${filenameBase}.json`);
+        return;
+      }
+
+      if (format === 'xlsx') {
+        if (typeof XLSX === 'undefined') {
+          window.alert('Biblioteca XLSX não carregada. Faça o download em CSV ou JSON.');
+          return;
+        }
+        const worksheetData = [headers, ...rows.map(row => row.map(cell => (cell == null ? '' : cell)))];
+        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Outorgas');
+        const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        triggerFileDownload(blob, `${filenameBase}.xlsx`);
+        return;
+      }
+
+      window.alert('Formato de download não suportado.');
+    }
+
+    function renderFlowDetailTable(containerId, src) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const rows = [];
+      let totalAnnual = 0;
+
+      for (const month of FLOW_TABLE_MONTHS) {
+        const data = src?.vazoes?.[month.key] || {};
+        const horasMes = Number(data.horas) || 0;
+        const diasMes = Number.isFinite(month.days) ? month.days : 0;
+        const vazaoM3h = Number(data.vazao_m3h) || 0;
+        const volumeMensal = vazaoM3h * horasMes;
+        totalAnnual += volumeMensal;
+        rows.push({
+          label: month.label,
+          horasMes,
+          diasMes,
+          vazaoM3h,
+          volumeMensal
         });
       }
 
-      document.getElementById('es-summary').textContent =
-        `Outorgas (cache): ${recs.length} • Carregados (mapa): ${added}`;
-      console.log(`Renderizado do cache: ${recs.length} registros, ${added} marcadores adicionados`);
-      return added;
+      const tableRowsHtml = rows.map(row => `
+          <tr>
+            <th scope="row">${row.label}</th>
+            <td class="text-end">${formatNumber(row.horasMes, { decimals: 2 })}</td>
+            <td class="text-end">${formatNumber(row.diasMes, { decimals: 0 })}</td>
+            <td class="text-end">${formatNumber(row.vazaoM3h, { decimals: 2 })}</td>
+            <td class="text-end">${formatNumber(row.volumeMensal, { decimals: 2 })}</td>
+          </tr>
+        `).join('');
+
+      container.innerHTML = `
+        <div class="table-responsive">
+          <table class="table table-striped table-sm align-middle mb-0">
+            <thead>
+              <tr>
+                <th scope="col">Mês</th>
+                <th scope="col" class="text-end">Horas/mês</th>
+                <th scope="col" class="text-end">Dias/mês</th>
+                <th scope="col" class="text-end">Vazão (m³/h)</th>
+                <th scope="col" class="text-end">Volume (m³/mês)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRowsHtml}
+            </tbody>
+            <tfoot>
+              <tr class="fw-semibold">
+                <th scope="row">Total m³/ano</th>
+                <td class="text-end">-</td>
+                <td class="text-end">-</td>
+                <td class="text-end">-</td>
+                <td class="text-end">${formatNumber(totalAnnual, { decimals: 2 })}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      `;
     }
 
     function populateDiretoriasSelect() {
@@ -1162,21 +1978,31 @@
 
     function addMarkersFromHits(hits, popupField = null) {
       let added = 0;
-      summary = document.getElementById('es-summary');
+      if (!markersLayer || typeof markersLayer.addLayers !== 'function') return added;
+
+      const currentCount = markersLayer.getLayers ? markersLayer.getLayers().length : 0;
+      const markersToAdd = [];
 
       for (const h of hits) {
+        if (markerOverflow) break;
         const src = h._source || {};
         let lat = src.latitude, lon = src.longitude;
         if (lat != null && lon != null) {
+          const pendingCount = currentCount + markersToAdd.length;
+          if (pendingCount >= MAX_MAP_MARKERS) {
+            markerOverflow = true;
+            break;
+          }
+
           const cm = L.circleMarker([lat, lon], {
             renderer: canvasRenderer,
-            radius: 8,
+            radius: 6,
             stroke: true,
-            fillOpacity: 1,
+            fillOpacity: 0.8,
             fillColor: styleMarkerByType(src.tipo_uso),
-            weight: 2,
+            weight: 1.25,
             color: '#000000'
-          }).addTo(markersLayer);
+          });
 
           const title = src.name || h._id;
           //const extra = (popupField && src[popupField] != null) ? `<br><small>${popupField}: ${src[popupField]}</small>` : '';
@@ -1194,10 +2020,61 @@
             renderModalInfo(e, src);
           });
 
-          added++;        
+          markersToAdd.push(cm);
+          added++;
         }
       }
+
+      if (markersToAdd.length) {
+        markersLayer.addLayers(markersToAdd);
+      }
+
       return added;
+    }
+
+    function addMarkersFromRecords(records) {
+      if (markerOverflow) return 0;
+      if (!Array.isArray(records) || !records.length) return 0;
+
+      let slice = records;
+      if (markersLayer && typeof markersLayer.getLayers === 'function') {
+        const currentCount = markersLayer.getLayers().length;
+        const remainingSlots = MAX_MAP_MARKERS - currentCount;
+        if (remainingSlots <= 0) {
+          markerOverflow = true;
+          return 0;
+        }
+        if (records.length > remainingSlots) {
+          markerOverflow = true;
+          slice = records.slice(0, remainingSlots);
+        }
+      }
+
+      const hits = slice.map(r => ({
+        _id: r.id,
+        _source: {
+          latitude: r.lat,
+          longitude: r.lon,
+          name: r.name,
+          tipo_uso: r.tipo_uso,
+          sol_req_num_cod: r.sol_req_num_cod,
+          tipo_finalidade_grupo: r.tipo_finalidade_grupo,
+          cod_ibge: r.cod_ibge,
+          ugrhi: r.ugrhi,
+          municipio: r.municipio,
+          diretoria: r.diretoria,
+          data_publicacao: r.data_publicacao,
+          status_uso: r.status_uso,
+          status_requerimento: r.status_requerimento,
+          vazao_normalizada_m3s: r.vazao_normalizada_m3s,
+          tem_sazonalidade: r.tem_sazonalidade,
+          volume_m3_anual: r.volume_m3_anual,
+          requerente: r.requerente,
+          vazoes: r.vazoes,
+          portaria: r.portaria
+        }
+      }));
+      return addMarkersFromHits(hits);
     }
 
 
@@ -1212,6 +2089,9 @@
 
       console.log("Modal src:", src);
 
+      let avg_vazao = Object.values(src.vazoes).map(month => month.vazao_m3h).reduce((soma,vazao,_,arr) => (soma + vazao) / (arr.length === _ + 1 ? arr.length : 1), 0);
+      let avg_vol_max = Object.values(src.vazoes).map(month => month.vol_max).reduce((soma,vol_max,_,arr) => (soma + vol_max) / (arr.length === _ + 1 ? arr.length : 1), 0);
+
       let html = `
         
         <ul class="nav nav-underline" id="myTab" role="tablist">
@@ -1222,11 +2102,14 @@
             <button class="nav-link" id="discharges-tab" data-bs-toggle="tab" data-bs-target="#discharges-tab-pane" type="button" role="tab" aria-controls="discharges-tab-pane" aria-selected="false">Volumes</button>
           </li>
           <li class="nav-item" role="presentation">
+            <button class="nav-link" id="flow-table-tab" data-bs-toggle="tab" data-bs-target="#flow-table-pane" type="button" role="tab" aria-controls="flow-table-pane" aria-selected="false">Detalhamento Vazão</button>
+          </li>
+          <!--<li class="nav-item" role="presentation">
             <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Contact</button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
-          </li>
+          </li>-->
         </ul>
         <br/>
         <div class="tab-content" id="myTabContent">
@@ -1240,16 +2123,21 @@
               <li class="list-group-item"><b>Diretoria:</b> ${src.diretoria || '-'}</li>
               <li class="list-group-item"><b>Data Publicação:</b> ${src.data_publicacao || '-'}</li>          
               <li class="list-group-item"><b>Vazão Normalizada (m³/s):</b> ${src.vazao_normalizada_m3s != null ? src.vazao_normalizada_m3s : '-'}</li>
-              <li class="list-group-item"><b>Vazão por Hora (m³/h):</b> ${src.vazao_normalizada_m3s != null ? (src.vazao_normalizada_m3s * 3600) : '-'}</li>
+              <li class="list-group-item"><b>Vazão por Hora (m³/h):</b> ${ avg_vazao != null ? avg_vazao : '-'}</li>
+              <li class="list-group-item"><b>Volume Máximo (m³/dia):</b> ${ avg_vol_max != null ? avg_vol_max : '-'}</li>
               <li class="list-group-item"><b>Volume Anual (m³):</b> ${src.volume_m3_anual != null ? src.volume_m3_anual : '-'}</li>
               <li class="list-group-item"><b>Tem Sazonalidade:</b> ${src.tem_sazonalidade ? 'Sim' : 'Não'}</li>
               <li class="list-group-item"><b>Status de Uso:</b> <span style="color: ${getColorByStatusUso(src.status_uso)}">${src.status_uso || '-'}</span></li>
+              <li class="list-group-item"><b>Status do Req.:</b> <span>${src.status_requerimento}</span></li>
               <li class="list-group-item"><b>Requerente:</b> ${src.requerente?.nome || '-'} (${src.requerente?.id || '-'})</li>
               <li class="list-group-item"><b>Coordenadas:</b> ${src.latitude}, ${src.longitude}</li>    
             </ul>  
           </div>
           <div class="tab-pane fade" id="discharges-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
             <div id="chart_discharges"></div>
+          </div>
+          <div class="tab-pane fade" id="flow-table-pane" role="tabpanel" aria-labelledby="flow-table-tab" tabindex="0">
+            <div id="flow-table-container" class="pt-3"></div>
           </div>
           <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">...</div>
           <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
@@ -1260,6 +2148,7 @@
 
       //Render Discharge Chart
       renderDischargeChart('chart_discharges', src);
+      renderFlowDetailTable('flow-table-container', src);
     }
 
     function getColorByStatusUso(status) {
@@ -1273,95 +2162,151 @@
     }
 
     async function getAllOutorgas({ forceRefresh = false } = {}, filter = {}) {
-      //Try load from cache first
       try {
+        const summaryEl = document.getElementById('es-summary');
+        const tableBody = document.getElementById('outorgasTableBody');
+        if (tableBody) tableBody.innerHTML = '';
 
-        const meta = await getMeta('outorgas_all');
-        const fresh = meta && isFresh(meta.savedAt, ONE_DAY);
-        const hasCache = (await db.items.count()) > 0;
+        markerOverflow = false;
 
-        if (hasCache && fresh && !forceRefresh) {
-          //console.log("Usando cache local (filtros:", filter, ")");
-          await renderFromCacheToMap(filter); // Pass filter to the function
+        const isFullMode = cacheMode === 'full';
+        const filterKeys = Object.keys(filter || {}).filter(Boolean);
+        const filterKey = !isFullMode ? buildFilterKey(filter) : null;
+
+        if (!isFullMode && !filterKeys.length) {
+          await clearMapAndTable();
+          announceCacheMode();
           return;
         }
 
-        const url = '/api/outorgas/all?fields=' + fields;
-        const res = await fetch(url);
+        if (!isFullMode && filterKey) {
+          const hasFilteredCache = await hasFreshFilteredCache(filterKey);
+          if (hasFilteredCache && !forceRefresh) {
+            await renderFilteredCache(filter, filterKey);
+            return;
+          }
+        }
+
+        const meta = await getMeta('outorgas_all');
+        const hasCache = (await db.items.count()) > 0;
+        const canServeFromCache = isFullMode && hasCache && meta?.mode === 'full' && isFresh(meta?.savedAt, ONE_DAY);
+
+        if (canServeFromCache && !forceRefresh) {
+          await renderFromCacheToMap(filter);
+          return;
+        }
+
+        try { markersLayer.clearLayers(); } catch (err) { console.warn('[cache-mode] falha ao limpar marcadores', err); }
+
+        const params = isFullMode ? new URLSearchParams({ fields }) : buildFilterQueryParams(filter);
+        if (!isFullMode) params.set('fields', fields);
+
+        const requestUrl = isFullMode
+          ? `/api/outorgas/all?${params.toString()}`
+          : `/api/outorgas/filter?${params.toString()}`;
+
+        updateSummary('Carregando dados...', { showChangeAction: true });
+
+        const res = await fetch(requestUrl);
         if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
         const data = await res.json();
 
-        await saveIncremental(data?.hits?.hits || []);
-        //await renderFromCacheToMap(); // ou desenhe só o lote atual, como preferir
+        const totalHits = data?.hits?.total?.value ?? data?.hits?.total ?? 0;
+        let processedCount = 0;
+        let tableHasData = false;
 
-        let scrollId = data._scroll_id;
-        let added = 0;
-        const fetchNext = async () => {
-          if (!scrollId) return;
-          const nextRes = await fetch(`/api/outorgas/scroll_list?scroll_id=${encodeURIComponent(scrollId)}`);
-          if (!nextRes.ok) throw new Error(`HTTP ${nextRes.status}`);
-          const nextData = await nextRes.json();
-          //console.log("Próximo lote:", nextData);
-          const chunk = nextData?.hits?.hits || [];
-          if (chunk.length) {
-            await saveIncremental(chunk);    // grava incremental
-            // dica: para UX, você pode também “streamar” para o mapa:
-            //addMarkersFromHits(toCompactRecords(chunk).map(r => ({ _id: r.id, _source: { latitude:r.lat, longitude:r.lon, name:r.name, ...} })));
-            addMarkersFromHits(toCompactRecords(chunk).map(r => ({
-              _id: r.id, _source:
-              {
-                latitude: r.lat, longitude: r.lon,
-                name: r.name, tipo_uso: r.tipo_uso,
-                sol_req_num_cod: r.sol_req_num_cod,
-                tipo_finalidade_grupo: r.tipo_finalidade_grupo,
-                tipo_uso: r.tipo_uso,
-                cod_ibge: r.cod_ibge,
-                ugrhi: r.ugrhi,
-                municipio: r.municipio,
-                diretoria: r.diretoria,
-                data_publicacao: r.data_publicacao,
-                status_uso: r.status_uso,
-                vazao_normalizada_m3s: r.vazao_normalizada_m3s,
-                tem_sazonalidade: r.tem_sazonalidade,
-                volume_m3_anual: r.volume_m3_anual
-              }
-            })));
-            scrollId = nextData._scroll_id;
-            added += chunk.length;
+        const shouldPersist = isFullMode;
+        const metaInfo = shouldPersist ? { mode: 'full' } : {};
+        const collectedRecords = shouldPersist ? null : [];
 
-
-            if(summary){
-              let per = Math.round(((added / nextData.hits.total.value) * 100));
-              
-              summary.textContent = `Carregando : ${per.toFixed(2)}% - Total ${nextData.hits.total.value}`;
-              setProgressBar("global-progress", "global-progress-bar", per);
-            }
-            await new Promise(res => setTimeout(res, 1)); // pausa breve para UI
-
-            await fetchNext();
+        const updateProgress = () => {
+          if (!summaryEl) return;
+          if (totalHits > 0) {
+            const percent = Math.min(100, Math.round((processedCount / totalHits) * 100));
+            const label = isFullMode ? 'base completa' : 'dados filtrados';
+            updateSummary(`Carregando ${label}: ${percent.toFixed(2)}% - ${processedCount.toLocaleString('pt-BR')} de ${totalHits.toLocaleString('pt-BR')}`);
+            setProgressBar('global-progress', 'global-progress-bar', percent);
           } else {
-            scrollId = null;
+            updateSummary(`Carregando registros (${processedCount.toLocaleString('pt-BR')})`);
           }
         };
 
-        fetchNext();
+        const processChunk = async (hits) => {
+          if (!hits || !hits.length) return;
+          const { added, records } = await saveIncremental(hits, 'outorgas_all', metaInfo, { persist: shouldPersist });
+          if (!added) return;
 
-        document.getElementById('es-summary').textContent = `Outorgas atualizadas • ${new Date().toLocaleString()}`;
+          processedCount += added;
+          if (!shouldPersist && collectedRecords) {
+            collectedRecords.push(...records);
+          }
+          addMarkersFromRecords(records);
+          if (tableBody) {
+            renderRowsTable(records, !tableHasData);
+            tableHasData = true;
+          }
+          updateProgress();
+        };
+
+        await processChunk(data?.hits?.hits || []);
+
+        let scrollId = data._scroll_id;
+
+        while (scrollId) {
+          const nextRes = await fetch(`/api/outorgas/scroll_list?scroll_id=${encodeURIComponent(scrollId)}`);
+          if (!nextRes.ok) throw new Error(`HTTP ${nextRes.status}`);
+          const nextData = await nextRes.json();
+          const chunk = nextData?.hits?.hits || [];
+          await processChunk(chunk);
+          scrollId = chunk.length ? nextData._scroll_id : null;
+        }
+
+        if (!shouldPersist && filterKey) {
+          await replaceFilteredCache(filterKey, collectedRecords || []);
+        }
+
+        const totalLabel = totalHits || processedCount;
+        let finalSummary = '';
+        if (isFullMode) {
+          finalSummary = `Outorgas atualizadas - ${new Date().toLocaleString()} (${totalLabel.toLocaleString('pt-BR')} registros)`;
+        } else {
+          finalSummary = `Filtro carregado - ${totalLabel.toLocaleString('pt-BR')} registros carregados (modo sob demanda).`;
+        }
+        if (markerOverflow) {
+          finalSummary += ` - Marcadores limitados a ${MAX_MAP_MARKERS.toLocaleString('pt-BR')} itens para preservar desempenho`;
+        }
+        updateSummary(finalSummary);
+        setProgressBar('global-progress', 'global-progress-bar', 100);
+        if (tableHasData) {
+          refreshDataTable();
+        }
 
 
       } catch (err) {
-        console.error("Erro ao carregar cache do localStorage:", err);
-        document.getElementById('es-summary').textContent = 'Erro ao carregar cache!';
+        console.error('Erro ao carregar dados das outorgas:', err);
+        updateSummary('Erro ao carregar dados. Tente novamente.');
         return;
       }
 
-      //Fit bounds after loading
-      if (markersLayer.getLayers().length) {
+      if (markersLayer && typeof markersLayer.getLayers === 'function' && markersLayer.getLayers().length) {
         loadMunicipioLayer();
         loadUgrhiLayer();
         map.fitBounds(markersLayer.getBounds(), { maxZoom: 12, padding: [50, 50] });
       }
     }
+    const tableDownloadMenu = document.getElementById('tableDownloadMenu');
+    if (tableDownloadMenu) {
+      tableDownloadMenu.addEventListener('click', (event) => {
+        const target = event.target?.closest('[data-export-format]');
+        if (!target) return;
+        event.preventDefault();
+        handleTableDownload(target.dataset.exportFormat);
+      });
+    }
+
+    showCacheNoticeIfNeeded();
+    initializeCacheWorkflow().catch(err => console.error('[cache-mode] falha ao inicializar fluxo de cache', err));
+
   </script>
 </body>
 

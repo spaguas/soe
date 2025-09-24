@@ -427,6 +427,34 @@ router.get('/index_new2', function(req, res, next) {
   run().catch(console.log);
 });
 
+router.get('/index_fix', function(req,res,next){
+  async function run(){
+    res.render('index_fix', { title: 'SOE' })
+  }
+  run().catch(console.log);
+})
+
+router.get('/index_wms', function(req,res,next){
+  async function run(){
+    res.render('index_wms', { title: 'SOE' })
+  }
+  run().catch(console.log);
+})
+
+router.get('/wms/capabilities', async (req, res) => {
+  const url = 'https://geodados.daee.sp.gov.br/geoserver/geonode/wms?service=WMS&version=1.3.0&request=GetCapabilities';
+  try {
+    const upstream = await fetch(url);
+    if (!upstream.ok) return res.status(upstream.status).send('Falha ao obter Capabilities');
+    res.type(upstream.headers.get('content-type') || 'text/xml');
+    res.send(await upstream.text());
+  } catch (err) {
+    res.status(500).send('Erro ao buscar Capabilities');
+  }
+});
+
+
+
 function isEmpty(obj) {
   for(var prop in obj) {
     if(Object.prototype.hasOwnProperty.call(obj, prop)) {

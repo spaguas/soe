@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <title><%= title || 'SOE-SP Águas - Visualizador WMS' %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhI0vJM6zE2dS3kSxhKp9I1Q6NcdV+f3Gg0k=" crossorigin="">
+
+    <style>
+      html, body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+
+      main.flex-grow-1 {
+        min-height: 0;
+      }
+
+      #map {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="d-flex flex-column min-vh-100">
+      <header>
+        <nav class="navbar navbar-dark bg-dark px-3">
+          <span class="navbar-brand mb-0 h1">SOE-SP Águas</span>
+          <span class="navbar-text">Visualizador de Mapas WMS</span>
+        </nav>
+      </header>
+
+      <main class="flex-grow-1 position-relative">
+        <div id="map" class="position-absolute top-0 start-0 w-100 h-100"></div>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const map = L.map('map', {
+          center: [-22.49, -48.54],
+          zoom: 7,
+          zoomControl: true
+        });
+
+        const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> colaboradores'
+        }).addTo(map);
+
+        const wmsLayer = L.tileLayer.wms('https://geodados.daee.sp.gov.br/geoserver/geonode/wms', {
+          layers: 'outorgas-soe',
+          format: 'image/png',
+          transparent: true,
+          tiled: false,
+          attribution: 'Dados © DAEE Geodados'
+        }).addTo(map);
+
+        L.control.layers({ 'OpenStreetMap': baseLayer }, { 'Outorgas SOE': wmsLayer }, {
+          collapsed: false
+        }).addTo(map);
+      });
+    </script>
+  </body>
+</html>
