@@ -212,7 +212,7 @@ router.get('/municipios/:cod_ibge', function(req,res,next){
 //   run().catch(console.log);
 // });
 
-/* GET home page. */
+/* GET home page. 
 router.get('/', function(req, res, next) {
 
   async function run(){
@@ -409,9 +409,9 @@ router.get('/', function(req, res, next) {
   run().catch(console.log);
 
   
-});
+});*/
 
-router.get('/index_new', function(req, res, next) {
+router.get('/', function(req, res, next) {
   async function run(){
     res.render('index_new', { title: 'SOE' });
   }
