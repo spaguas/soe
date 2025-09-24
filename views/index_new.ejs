@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SP-Águas • Mapa</title>
 
-  <link rel="icon" href="/favicon.ico">
-  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="<%= assetPath('/favicon.ico') %>">
+  <link rel="shortcut icon" href="<%= assetPath('/favicon.ico') %>">
 
   <script src="https://code.jquery.com/jquery-3.6.1.min.js"
     integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -114,17 +114,18 @@
   <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <img src="/logo-spaguas-colorido.png" alt="SP-Águas" />
+        <img src="<%= assetPath('/logo-spaguas-colorido.png') %>" alt="SP-Águas" />
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
           <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
           <!--<li class="nav-item"><a class="nav-link" href="#map">Mapa</a></li>-->
           <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offFilters">Filtros</a></li>
+          <!--<li class="nav-item"><button type="button" class="btn btn-link nav-link" id="tutorialStartBtn">Tutorial</button></li>-->
           <!--<li class="nav-item"><a class="nav-link" href="#">Relatórios</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -451,6 +452,9 @@
 
 
   <script>
+    const BASE_PATH = '<%- basePath %>';
+    const API_BASE = (BASE_PATH || '') + '/api';
+    window.__BASE_PATH__ = BASE_PATH;
     const CACHE_NOTICE_STORAGE_KEY = 'soe-cache-notice-day';
     const CACHE_MODE_STORAGE_KEY = 'soe-cache-mode';
 
@@ -2202,8 +2206,8 @@
         if (!isFullMode) params.set('fields', fields);
 
         const requestUrl = isFullMode
-          ? `/api/outorgas/all?${params.toString()}`
-          : `/api/outorgas/filter?${params.toString()}`;
+          ? `${API_BASE}/outorgas/all?${params.toString()}`
+          : `${API_BASE}/outorgas/filter?${params.toString()}`;
 
         updateSummary('Carregando dados...', { showChangeAction: true });
 
@@ -2253,7 +2257,7 @@
         let scrollId = data._scroll_id;
 
         while (scrollId) {
-          const nextRes = await fetch(`/api/outorgas/scroll_list?scroll_id=${encodeURIComponent(scrollId)}`);
+          const nextRes = await fetch(`${API_BASE}/outorgas/scroll_list?scroll_id=${encodeURIComponent(scrollId)}`);
           if (!nextRes.ok) throw new Error(`HTTP ${nextRes.status}`);
           const nextData = await nextRes.json();
           const chunk = nextData?.hits?.hits || [];

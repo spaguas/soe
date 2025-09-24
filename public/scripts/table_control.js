@@ -3,6 +3,7 @@ const tableControl = L.Control.extend({
     onAdd: function () {
         const div = L.DomUtil.create('div', 'leaflet-bar');
         const btn = L.DomUtil.create('button', 'btn btn-secondary', div);
+        btn.id = 'tableControlBtn';
         btn.type = 'button';
         btn.title = 'Abrir tabela de dados';
         btn.innerHTML = '<span><i class="bi bi-table"></i></span>';
