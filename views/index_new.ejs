@@ -669,7 +669,13 @@
       { key: 'nov', label: 'Novembro', days: 30 },
       { key: 'dez', label: 'Dezembro', days: 31 }
     ];
-    let currentTableRecords = [];
+    const summaryState = {
+      finalidadeCounts: new Map(),
+      usoCounts: new Map(),
+      topFlows: [],
+      totalRecords: 0
+    };
+    let currentDataSource = { type: 'none', filterKey: null };
     const TABLE_EXPORT_COLUMNS = [
       { label: 'Requerimento', accessor: (r) => r.sol_req_num_cod ?? '' },
       { label: 'Tipo de Uso', accessor: (r) => r.tipo_uso ?? '' },
@@ -938,7 +944,8 @@
       if (tableBody) tableBody.innerHTML = '';
       destroyDataTable();
       markerOverflow = false;
-      currentTableRecords = [];
+      resetSummaryState();
+      currentDataSource = { type: 'none', filterKey: null };
       renderSummaryTables();
     }
 
@@ -1618,12 +1625,15 @@
 
       if (clearBefore) {
         tableBody.innerHTML = '';
-        currentTableRecords = [];
+        resetSummaryState();
       }
 
-      if (Array.isArray(recs) && recs.length) {
-        currentTableRecords.push(...recs);
+      if (!Array.isArray(recs) || !recs.length) {
+        renderSummaryTables();
+        return;
       }
+
+      updateSummaryState(recs);
 
       for (const r of recs) {
         //console.log("Renderizando linha da tabela:", r);
@@ -1722,12 +1732,21 @@
 
     async function renderFilteredCache(filter, filterKey) {
       const records = filterKey ? await loadFilteredCache(filterKey) : [];
-      return renderFromCacheToMap(filter, { records, source: 'filtered' });
+      return renderFromCacheToMap(filter, { records, source: 'filtered', filterKey });
     }
 
-    async function renderFromCacheToMap(filter, { records, source = 'full' } = {}) {
+    async function renderFromCacheToMap(filter, { records, source = 'full', filterKey = null } = {}) {
       const recs = Array.isArray(records) ? records : await loadAllFromCache(filter);
       let per = 0;
+
+      if (source === 'filtered') {
+        currentDataSource = {
+          type: 'filtered',
+          filterKey: filterKey || (filter ? buildFilterKey(filter) : null)
+        };
+      } else if (source === 'full') {
+        currentDataSource = { type: 'full', filterKey: null };
+      }
 
       let tableBody = document.getElementById('outorgasTableBody');
       destroyDataTable();
@@ -1748,12 +1767,13 @@
           : 'Cache disponível: nenhum registro corresponde ao filtro.';
         updateSummary(emptyLabel);
         setProgressBar("global-progress", "global-progress-bar", 100);
+        resetSummaryState();
+        currentDataSource = { type: 'none', filterKey: null };
         refreshDataTable();
         renderSummaryTables();
         return 0;
       }
       let added = 0;
-      currentTableRecords = [];
 
       const batch = 100; // processa em lotes para evitar travar a UI
       for (let i = 0; i < recs.length; i += batch) {
@@ -1762,7 +1782,7 @@
 
         const addedNow = addMarkersFromRecords(chunk);
 
-        renderRowsTable(chunk, false); // false = não limpa antes
+        renderRowsTable(chunk, i === 0); // reinicia apenas no primeiro lote
 
         added += addedNow;
         //console.log(`Renderizado do cache: ${i + chunk.length} / ${recs.length} registros (${addedNow} marcadores adicionados)`);
@@ -1805,6 +1825,62 @@
       });
     }
 
+    function resetSummaryState() {
+      summaryState.finalidadeCounts.clear();
+      summaryState.usoCounts.clear();
+      summaryState.topFlows = [];
+      summaryState.totalRecords = 0;
+    }
+
+    function computeFlowFromRecord(rec) {
+      let flowPerHour = Number(rec?.vazao_normalizada_m3s);
+      if (Number.isFinite(flowPerHour) && flowPerHour > 0) {
+        return flowPerHour * 3600;
+      }
+      let maxFlow = 0;
+      const vazoes = rec?.vazoes || {};
+      for (const month of FLOW_TABLE_MONTHS) {
+        const current = Number(vazoes?.[month.key]?.vazao_m3h);
+        if (Number.isFinite(current) && current > maxFlow) {
+          maxFlow = current;
+        }
+      }
+      return maxFlow;
+    }
+
+    function insertTopFlowCandidate(candidate) {
+      if (!candidate || !Number.isFinite(candidate.flowPerHour) || candidate.flowPerHour <= 0) return;
+      summaryState.topFlows.push(candidate);
+      summaryState.topFlows.sort((a, b) => b.flowPerHour - a.flowPerHour);
+      if (summaryState.topFlows.length > 10) {
+        summaryState.topFlows.length = 10;
+      }
+    }
+
+    function updateSummaryState(records) {
+      if (!Array.isArray(records) || !records.length) return;
+      for (const rec of records) {
+        summaryState.totalRecords += 1;
+        const finalidade = (rec?.tipo_finalidade_grupo || '-').trim() || '-';
+        const uso = (rec?.tipo_uso || '-').trim() || '-';
+        summaryState.finalidadeCounts.set(finalidade, (summaryState.finalidadeCounts.get(finalidade) || 0) + 1);
+        summaryState.usoCounts.set(uso, (summaryState.usoCounts.get(uso) || 0) + 1);
+
+        const flowPerHour = computeFlowFromRecord(rec);
+        if (Number.isFinite(flowPerHour) && flowPerHour > 0) {
+          insertTopFlowCandidate({
+            id: rec?.sol_req_num_cod || rec?.id || '-',
+            tipoUso: rec?.tipo_uso || '-',
+            flowPerHour
+          });
+        }
+      }
+    }
+
+    function mapToSortedEntries(map) {
+      return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
+    }
+
     function buildCountRows(mapEntries, emptyCols = 2) {
       if (!Array.isArray(mapEntries) || !mapEntries.length) {
         return `<tr><td colspan="${emptyCols}" class="text-center text-secondary">Nenhum dado disponível</td></tr>`;
@@ -1817,52 +1893,14 @@
       `).join('');
     }
 
-    function computeCountMap(records, accessor) {
-      const map = new Map();
-      for (const rec of records || []) {
-        const key = accessor(rec) || '-';
-        map.set(key, (map.get(key) || 0) + 1);
-      }
-      return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
-    }
-
-    function computeTopFlows(records, limit = 10) {
-      const list = [];
-      for (const rec of records || []) {
-        let flowPerHour = Number(rec?.vazao_normalizada_m3s);
-        if (Number.isFinite(flowPerHour)) {
-          flowPerHour *= 3600;
-        } else {
-          flowPerHour = 0;
-          const vazoes = rec?.vazoes || {};
-          for (const month of FLOW_TABLE_MONTHS) {
-            const vz = vazoes[month.key];
-            const m3h = Number(vz?.vazao_m3h);
-            if (Number.isFinite(m3h)) {
-              flowPerHour = Math.max(flowPerHour, m3h);
-            }
-          }
-        }
-        if (!Number.isFinite(flowPerHour) || flowPerHour <= 0) continue;
-        list.push({
-          id: rec.sol_req_num_cod || rec.id || '-',
-          tipoUso: rec.tipo_uso || '-',
-          flowPerHour
-        });
-      }
-      list.sort((a, b) => b.flowPerHour - a.flowPerHour);
-      return list.slice(0, limit);
-    }
-
     function renderSummaryTables() {
       const finalidadeBody = document.getElementById('summaryFinalidadeBody');
       const usoBody = document.getElementById('summaryUsoBody');
       const topFlowBody = document.getElementById('summaryTopFlowBody');
 
-      const records = currentTableRecords || [];
-      const finalidadeRows = computeCountMap(records, (rec) => rec.tipo_finalidade_grupo);
-      const usoRows = computeCountMap(records, (rec) => rec.tipo_uso);
-      const topFlowRows = computeTopFlows(records);
+      const finalidadeRows = mapToSortedEntries(summaryState.finalidadeCounts);
+      const usoRows = mapToSortedEntries(summaryState.usoCounts);
+      const topFlowRows = summaryState.topFlows;
 
       if (finalidadeBody) finalidadeBody.innerHTML = buildCountRows(finalidadeRows);
       if (usoBody) usoBody.innerHTML = buildCountRows(usoRows);
@@ -1902,9 +1940,49 @@
       }
     }
 
-    function buildTableExportMatrix() {
+    function collectRecordsFromMarkers() {
+      if (!markersLayer || typeof markersLayer.getLayers !== 'function') {
+        return [];
+      }
+      const layers = markersLayer.getLayers();
+      const records = [];
+      for (const layer of layers) {
+        const record = layer?.__record;
+        if (record) records.push(record);
+      }
+      return records;
+    }
+
+    async function loadRecordsFromStorageForExport() {
+      if (!db) return [];
+      try {
+        if (currentDataSource.type === 'full') {
+          return await db.items.toArray();
+        }
+        if (currentDataSource.type === 'filtered' && currentDataSource.filterKey) {
+          return await loadFilteredCache(currentDataSource.filterKey);
+        }
+      } catch (err) {
+        console.warn('[table-export] falha ao carregar dados do cache persistido', err);
+      }
+      return [];
+    }
+
+    async function collectRecordsForExport() {
+      const markerRecords = collectRecordsFromMarkers();
+      const expected = summaryState.totalRecords || markerRecords.length;
+      if (expected > markerRecords.length) {
+        const storedRecords = await loadRecordsFromStorageForExport();
+        if (Array.isArray(storedRecords) && storedRecords.length) {
+          return storedRecords;
+        }
+      }
+      return markerRecords;
+    }
+
+    function buildTableExportMatrix(records) {
       const headers = TABLE_EXPORT_COLUMNS.map(column => column.label);
-      const rows = currentTableRecords.map(record => TABLE_EXPORT_COLUMNS.map(column => sanitizeExportValue(safeAccessColumn(column, record))));
+      const rows = records.map(record => TABLE_EXPORT_COLUMNS.map(column => sanitizeExportValue(safeAccessColumn(column, record))));
       return { headers, rows };
     }
 
@@ -1943,13 +2021,18 @@
       setTimeout(() => URL.revokeObjectURL(url), 2000);
     }
 
-    function handleTableDownload(format) {
-      if (!Array.isArray(currentTableRecords) || !currentTableRecords.length) {
+    async function handleTableDownload(format) {
+      const records = await collectRecordsForExport();
+      if (!records.length) {
         window.alert('Nenhum dado disponível para download.');
         return;
       }
 
-      const { headers, rows } = buildTableExportMatrix();
+      if (summaryState.totalRecords > records.length) {
+        window.alert('Nem todos os registros foram carregados no mapa; o download usará apenas os itens exibidos.');
+      }
+
+      const { headers, rows } = buildTableExportMatrix(records);
       if (!rows.length) {
         window.alert('Nenhum dado disponível para download.');
         return;
@@ -2177,8 +2260,10 @@
             <br><small style='color: ${getColorByStatusUso(src.status_uso)}'><b>Status</b>: ${src.status_uso || '-'}</small>
           `;
           cm.bindPopup(`<b>ID: ${title}</b>${extra}`);*/
+          cm.__record = src;
+
           cm.on('click', function(e){
-            renderModalInfo(e, src);
+            renderModalInfo(e, this?.__record || {});
           });
 
           markersToAdd.push(cm);
@@ -2359,6 +2444,10 @@
           return;
         }
 
+        currentDataSource = isFullMode
+          ? { type: 'full', filterKey: null }
+          : { type: 'filtered', filterKey: filterKey || (filter ? buildFilterKey(filter) : null) };
+
         try { markersLayer.clearLayers(); } catch (err) { console.warn('[cache-mode] falha ao limpar marcadores', err); }
 
         const params = isFullMode ? new URLSearchParams({ fields }) : buildFilterQueryParams(filter);
@@ -2425,7 +2514,11 @@
         }
 
         if (!shouldPersist && filterKey) {
-          await replaceFilteredCache(filterKey, collectedRecords || []);
+          const recordsToPersist = Array.isArray(collectedRecords) ? collectedRecords : [];
+          await replaceFilteredCache(filterKey, recordsToPersist);
+          if (Array.isArray(collectedRecords)) {
+            collectedRecords.length = 0;
+          }
         }
 
         const totalLabel = totalHits || processedCount;
@@ -2448,6 +2541,7 @@
       } catch (err) {
         console.error('Erro ao carregar dados das outorgas:', err);
         updateSummary('Erro ao carregar dados. Tente novamente.');
+        currentDataSource = { type: 'none', filterKey: null };
         return;
       }
 
@@ -2463,7 +2557,11 @@
         const target = event.target?.closest('[data-export-format]');
         if (!target) return;
         event.preventDefault();
-        handleTableDownload(target.dataset.exportFormat);
+        Promise.resolve(handleTableDownload(target.dataset.exportFormat))
+          .catch(err => {
+            console.error('[table-export] falha ao gerar download', err);
+            window.alert('Falha ao gerar o arquivo. Tente novamente.');
+          });
       });
     }
 
