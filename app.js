@@ -49,6 +49,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
+// Allow running behind proxies that strip the base path prefix
+if (basePath !== '/' && basePath.length > 1) {
+  app.use((req, res, next) => {
+    const url = req.url || '/';
+    if (url === basePath) return next();
+    if (url.startsWith(`${basePath}/`) || url.startsWith(`${basePath}?`)) {
+      return next();
+    }
+    if (url === '/' || url === '') {
+      req.url = `${basePath}/`;
+      return next();
+    }
+    if (url.startsWith('/')) {
+      req.url = `${basePath}${url}`;
+      return next();
+    }
+    req.url = `${basePath}/${url}`;
+    return next();
+  });
+}
+
 const baseRouter = express.Router();
 baseRouter.use('/', indexRouter);
 baseRouter.use('/api', apiRouter);
