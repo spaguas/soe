@@ -14,6 +14,9 @@ var app = express();
 // Base path configuration (use BASE_PATH env var, e.g. '/soe')
 const rawBasePath = process.env.BASE_PATH || '';
 let basePath = rawBasePath.trim();
+if (basePath.length > 1) {
+  basePath = basePath.replace(/^['"]+|['"]+$/g, '').trim();
+}
 if (!basePath || basePath === '/') {
   basePath = '/';
 } else {
