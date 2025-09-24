@@ -107,6 +107,7 @@
 <script src="scripts/map_progress.js"></script>
 <script src="scripts/radius_search_control.js"></script>
 <script src="scripts/table_control.js"></script>
+<script src="scripts/summary_control.js"></script>
 <script src="scripts/chart_control.js"></script>
 
 <body>
@@ -125,7 +126,8 @@
           <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
           <!--<li class="nav-item"><a class="nav-link" href="#map">Mapa</a></li>-->
           <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offFilters">Filtros</a></li>
-          <!--<li class="nav-item"><button type="button" class="btn btn-link nav-link" id="tutorialStartBtn">Tutorial</button></li>-->
+          <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offSummary">Resumo</a></li>
+          <li class="nav-item"><button type="button" class="btn btn-link nav-link" id="tutorialStartBtn">Tutorial</button></li>
           <!--<li class="nav-item"><a class="nav-link" href="#">Relatórios</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -342,6 +344,67 @@
     </div>
   </div>
 
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offSummary" aria-labelledby="offSummaryLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offSummaryLabel">Resumo dos Resultados</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="mb-4">
+        <h6 class="fw-semibold">Resumo por Tipo de Finalidade</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-striped align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Tipo de Finalidade</th>
+                <th class="text-end">Quantidade</th>
+              </tr>
+            </thead>
+            <tbody id="summaryFinalidadeBody">
+              <tr><td colspan="2" class="text-center text-secondary">Nenhum dado disponível</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <h6 class="fw-semibold">Resumo por Tipo de Uso</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-striped align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Tipo de Uso</th>
+                <th class="text-end">Quantidade</th>
+              </tr>
+            </thead>
+            <tbody id="summaryUsoBody">
+              <tr><td colspan="2" class="text-center text-secondary">Nenhum dado disponível</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h6 class="fw-semibold">Top Vazões (m³/h)</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-striped align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Requerimento</th>
+                <th>Tipo de Uso</th>
+                <th class="text-end">Vazão (m³/h)</th>
+              </tr>
+            </thead>
+            <tbody id="summaryTopFlowBody">
+              <tr><td colspan="3" class="text-center text-secondary">Nenhum dado disponível</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- OFFCANVAS: Controles e Filtros -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offFilters" aria-labelledby="offFiltersLabel">
     <div class="offcanvas-header">
@@ -454,7 +517,7 @@
   <script>
     let BASE_PATH = ('<%- basePath %>' || '').trim();
     if (BASE_PATH === '/') BASE_PATH = '';
-    const API_BASE = BASE_PATH ? `${BASE_PATH.replace(/\/$/, '')}/api` : 'api';
+    const API_BASE = BASE_PATH ? `${BASE_PATH.replace(/\/$/, '')}/api` : '/api';
     window.__BASE_PATH__ = BASE_PATH;
     const CACHE_NOTICE_STORAGE_KEY = 'soe-cache-notice-day';
     const CACHE_MODE_STORAGE_KEY = 'soe-cache-mode';
@@ -866,6 +929,7 @@
       destroyDataTable();
       markerOverflow = false;
       currentTableRecords = [];
+      renderSummaryTables();
     }
 
     async function handleCacheModeChoice(mode, modalInstance) {
@@ -923,6 +987,7 @@
     populateMunicipiosSelect()
     populateUgrhisSelect()
     populateDiretoriasSelect()
+    renderSummaryTables()
 
     // Layers for grouping
     let ugrhiLayer = L.layerGroup([]);
@@ -955,6 +1020,7 @@
 
     // Botão no mapa para abrir offcanvas
     map.addControl(new FilterControl());
+    map.addControl(new summaryControl());
 
     // Watermark com logo no canto inferior direito
     map.addControl(new WatermarkControl());
@@ -1613,6 +1679,8 @@
         `;
         tableBody.appendChild(tr);
       }
+
+      renderSummaryTables();
     }
 
     function refreshDataTable() {
@@ -1671,6 +1739,7 @@
         updateSummary(emptyLabel);
         setProgressBar("global-progress", "global-progress-bar", 100);
         refreshDataTable();
+        renderSummaryTables();
         return 0;
       }
       let added = 0;
@@ -1724,6 +1793,83 @@
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals
       });
+    }
+
+    function buildCountRows(mapEntries, emptyCols = 2) {
+      if (!Array.isArray(mapEntries) || !mapEntries.length) {
+        return `<tr><td colspan="${emptyCols}" class="text-center text-secondary">Nenhum dado disponível</td></tr>`;
+      }
+      return mapEntries.map(([label, value]) => `
+        <tr>
+          <td>${label || '-'}</td>
+          <td class="text-end">${value.toLocaleString('pt-BR')}</td>
+        </tr>
+      `).join('');
+    }
+
+    function computeCountMap(records, accessor) {
+      const map = new Map();
+      for (const rec of records || []) {
+        const key = accessor(rec) || '-';
+        map.set(key, (map.get(key) || 0) + 1);
+      }
+      return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
+    }
+
+    function computeTopFlows(records, limit = 10) {
+      const list = [];
+      for (const rec of records || []) {
+        let flowPerHour = Number(rec?.vazao_normalizada_m3s);
+        if (Number.isFinite(flowPerHour)) {
+          flowPerHour *= 3600;
+        } else {
+          flowPerHour = 0;
+          const vazoes = rec?.vazoes || {};
+          for (const month of FLOW_TABLE_MONTHS) {
+            const vz = vazoes[month.key];
+            const m3h = Number(vz?.vazao_m3h);
+            if (Number.isFinite(m3h)) {
+              flowPerHour = Math.max(flowPerHour, m3h);
+            }
+          }
+        }
+        if (!Number.isFinite(flowPerHour) || flowPerHour <= 0) continue;
+        list.push({
+          id: rec.sol_req_num_cod || rec.id || '-',
+          tipoUso: rec.tipo_uso || '-',
+          flowPerHour
+        });
+      }
+      list.sort((a, b) => b.flowPerHour - a.flowPerHour);
+      return list.slice(0, limit);
+    }
+
+    function renderSummaryTables() {
+      const finalidadeBody = document.getElementById('summaryFinalidadeBody');
+      const usoBody = document.getElementById('summaryUsoBody');
+      const topFlowBody = document.getElementById('summaryTopFlowBody');
+
+      const records = currentTableRecords || [];
+      const finalidadeRows = computeCountMap(records, (rec) => rec.tipo_finalidade_grupo);
+      const usoRows = computeCountMap(records, (rec) => rec.tipo_uso);
+      const topFlowRows = computeTopFlows(records);
+
+      if (finalidadeBody) finalidadeBody.innerHTML = buildCountRows(finalidadeRows);
+      if (usoBody) usoBody.innerHTML = buildCountRows(usoRows);
+
+      if (topFlowBody) {
+        if (!topFlowRows.length) {
+          topFlowBody.innerHTML = '<tr><td colspan="3" class="text-center text-secondary">Nenhum dado disponível</td></tr>';
+        } else {
+          topFlowBody.innerHTML = topFlowRows.map(item => `
+            <tr>
+              <td>${item.id}</td>
+              <td>${item.tipoUso}</td>
+              <td class="text-end">${formatNumber(item.flowPerHour, { decimals: 2 })}</td>
+            </tr>
+          `).join('');
+        }
+      }
     }
 
     function sanitizeExportValue(value) {
@@ -2069,6 +2215,7 @@
           municipio: r.municipio,
           diretoria: r.diretoria,
           data_publicacao: r.data_publicacao,
+          data_exame: r.data_exame,
           status_uso: r.status_uso,
           status_requerimento: r.status_requerimento,
           vazao_normalizada_m3s: r.vazao_normalizada_m3s,
@@ -2126,7 +2273,8 @@
               <li class="list-group-item"><b>Município:</b> ${src.municipio?.nome || '-'}</li>
               <li class="list-group-item"><b>Ugrhi:</b> ${src.ugrhi?.nome || '-'}</li>
               <li class="list-group-item"><b>Diretoria:</b> ${src.diretoria || '-'}</li>
-              <li class="list-group-item"><b>Data Publicação:</b> ${src.data_publicacao || '-'}</li>          
+              <li class="list-group-item"><b>Data Publicação:</b> ${src.data_publicacao != null ? src.data_publicacao.substring(0, 10) || '-' : '-'}</li>
+              <li class="list-group-item"><b>Data Vencimento:</b> ${src.data_exame != null ? src.data_exame.substring(0, 10) || '-' : '-'}</li>          
               <li class="list-group-item"><b>Vazão Normalizada (m³/s):</b> ${src.vazao_normalizada_m3s != null ? src.vazao_normalizada_m3s : '-'}</li>
               <li class="list-group-item"><b>Vazão por Hora (m³/h):</b> ${ avg_vazao != null ? avg_vazao : '-'}</li>
               <li class="list-group-item"><b>Volume Máximo (m³/dia):</b> ${ avg_vol_max != null ? avg_vol_max : '-'}</li>
