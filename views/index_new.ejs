@@ -452,8 +452,9 @@
 
 
   <script>
-    const BASE_PATH = '<%- basePath %>';
-    const API_BASE = (BASE_PATH || '') + '/api';
+    let BASE_PATH = ('<%- basePath %>' || '').trim();
+    if (BASE_PATH === '/') BASE_PATH = '';
+    const API_BASE = BASE_PATH ? `${BASE_PATH.replace(/\/$/, '')}/api` : 'api';
     window.__BASE_PATH__ = BASE_PATH;
     const CACHE_NOTICE_STORAGE_KEY = 'soe-cache-notice-day';
     const CACHE_MODE_STORAGE_KEY = 'soe-cache-mode';
