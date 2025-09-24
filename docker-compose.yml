@@ -1,4 +1,3 @@
-version: '3.3'
 services:
   web:
     build:
@@ -6,7 +5,9 @@ services:
     command: npm start
     restart: unless-stopped
     ports:
-      - "20000:3000"
+      - "20000:${PORT}"
+    env_file:
+      - .env
     environment:
       NODE_ENV: production
       DEBUG: nodejs-docker-express:*
