@@ -684,6 +684,8 @@
       { label: 'Diretoria', accessor: (r) => r.diretoria ?? '' },
       { label: 'Requerente (ID)', accessor: (r) => r.requerente?.id ?? '' },
       { label: 'Requerente (Nome)', accessor: (r) => r.requerente?.nome ?? '' },
+      { label: 'Latitude', accessor: (r) => r.lat ?? r.latitude ?? '' },
+      { label: 'Longitude', accessor: (r) => r.lon ?? r.longitude ?? '' },
       { label: 'Tipo de Uso (Tabela)', accessor: (r) => r.tipo_uso ?? '' },
       { label: 'Finalidade', accessor: (r) => r.tipo_finalidade_grupo ?? '' },
       { label: 'Portaria', accessor: (r) => r.portaria ?? r.numero_portaria ?? '' },
