@@ -1642,6 +1642,8 @@
         if(r.tem_sazonalidade){
           tr.classList.add('table-info');
         }
+
+        //console.log("Row: ", r);
         
         tr.innerHTML = `
           <td>${r.sol_req_num_cod || ''}</td>
@@ -1650,7 +1652,7 @@
           <td>${r.ugrhi?.nome || ''}</td>
           <td>${r.diretoria || ''}</td>
           <td>${r.requerente?.id || ''} - ${r.requerente?.nome || ''}</td>
-          <td>${r.latitude || '' }, ${r.longitude || ''}</td>
+          <td>${r.lat }, ${r.lon}</td>
           <td>${r.tipo_uso || ''}</td>
           <td>${r.tipo_finalidade_grupo || ''}</td>
           <td>${r.portaria || r.numero_portaria || ''}</td>
@@ -1778,7 +1780,7 @@
       const batch = 100; // processa em lotes para evitar travar a UI
       for (let i = 0; i < recs.length; i += batch) {
         const chunk = recs.slice(i, i + batch);
-        //console.log("Chunk:", chunk);
+        console.log("Chunk:", chunk);
 
         const addedNow = addMarkersFromRecords(chunk);
 
